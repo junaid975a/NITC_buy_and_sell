@@ -1,6 +1,8 @@
 import React from "react";
 import ItemCard from "./ItemCard";
-const DashboardItemCollection = () => {
+
+
+const DashboardItemCollection = ({searchParam}) => {
 
     // this datafile just pasted here for testing
     const employees = [
