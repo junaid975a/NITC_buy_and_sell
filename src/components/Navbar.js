@@ -10,23 +10,54 @@ const Navbar = (props) => {
 
     return (
         <div className="flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
-            <Link to="/" >
-                <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
-            </Link>
+            {!isLoggedIn &&
+                <Link to="/" >
+                    <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
+                </Link>
+            }
+            {isLoggedIn &&
+                <Link to="/dashboard" >
+                    <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
+                </Link>
+            }
 
-            <nav>
-                <ul className="flex gap-x-6">
-                    <li>
-                        <Link to='/'>Home</Link>
-                    </li>
-                    <li>
-                        <Link to='/'>About</Link>
-                    </li>
-                    <li>
-                        <Link to='/'>Contact</Link>
-                    </li>
-                </ul>
-            </nav>
+
+            {!isLoggedIn &&
+                <nav>
+                    <ul className="flex gap-x-6">
+                        <li>
+                            <Link to='/'>Home</Link>
+                        </li>
+                        <li>
+                            <Link to='/'>About</Link>
+                        </li>
+                        <li>
+                            <Link to='/'>Contact</Link>
+                        </li>
+                    </ul>
+                </nav>
+            }
+
+            {isLoggedIn &&
+                <nav>
+                    <ul className="flex gap-x-6">
+                        <li>
+                            <Link to='/dashboard'>Bought</Link>
+                        </li>
+                        <li>
+                            <Link to='/dashboard'>Sold</Link>
+                        </li>
+                        <li>
+                            <Link to='/dashboard'>Add Item</Link>
+                        </li>
+                        <li>
+                            <Link to='/dashboard'>Profile</Link>
+                        </li>
+                    </ul>
+                </nav>
+
+            }
+
 
             {/* login-signup-logout-dashboard */}
             <div className="flex items-center gap-x-4">
