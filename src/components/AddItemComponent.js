@@ -32,6 +32,7 @@ const AddItemComponent = ({ setIsLoggedIn }) => {
     function submitHandler(event) {
         event.preventDefault();
 
+        // on submit, what to do
 
     }
     return (
