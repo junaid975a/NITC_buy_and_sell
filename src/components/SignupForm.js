@@ -30,7 +30,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
     function submitHandler(event) {
         event.preventDefault();
 
-        if (formData.password != formData.confirmPassword) {
+        if (formData.password !== formData.confirmPassword) {
             toast.error("Passwords do not match");
             return;
         }
