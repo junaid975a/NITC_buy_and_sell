@@ -49,30 +49,13 @@ const Navbar = (props) => {
               <Link to="/additem">Add Item</Link>
             </li>
             <li>
-              <Link to="/dashboard">Profile</Link>
-            </li>
-          </ul>
-        </nav>
-      )}
-
-      {isLoggedIn && (
-        <nav>
-          <ul className="flex gap-x-6">
-            <li>
-              <Link to="/dashboard">Bought</Link>
-            </li>
-            <li>
-              <Link to="/dashboard">Sold</Link>
-            </li>
-            <li>
-              <Link to="/additem">Add Item</Link>
-            </li>
-            <li>
               <Link to="/profile">Profile</Link>
             </li>
           </ul>
         </nav>
       )}
+
+      
 
       {/* login-signup-logout-dashboard */}
       <div className="flex items-center gap-x-4">
