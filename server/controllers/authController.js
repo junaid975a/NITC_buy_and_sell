@@ -202,6 +202,10 @@ const findUser = async (req, res) => {
     }
 }
 
+const getUser = async (req, res) => {
+    
+}
+
 // const allUsers = async (req, res) => {
 //     const keyword = req.query.search ? {
 //         $or: [

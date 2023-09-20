@@ -37,19 +37,19 @@ const ItemCard = ({ id, name, category, description, seller_id, condition, creat
 
             {isPopupVisible && (
                 <ItemDetailsPopup
-                id={id}
-                name={name}
-                category={category}
-                description={description}
-                seller_id={seller_id}
-                condition={condition}
-                created_at={created_at}
-                price={price}
+                    id={id}
+                    name={name}
+                    category={category}
+                    description={description}
+                    seller_id={seller_id}
+                    condition={condition}
+                    created_at={created_at}
+                    price={price}
                     onClose={togglePopup} // Pass the function to close the popup
                 />
             )}
 
-            
+
 
 
 
