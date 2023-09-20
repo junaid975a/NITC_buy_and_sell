@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import star from "./images/Star_icon.png";
 
 function Profile_View({ user, setUser }) {
+  // calculating rating variable
+  const rating = user.tot_rating / user.no_of_rating;
+  const roundedRating = rating.toFixed(2);
   // useState variable to toggle between View and Edit state
   const [isEditing, setIsEditing] = useState(false);
   // useState variable to keep Edited data that will replace existing data
@@ -37,11 +41,15 @@ function Profile_View({ user, setUser }) {
 
   // renders View or Edit mode depending on state of isEditing variable
   return (
-    <div className="user-profile p-4 border rounded-lg shadow-lg bg-white">
-      <h2 className="text-4xl font-bold mb-10">User Profile</h2>
+    <div className="user-profile p-16 border rounded-lg shadow-2xl bg-white font-sans">
+      <div className="text-center">
+        <h2 className="text-4xl font-bold mb-12">
+          {isEditing ? "Edit Profile" : "User Profile"}
+        </h2>
+      </div>
       {isEditing ? (
         <form onSubmit={handleSaveClick}>
-          <label className="block mb-2">
+          <label className="block mb-4">
             <strong>Name:</strong>
             <input
               type="text"
@@ -51,17 +59,8 @@ function Profile_View({ user, setUser }) {
               className="border rounded-md p-2 w-full"
             />
           </label>
-          <label className="block mb-2">
-            <strong>Email:</strong>
-            <input
-              type="email"
-              name="email"
-              value={editedUser.email}
-              onChange={handleInputChange}
-              className="border rounded-md p-2 w-full"
-            />
-          </label>
-          <label className="block mb-2">
+
+          <label className="block mb-4">
             <strong>Roll Number:</strong>
             <input
               type="text"
@@ -71,7 +70,7 @@ function Profile_View({ user, setUser }) {
               className="border rounded-md p-2 w-full"
             />
           </label>
-          <label className="block mb-2">
+          <label className="block mb-4">
             <strong>Address:</strong>
             <input
               type="text"
@@ -81,23 +80,27 @@ function Profile_View({ user, setUser }) {
               className="border rounded-md p-2 w-full"
             />
           </label>
-          <label className="block mb-2">
+          <label className="block mb-4">
             <strong>Phone Number:</strong>
             <input
               type="text"
               name="phone"
               value={editedUser.phone}
               onChange={handleInputChange}
+              pattern="[0-9]{10}"
+              title="Enter a numeric value of 10 digits" // Custom error message
               className="border rounded-md p-2 w-full"
             />
           </label>
-          <button
-            type="submit"
-            onClick={tempHandleChange}
-            className="bg-yellow-300 hover:bg-yellow-400 rounded-md text-black py-2 px-4 mt-4"
-          >
-            Save
-          </button>
+          <div className="text-center">
+            <button
+              type="submit"
+              onClick={tempHandleChange}
+              className="bg-yellow-300 hover:bg-yellow-400 rounded-md text-black py-3 px-10 mt-6 font-semibold w-full"
+            >
+              Save
+            </button>
+          </div>
         </form>
       ) : (
         <div>
@@ -117,13 +120,21 @@ function Profile_View({ user, setUser }) {
             <li className="mb-7">
               <strong>Phone Number:</strong> {user.phone}
             </li>
+            <li className="mb-7 flex items-center">
+              <strong className="mr-2">
+                <img src={star} alt="" className="w-10 h-10" />
+              </strong>
+              <span className="mt-1">{roundedRating}</span>
+            </li>
           </ul>
-          <button
-            onClick={handleEditClick}
-            className="bg-yellow-300 hover:bg-yellow-400 rounded-md text-black py-2 px-4 mt-4"
-          >
-            Edit
-          </button>
+          <div className="text-center">
+            <button
+              onClick={handleEditClick}
+              className="bg-yellow-300 hover:bg-yellow-400 rounded-md text-black py-3 px-6 mt-4 font-semibold w-full"
+            >
+              Edit
+            </button>
+          </div>
         </div>
       )}
     </div>

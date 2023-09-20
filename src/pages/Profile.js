@@ -9,7 +9,9 @@ const Profile = (formData) => {
     email: "joel@nitc.ac.in",
     roll: "M210694CA",
     address: "Calicut",
-    phone: "123456",
+    phone: "1234567890",
+    tot_rating: 30,
+    no_of_rating: 7,
   });
   return (
     <div className="w-screen h-screen flex justify-center items-center text-3xl">
