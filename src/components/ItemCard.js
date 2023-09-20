@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ItemDetailsPopup from "./ItemDetailsPopup";
-import { CSSTransition } from "react-transition-group";
 
 const ItemCard = ({ id, name, category, description, seller_id, condition, created_at, price }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);

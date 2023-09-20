@@ -43,7 +43,7 @@ const Navbar = (props) => {
               <Link to="/dashboard">Bought</Link>
             </li>
             <li>
-              <Link to="/dashboard">My List</Link>
+              <Link to="/mylist">My List</Link>
             </li>
             <li>
               <Link to="/additem">Add Item</Link>
