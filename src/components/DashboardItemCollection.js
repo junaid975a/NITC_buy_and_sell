@@ -20,7 +20,7 @@ const DashboardItemCollection = ({ searchParam }) => {
             <div>
                 <h2 className="text-4xl m-[6vh]">Find Your Needs Here..</h2>
             </div>
-            <div className="flex flex-row flex-wrap justify-center max-w-[1300px] my-0 mx-auto">
+            <div className="flex flex-row flex-wrap justify-center max-w-[1380px] my-0 mx-auto">
                 {/* here fetch data from database, and put them all in card one by one using for loop */}
 
                 {/* fetch data */}

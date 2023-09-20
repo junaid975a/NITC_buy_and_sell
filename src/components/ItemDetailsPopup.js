@@ -21,9 +21,9 @@ const ItemDetailsPopup = ({ id, name, category, description, seller_id, conditio
       };
     
     return (
-        <div className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"}`}>
+        <div className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"}`}>
             {/* Create a centered square popup */}
-            <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-min h-min max-h-[600px] overflow-y-auto p-4 text-center z-10 transform transition-transform duration-400 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
+            <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-min h-min max-h-[600px] overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
                 {/* container to show all the details */}
                 <div className="flex flex-col justify-between">
 

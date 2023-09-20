@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import AddItem from "./pages/AddItem";
 import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
+import MyList from "./pages/MyList";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +33,7 @@ function App() {
           element={<Signup setIsLoggedIn={setIsLoggedIn} />}
         />
         <Route path="/additem" element={<AddItem />} />
+        <Route path="mylist" element={<MyList/>}/>
         <Route
           path="/dashboard"
           element={
