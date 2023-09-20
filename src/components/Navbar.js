@@ -49,6 +49,9 @@ const Navbar = (props) => {
               <Link to="/additem">Add Item</Link>
             </li>
             <li>
+              <Link to="/dashboard">Chats</Link>
+            </li>
+            <li>
               <Link to="/profile">Profile</Link>
             </li>
           </ul>
