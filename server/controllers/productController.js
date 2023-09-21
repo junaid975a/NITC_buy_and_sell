@@ -78,19 +78,21 @@ const updateProduct = async (req, res) => {
     const status = newStatus ? newStatus : "not sold";
 
     try {
-        let categoryId = await sequelize.query("select id from categories where name = :categoryName", {
-            replacements: { categoryName },
+        const lCategoryName = categoryName.toLowerCase();
+
+        let categoryId = await sequelize.query("select id from categories where name = :lCategoryName", {
+            replacements: { lCategoryName },
             type: QueryTypes.SELECT
         })
         console.log(categoryId);
         if (categoryId.length === 0) {
-            await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:categoryName,NOW(),NOW())", {
-                replacements: { categoryName },
+            await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:lCategoryName,NOW(),NOW())", {
+                replacements: { lCategoryName },
                 type: QueryTypes.INSERT
             })
 
-            categoryId = await sequelize.query("select id from categories where name = :categoryName", {
-                replacements: { categoryName },
+            categoryId = await sequelize.query("select id from categories where name = :lCategoryName", {
+                replacements: { lCategoryName },
                 type: QueryTypes.SELECT
             })
         }
@@ -117,6 +119,54 @@ const updateProduct = async (req, res) => {
 
 
         if (product) {
+
+            if(status==="sold"){
+                const {finalPrice,buyerId} = req.body
+                if(finalPrice && buyerId) {
+
+                    const buyer = await sequelize.query("select * from users where email=:buyerId",{
+                        replacements:{buyerId},
+                        type:QueryTypes.SELECT
+                    })
+                    if(buyer.length===0) {
+                        res.status(404).json({
+                            "message": "User not found"
+                        })
+                        return;
+                    }
+                    console.log(buyer);
+                    const insertQuery = "INSERT INTO solditems (finalPrice,buyerId,productId,createdAt,updatedAt) values (:finalPrice,:buyerId,:id,NOW(),NOW())";
+                    const soldData = {
+                        finalPrice: finalPrice,
+                        id:id,
+                        buyerId: buyer[0].email
+                    }
+                    const soldProduct = await sequelize.query(insertQuery,{
+                        replacements:soldData,
+                        type: QueryTypes.INSERT
+                    })
+                    if(soldProduct){
+                        const buyerData = await sequelize.query("select * from users where email= :buyerId",{
+                            replacements:{buyerId},
+                            type: QueryTypes.SELECT
+                        })
+                        res.status(201).json({
+                            name: name,
+                            description: description,
+                            image_url: image_url,
+                            pdt_condition: condition,
+                            categoryName: categoryName,
+                            price: price,
+                            status: status,
+                            finalPrice:finalPrice,
+                            buyer:buyerData[0]
+                        })
+                        return;
+                    }
+                }
+
+            }
+
             res.status(201).json({
                 name: name,
                 description: description,
@@ -158,9 +208,9 @@ const deleteProduct = async(req, res) => {
     }
 }
 
-const moveToSoldProducts = () => {
+// const moveToSoldProducts = () => {
 
-}
+// }
 
 const getAllProducts = async(req, res) => {
     try {

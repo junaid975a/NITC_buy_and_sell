@@ -11,9 +11,15 @@ const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    ...config,
+    logging:false,
+  });
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    ...config,
+    logging:false,
+  });
 }
 
 fs
@@ -48,14 +54,19 @@ db.product.belongsTo(db.category)
 db.user.hasMany(db.product)
 db.product.belongsTo(db.user)
 
-db.product.hasOne(db.solditem)
-db.solditem.belongsTo(db.product)
+// db.product.hasOne(db.solditem);
 
-// db.user.hasOne(db.solditem)
-db.solditem.belongsTo(db.user,{
-  foreignKey:'buyerId',
-  as:'buyer'
-})
+// db.solditem.belongsTo(db.product, {
+//   foreignKey: 'productId', // Use productId as the foreign key
+// });
+
+// db.user.hasMany(db.solditem);
+
+// Define the association on the db.solditem model
+// db.solditem.belongsTo(db.user, {
+//   foreignKey: 'buyerId',
+//   as: 'buyer',
+// });
 
 db.solditem.hasOne(db.rating)
 db.rating.belongsTo(db.solditem)

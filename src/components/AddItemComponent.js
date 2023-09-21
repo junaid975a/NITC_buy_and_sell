@@ -9,13 +9,18 @@ const AddItemComponent = ({ setIsLoggedIn }) => {
         // item_id will be automatic generated
         itemname: "",
         // category id will be fetched and placed 
+        // need to pass the **category name** only , it will fetch the id of the category in backend , 
+        // if a new category is created it will create in backend first and then create the id for that category
+
         category: "",
         description: "",
         // seller id is the ID of the current user
         // seller_id: "",
+        // seller_id will be taken in backend
         condition: "",
         price: "",
         // attribute-> created_at, will be taken from sql.now() function
+        // No need to give created_at,updated_at , it will be automatically generated at backend
         // status will be unsold by default
     });
 
@@ -118,8 +123,6 @@ const AddItemComponent = ({ setIsLoggedIn }) => {
                         w-full p-[12px]"
                     />
                 </label>
-
-
                 <button className="w-[250px] bg-yellow-300 hover:bg-yellow-400 rounded-[8px] font-medium text-black
                 px-[12px] py-[8px] mt-6">
                     Submit

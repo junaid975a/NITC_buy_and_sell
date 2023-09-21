@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         phoneNo: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            // unique: true
         },
         avg_rating: {
             type: DataTypes.FLOAT,
