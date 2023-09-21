@@ -28,7 +28,7 @@ const createProduct = async (req, res) => {
         }
         categoryId = categoryId[0].id
         console.log(categoryId);
-        const insertQuery = "INSERT INTO products (name, description,image_url,pdt_condition, createdAt,updatedAt,item_price,categoryId,userEmail) VALUES (:name, :description, :image_url, :pdt_condition, NOW(),NOW(), :price, :categoryId, :userEmail)"
+        const insertQuery = "INSERT INTO products (name, description,image_url,pdt_condition, createdAt,updatedAt,item_price,categoryId,sellerId) VALUES (:name, :description, :image_url, :pdt_condition, NOW(),NOW(), :price, :categoryId, :sellerId)"
 
         const productData = {
             name: name,
@@ -36,7 +36,7 @@ const createProduct = async (req, res) => {
             image_url: image_url,
             pdt_condition: condition,
             categoryId: categoryId,
-            userEmail: req.user,
+            sellerId: req.user,
             price: price
         }
 
@@ -69,15 +69,43 @@ const updateProduct = async (req, res) => {
     const { name, description, image_url, condition, categoryName, price, newStatus } = req.body;
     // let status = req.body
     const id = req.params.id;
-    if (!name || !description || !image_url || !condition || !categoryName || !price) {
+    if (!name || !description || !condition || !categoryName || !price) {
         res.status(400).send({ message: 'Invalid inputs' });
         return;
     }
     const validStatusValues = ["sold", "not sold"];
     // const status = validStatusValues.includes(newStatus) ? newStatus : "not sold";
     const status = newStatus ? newStatus : "not sold";
-
+    // console.log(req.user);
     try {
+
+        // const user = req.user;
+        // 1. check if the user is actually the seller of the product
+        const userId = await sequelize.query("select sellerId from products where sellerId=:sellerId and id=:id",{
+            replacements:{
+                sellerId:req.user,
+                id:id
+            },
+            type: QueryTypes.SELECT
+        });
+
+        // console.log("seller :",userId);
+        if(userId.length===0){
+            res.status(400).json({message:"You are not the owner of this product"})
+            return;
+        }
+
+        // 2. Check if the product has already been in solditems i.e it is already sold out
+        const isSold = await sequelize.query("select * from solditems where productId = :id",{
+            replacements:{id},
+            type:QueryTypes.SELECT
+        })
+
+        if(isSold.length > 0){
+            res.status(400).json({message:"This product has already been sold out , so you cannot update this"})
+            return;
+        }
+        // 3. if both cases doesn't satisfy then proceed'
         const lCategoryName = categoryName.toLowerCase();
 
         let categoryId = await sequelize.query("select id from categories where name = :lCategoryName", {
@@ -190,6 +218,16 @@ const deleteProduct = async(req, res) => {
     const id = req.params.id;
     
     try {
+        const userId = await sequelize.query("select sellerId from products where sellerId=:sellerId",{
+            replacements:{sellerId:req.user},
+            type: QueryTypes.SELECT
+        });
+
+        console.log(userId);
+        if(userId.length===0){
+            res.status(500).json({message:"Unauthorized access"})
+            return;
+        }
         const product = await sequelize.query("select * from products where id=:id",{
             replacements:{id},
             type:QueryTypes.SELECT
@@ -226,6 +264,20 @@ const getAllProducts = async(req, res) => {
     
 }
 
+
+const getCategories = async(req, res) => {
+    try {
+        const allCategories = await sequelize.query("select * from categories",{
+            type:QueryTypes.SELECT
+        })
+        console.log(allCategories);
+        res.status(200).json(allCategories)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: error.message });
+    }
+}
+
 // const 
 
 module.exports = {
@@ -233,4 +285,5 @@ module.exports = {
     updateProduct,
     deleteProduct,
     getAllProducts,
+    getCategories
 }

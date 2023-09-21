@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         references: {
             model: 'users', // Reference the 'products' table
             key: 'email', // Reference the 'id' column in 'products'
-          }
+        }
     }
   });
 

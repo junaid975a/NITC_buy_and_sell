@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             // unique: true
         },
-        avg_rating: {
+        tot_no_rating: {
             type: DataTypes.FLOAT,
             allowNull: true,
             defaultValue: 0

@@ -1,11 +1,14 @@
 const express = require('express');
 const fetchuser = require('../middlewares/fetchUser');
-const { createProduct, updateProduct, getAllProducts, deleteProduct } = require('../controllers/productController');
+const { createProduct, updateProduct, getAllProducts, deleteProduct, getCategories } = require('../controllers/productController');
 const router = express.Router();
 
 router.post('/create',fetchuser,createProduct)
 router.put('/update-product/:id',fetchuser,updateProduct)
 router.get('/all-products',getAllProducts)
-router.delete('/delete-product/:id',deleteProduct)
+router.delete('/delete-product/:id',fetchuser,deleteProduct)
+
+// categories
+router.get('/categories',getCategories)
 
 module.exports = router

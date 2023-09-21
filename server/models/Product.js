@@ -1,46 +1,54 @@
-module.exports = (sequelize,DataTypes) => {
-    const Product = sequelize.define('product',{
-        id:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
+module.exports = (sequelize, DataTypes) => {
+    const Product = sequelize.define('product', {
+        id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true,
         },
-        name:{
-            type:DataTypes.STRING,
-            allowNull:false
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        description:{
-            type:DataTypes.TEXT,
-            allowNull:false
+        sellerId: {
+            type: DataTypes.STRING,
+            references: {
+                model: 'users', // Reference the 'products' table
+                key: 'email', // Reference the 'id' column in 'products'
+            }
         },
-        image_url:{
-            type:DataTypes.STRING,
-            allowNull:false
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: false
         },
-        pdt_condition:{
-            type:DataTypes.TEXT,
-            allowNull:false
+        image_url: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
-        item_price:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-            defaultValue:0
+        pdt_condition: {
+            type: DataTypes.TEXT,
+            allowNull: false
         },
-        avg_rating:{
-            type:DataTypes.FLOAT,
-            allowNull:true,
-            defaultValue:0
+        item_price: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
         },
-        tot_rating:{
-            type:DataTypes.INTEGER,
-            allowNull:true,
-            defaultValue:0
+        avg_rating: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
+            defaultValue: 0
         },
-        status:{
-            type:DataTypes.ENUM("sold","not sold"),
-            defaultValue:"not sold"
-        }
+        tot_rating: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 0
+        },
+        status: {
+            type: DataTypes.ENUM("sold", "not sold"),
+            defaultValue: "not sold"
+        },
+
     })
     return Product
 }

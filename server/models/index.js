@@ -51,8 +51,8 @@ db.Sequelize = Sequelize;
 db.category.hasMany(db.product)
 db.product.belongsTo(db.category)
 
-db.user.hasMany(db.product)
-db.product.belongsTo(db.user)
+// db.user.hasMany(db.product)
+// db.product.belongsTo(db.user)
 
 // db.product.hasOne(db.solditem);
 
@@ -68,8 +68,11 @@ db.product.belongsTo(db.user)
 //   as: 'buyer',
 // });
 
-db.solditem.hasOne(db.rating)
-db.rating.belongsTo(db.solditem)
+// db.solditem.hasOne(db.rating)
+// db.rating.belongsTo(db.solditem,{
+//   foreignKey: 'productId',
+//   as:'product'
+// })
 
 db.chat.belongsTo(db.user, {
   foreignKey: 'sellerId',
