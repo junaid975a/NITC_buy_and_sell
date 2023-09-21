@@ -158,9 +158,13 @@ const deleteProduct = async(req, res) => {
     }
 }
 
+const moveToSoldProducts = () => {
+
+}
+
 const getAllProducts = async(req, res) => {
     try {
-        const allProducts = await sequelize.query("select * from products",{
+        const allProducts = await sequelize.query("select * from products where status='not sold'",{
             type:QueryTypes.SELECT
         })
         console.log(allProducts);

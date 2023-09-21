@@ -48,5 +48,40 @@ db.product.belongsTo(db.category)
 db.user.hasMany(db.product)
 db.product.belongsTo(db.user)
 
+db.product.hasOne(db.solditem)
+db.solditem.belongsTo(db.product)
+
+// db.user.hasOne(db.solditem)
+db.solditem.belongsTo(db.user,{
+  foreignKey:'buyerId',
+  as:'buyer'
+})
+
+db.solditem.hasOne(db.rating)
+db.rating.belongsTo(db.solditem)
+
+db.chat.belongsTo(db.user, {
+  foreignKey: 'sellerId',
+  as: 'seller',
+});
+
+db.chat.belongsTo(db.user, {
+  foreignKey: 'buyerId',
+  as: 'buyer',
+});
+
+db.message.belongsTo(db.user, {
+  foreignKey: 'senderId',
+  as: 'sender'
+})
+db.message.belongsTo(db.chat,{
+  foreignKey: 'chatId',
+  as: 'chat'
+})
+
+db.chat.belongsTo(db.message,{
+  foreignKey: 'latestMessageId',
+})
+
 
 module.exports = db;
