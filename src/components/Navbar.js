@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/nitc_logo_icon.svg";
 import { toast } from "react-hot-toast";
+import AddandEditPopup from "./AddandEditPopup";
 
 const Navbar = (props) => {
   let isLoggedIn = props.isLoggedIn;
   let setIsLoggedIn = props.setIsLoggedIn;
+
+  const categories = [
+    { category_id: 1, category_name: "electronics" },
+    { category_id: 2, category_name: "furniture" },
+    { category_id: 3, category_name: "others" },
+  ]
+
+  // State to control the visibility of the popup
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  // Function to open the popup
+  const openPopup = () => {
+    setIsPopupVisible(true);
+  };
 
   return (
     <div className="flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
@@ -46,7 +61,9 @@ const Navbar = (props) => {
               <Link to="/mylist">My List</Link>
             </li>
             <li>
-              <Link to="/additem">Add Item</Link>
+              <button onClick={openPopup} className="cursor-pointer">
+                Add Item
+              </button>
             </li>
             <li>
               <Link to="/dashboard">Chats</Link>
@@ -56,9 +73,10 @@ const Navbar = (props) => {
             </li>
           </ul>
         </nav>
+
       )}
 
-      
+
 
       {/* login-signup-logout-dashboard */}
       <div className="flex items-center gap-x-4">
@@ -106,6 +124,15 @@ const Navbar = (props) => {
             </button>
           </Link>
         )}
+
+        {/* Render the popup component with visibility controlled by the state */}
+        {isPopupVisible && (
+          <AddandEditPopup
+            onClose={() => setIsPopupVisible(false)} // Pass a function to close the popup
+            categories={categories}
+          />
+        )}
+
       </div>
     </div>
   );

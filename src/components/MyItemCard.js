@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import AddandEditPopup from './AddandEditPopup';
 
-const MyItemCard = ({ id, name, category, description, seller_id, condition, created_at, price, buyer_id, final_price, purchase_date }) => {
+
+const MyItemCard = ({ id, name, category, description, seller_id, condition, created_at, price, buyer_id, final_price, purchase_date, categories }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
 
@@ -24,15 +26,15 @@ const MyItemCard = ({ id, name, category, description, seller_id, condition, cre
                     </div>
                     {!buyer_id && (
                         <div className="max-w-[80px] overflow-hidden text-ellipsis whitespace-nowrap text-sm">
-                        {description}
-                    </div>
+                            {description}
+                        </div>
                     )}
                     {buyer_id && (
                         <div className="max-w-[75px] overflow-hidden text-ellipsis whitespace-nowrap text-sm">
-                        {buyer_id}
-                    </div>
+                            {buyer_id}
+                        </div>
                     )}
-                    
+
                 </div>
             </div>
 
@@ -45,6 +47,22 @@ const MyItemCard = ({ id, name, category, description, seller_id, condition, cre
                     onClick={togglePopup}>
                     Edit Details
                 </button>
+            )}
+
+
+            {isPopupVisible && (
+                <AddandEditPopup
+                    id={id}
+                    name={name}
+                    category={category}
+                    description={description}
+                    seller_id={seller_id}
+                    condition={condition}
+                    created_at={created_at}
+                    price={price}
+                    onClose={togglePopup}
+                    categories={categories} // Pass the function to close the popup
+                />
             )}
 
             {buyer_id && (
