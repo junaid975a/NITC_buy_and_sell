@@ -32,7 +32,6 @@ function App() {
           path="/signup"
           element={<Signup setIsLoggedIn={setIsLoggedIn} />}
         />
-        <Route path="/additem" element={<AddItem />} />
         <Route path="mylist" element={<MyList/>}/>
         <Route
           path="/dashboard"

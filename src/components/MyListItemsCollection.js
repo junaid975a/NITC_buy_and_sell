@@ -25,6 +25,12 @@ const MyListItemsCollection = ({ searchParam }) => {
         { item_id: 3, item_name: 'umbrella', category_id: 'others', description: 'samsung umbrella', seller_id: 'm210662ca', condition: 'new', created_at: '', price: '100',buyer_id:'m210694ca', final_price: '100', purchase_date: '' },
         { item_id: 3, item_name: 'umbrella', category_id: 'others', description: 'samsung umbrella', seller_id: 'm210662ca', condition: 'new', created_at: '', price: '100',buyer_id:'m210694ca', final_price: '100', purchase_date: '' },
     ]
+
+    const categories = [
+        { category_id : 1, category_name: "electronics"},
+        { category_id : 2, category_name: "furniture"},
+        { category_id : 3, category_name: "others"},
+    ]
     return (
         <div className="flex justify-center max-w-[1380px] my-0 mx-auto">
                 {/* here fetch data from database, and put them all in card one by one using for loop */}
@@ -52,7 +58,8 @@ const MyListItemsCollection = ({ searchParam }) => {
                                     seller_id={item.seller_id}
                                     condition={item.condition}
                                     created_at={item.created_at}
-                                    price={item.price} />
+                                    price={item.price}
+                                    categories={categories} />
                             ))
                            
                         }
