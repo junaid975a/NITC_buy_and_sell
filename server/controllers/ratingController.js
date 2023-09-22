@@ -14,7 +14,7 @@ const createRating = async (req, res) => {
 
 
         // check if the requested user is the buyer of the product
-        const isBuyer = await sequelize.query("select sellerId from solditems where buyerId=:buyerId", {
+        const isBuyer = await sequelize.query("select * from solditems where buyerId=:buyerId", {
             replacements: {buyerId},
             type: QueryTypes.SELECT
         });
@@ -33,6 +33,18 @@ const createRating = async (req, res) => {
         if (product.length === 0) {
             res.send(404).json({ message: "product not found" });
         }
+        // check if any rating is already provided
+
+        const isAlreadyRated = await sequelize.query("select * from ratings where productId = :productId",{
+            replacements: { productId },
+            type: QueryTypes.SELECT
+        })
+
+        if(isAlreadyRated.length>0){
+            res.status(400).json({ message: "You have already rated this product" })
+            return;
+        }
+
         let fRating = 0;
         if (rating) {
             fRating = rating
@@ -61,37 +73,47 @@ const createRating = async (req, res) => {
                 replacements:{productId},
                 type:QueryTypes.SELECT
             })
+            console.log(sellerId[0]);
             // find the rating details of the seller
-            const ratingsData = await sequelize.query("select avg_rating,tot_rating from users where email=:sellerId",{
-                replacements:{sellerId},
+            const ratingsData = await sequelize.query("select tot_no_rating,tot_rating from users where email=:sellerId",{
+                replacements:{
+                    sellerId:sellerId[0].sellerId
+                },
                 type:QueryTypes.SELECT
             })
-
+            console.log(ratingsData);
             const no_of_ratings = ratingsData[0].tot_no_rating+1;
             const total_ratings = ratingsData[0].tot_rating+fRating
             // update the rating details of the seller
-            const updateQuery = "UPDATE users SET tot_no_rating=no_of_ratings,tot_rating=total_ratings,updatedAt=NOW() WHERE email = :sellerId"
+            const updateQuery = "UPDATE users SET tot_no_rating=:no_of_ratings,tot_rating=:total_ratings,updatedAt=NOW() WHERE email = :sellerId"
+            // eslint-disable-next-line no-unused-vars
             const updatedUser = await sequelize.query(updateQuery, {
                 replacements:{
                     no_of_ratings:no_of_ratings,
                     total_ratings:total_ratings,
-                    sellerId:sellerId
+                    sellerId:sellerId[0].sellerId
                 },
                 type:QueryTypes.UPDATE
             })
-            res.status(200).json(finalRating)
+            res.status(200).json({
+                rating:fRating,
+                review:fReview,
+                buyerId:buyerId,
+                sellerId:sellerId[0].sellerId,
+                productId:productId
+            })
         } else {
             res.status(500).json({ message: "Failed to create review" })
             return
         }
     } catch (error) {
-        res.status(500).json(error.message)
+        res.status(500).json({message:error.message})
         return;
     }
 }
 
 const updateRating = (req, res) => {
-
+    
 }
 
 const deleteRating = (req, res) => {
