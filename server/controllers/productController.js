@@ -278,12 +278,32 @@ const getCategories = async(req, res) => {
     }
 }
 
-// const 
+const getSearchProducts = async (req, res) => {
+    console.log(req.params);
+    const { query } = req.params;
+    console.log(query);
+    const searchQuery = query.trim().toLowerCase();
+    
+    try {
+        const searchedProducts = await sequelize.query("SELECT * FROM products WHERE LOWER(name) LIKE :searchQuery", {
+            replacements: { searchQuery: `%${searchQuery}%` },
+            type: QueryTypes.SELECT
+        });
+        
+        console.log(searchedProducts);
+        res.status(200).json(searchedProducts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
     getAllProducts,
-    getCategories
+    getCategories,
+    getSearchProducts
 }
