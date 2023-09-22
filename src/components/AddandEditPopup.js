@@ -64,7 +64,9 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
             {/* Create a centered square popup */}
             <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-[600px] md:w-[720px] h-min max-h-[600px]  overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
                 {/* container to show all the details */}
-                <div className="flex flex-col">
+                <form
+                    onSubmit={submitHandler} 
+                    className="flex flex-col">
 
                     <label className="w-full flex items-center gap-x">
                         <p className="text-[0.875rem] mb-1 leading-[1.375rem] whitespace-nowrap">Item Name<sup className="text-rose-500">*</sup> :</p>
@@ -175,10 +177,10 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                                 <input
                                     type="text"
                                     required
-                                    name="itemname"
+                                    name="buyer_id"
                                     onChange={changeHandler}
                                     placeholder="Enter Item Name"
-                                    value={itemData.itemname}
+                                    value="buyer_name/buyer_id"
                                     className="rounded-[0.5rem] 
                         w-full p-[12px]"
                                 />
@@ -188,10 +190,10 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                                 <input
                                     type="number"
                                     required
-                                    name="price"
+                                    name="final_price"
                                     onChange={changeHandler}
                                     placeholder="Enter Item Price"
-                                    value={itemData.price}
+                                    value={0}
                                     className="rounded-[0.5rem] 
                         w-full p-[12px]"
                                 />
@@ -216,7 +218,7 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                     </div>
 
 
-                </div>
+                </form>
 
 
 

@@ -6,10 +6,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-import AddItem from "./pages/AddItem";
 import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import MyList from "./pages/MyList";
+import Bought from "./pages/Bought";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,7 +32,8 @@ function App() {
           path="/signup"
           element={<Signup setIsLoggedIn={setIsLoggedIn} />}
         />
-        <Route path="mylist" element={<MyList/>}/>
+        {/* <Route path="mylist" element={<MyList/>}/>
+        <Route path="/bought" element={<Bought/>}/> */}
         <Route
           path="/dashboard"
           element={
@@ -41,7 +42,31 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/mylist"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <MyList />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/bought"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <Bought />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        {/* <Route path="/profile" element={<Profile />} /> */}
       </Routes>
     </div>
   );
