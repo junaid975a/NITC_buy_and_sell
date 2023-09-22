@@ -5,6 +5,15 @@ module.exports = (sequelize,DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
+        latestMessage: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references:{
+                model:"messages",
+                key: "id"
+            },
+            onDelete: 'SET NULL',
+        }
     });
     return Chat
 }

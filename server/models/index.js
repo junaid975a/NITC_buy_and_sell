@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 'use strict';
 
 const fs = require('fs');
@@ -93,9 +94,11 @@ db.message.belongsTo(db.chat,{
   as: 'chat'
 })
 
-db.chat.belongsTo(db.message,{
-  foreignKey: 'latestMessageId',
-})
+// db.chat.belongsTo(db.message,{
+//   foreignKey: 'latestMessageId',
+//   allowNull: true,
+//   onDelete: 'SET NULL',
+// })
 
 
 module.exports = db;
