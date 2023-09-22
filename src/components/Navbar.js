@@ -55,7 +55,7 @@ const Navbar = (props) => {
         <nav>
           <ul className="flex gap-x-6">
             <li>
-              <Link to="/dashboard">Bought</Link>
+              <Link to="/bought">Bought</Link>
             </li>
             <li>
               <Link to="/mylist">My List</Link>
