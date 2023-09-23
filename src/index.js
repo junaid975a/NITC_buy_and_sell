@@ -5,13 +5,21 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { ChakraProvider } from '@chakra-ui/react';
+// import ChatProvider from './context/chatProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <App />
-    <Toaster />
-  </BrowserRouter>
+  <ChakraProvider >
+    <BrowserRouter>
+
+      <App />
+
+      <Toaster />
+
+    </BrowserRouter>
+  </ChakraProvider>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

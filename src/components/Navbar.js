@@ -66,7 +66,7 @@ const Navbar = (props) => {
               </button>
             </li>
             <li>
-              <Link to="/dashboard">Chats</Link>
+              <Link to="/chatpage">Chats</Link>
             </li>
             <li>
               <Link to="/profile">Profile</Link>

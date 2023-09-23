@@ -10,6 +10,9 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import MyList from "./pages/MyList";
 import Bought from "./pages/Bought";
+import ChatPage from './pages/ChatPage';
+import { ChatContextProvider } from "./context/chatHelperContext";
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -63,6 +66,16 @@ function App() {
           element={
             <PrivateRoute isLoggedIn={isLoggedIn}>
               <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/chatpage"
+          element={
+            <PrivateRoute isLoggedIn={isLoggedIn}>
+              <ChatContextProvider >
+                <ChatPage />
+              </ChatContextProvider>
             </PrivateRoute>
           }
         />
