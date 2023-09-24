@@ -1,0 +1,128 @@
+import React, { useState, useEffect } from "react";
+import StarRating from "./StarRating";
+
+const BoughtItemReviewPopup = ({
+  id,
+  name,
+  category,
+  description,
+  seller_id,
+  condition,
+  created_at,
+  price,
+  onClose,
+  buyer_id,
+  final_price,
+  purchase_date,
+}) => {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [reviewDetails, setReviewDetails] = useState({
+    rating: 0,
+    title: "",
+    desc: "",
+  });
+  useEffect(() => {
+    // Use a setTimeout to delay the appearance of the popup
+    const timeout = setTimeout(() => {
+      setIsPopupVisible(true);
+    }, 300); // Adjust the delay time (in milliseconds) as needed
+
+    // Clean up the timeout when the component unmounts
+    return () => clearTimeout(timeout);
+  }, []);
+  const handleClose = () => {
+    // Removed timout here as it was causing bugs
+    setIsPopupVisible(false);
+    // Delay the closing of the popup to allow the animation to complete
+    onClose(0);
+  };
+  const handleSubmit = () => {
+    // Will be modified later during merging
+    // Simply closes popup for now
+    setIsPopupVisible(false);
+    // Delay the closing of the popup to allow the animation to complete
+    onClose(0);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setReviewDetails({
+      ...reviewDetails,
+      [name]: value,
+    });
+  };
+
+  return (
+    <div
+      className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${
+        isPopupVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      {/* Create a centered square popup */}
+      <div
+        className={`bg-white rounded-lg shadow-md w-[80%] sm:w-[400px] h-[60%] sm:h-auto overflow-y-auto p-8 px-8 text-center z-10 transform transition-transform ease-in duration-500 ${
+          isPopupVisible ? "scale-100" : "scale-90"
+        }`}
+      >
+        {/* Heading */}
+        <h2 className="text-2xl font-bold mb-4">Review your purchase</h2>
+
+        {/* container to show all the details */}
+        <div className="flex flex-col justify-between h-full">
+          {/* top details div */}
+          <form className="flex flex-col h-full text-left ml-2 mt-4">
+            <label className="block mb-4">
+              <strong>Rating:</strong>
+              <StarRating
+                initialRating={reviewDetails.rating}
+                onRatingChange={(newRating) =>
+                  setReviewDetails({ ...reviewDetails, rating: newRating })
+                }
+              />
+            </label>
+
+            <label className="mb-4">
+              <strong>Title:</strong>
+              <br />
+              <input
+                type="text"
+                name="title"
+                value={reviewDetails.title}
+                onChange={handleInputChange}
+                className="border rounded-md p-2 w-full"
+              />
+            </label>
+            <label className="mb-4">
+              <strong>Description:</strong>
+              <br />
+              <textarea
+                name="desc"
+                value={reviewDetails.desc}
+                onChange={handleInputChange}
+                className="border rounded-md p-2 w-full mb-2"
+              />
+            </label>
+
+            {/* buttons */}
+            <div className="flex gap-x-5 justify-center">
+              <button
+                onClick={handleSubmit}
+                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
+              >
+                Submit
+              </button>
+              <button
+                onClick={handleClose}
+                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
+              >
+                Close
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BoughtItemReviewPopup;
