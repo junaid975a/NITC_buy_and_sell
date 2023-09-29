@@ -73,7 +73,7 @@ const updateProduct = async (req, res) => {
         res.status(400).send({ message: 'Invalid inputs' });
         return;
     }
-    const validStatusValues = ["sold", "not sold"];
+    // const validStatusValues = ["sold", "not sold"];
     // const status = validStatusValues.includes(newStatus) ? newStatus : "not sold";
     const status = newStatus ? newStatus : "not sold";
     // console.log(req.user);
@@ -223,7 +223,7 @@ const deleteProduct = async(req, res) => {
             replacements:{id},
             type:QueryTypes.SELECT
         })
-        
+
         if(isSold.length > 0) {
             res.status(400).json({ message:"sorry this product is already sold, so that you cannot delete it"})
         }

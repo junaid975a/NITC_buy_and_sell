@@ -241,7 +241,7 @@ const deleteRating = async (req, res) => {
 
         const prevRating = rating[0].rating;
 
-        const deletedRating = await sequelize.query("delete from ratings where productId = :productId", {
+        await sequelize.query("delete from ratings where productId = :productId", {
             replacements: { productId },
             type: QueryTypes.DELETE
         })
@@ -267,8 +267,8 @@ const deleteRating = async (req, res) => {
         // eslint-disable-next-line no-unused-vars
         const updatedUser = await sequelize.query(updateQuery, {
             replacements: {
-                no_of_ratings: no_of_ratings,
-                total_ratings: total_ratings,
+                no_of_ratings: no_of_ratings-1,
+                total_ratings: total_ratings-prevRating,
                 sellerId: sellerId[0].sellerId
             },
             type: QueryTypes.UPDATE
