@@ -218,6 +218,16 @@ const deleteProduct = async(req, res) => {
     const id = req.params.id;
     
     try {
+
+        const isSold = await sequelize.query("select * from solditems where productId = :id",{
+            replacements:{id},
+            type:QueryTypes.SELECT
+        })
+        
+        if(isSold.length > 0) {
+            res.status(400).json({ message:"sorry this product is already sold, so that you cannot delete it"})
+        }
+
         const userId = await sequelize.query("select sellerId from products where sellerId=:sellerId",{
             replacements:{sellerId:req.user},
             type: QueryTypes.SELECT
