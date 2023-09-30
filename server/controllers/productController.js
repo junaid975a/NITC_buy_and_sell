@@ -69,6 +69,7 @@ const updateProduct = async (req, res) => {
     const { name, description, image_url, condition, categoryName, price, newStatus } = req.body;
     // let status = req.body
     const id = req.params.id;
+    const sellerId = req.user;
     if (!name || !description || !condition || !categoryName || !price) {
         res.status(400).send({ message: 'Invalid inputs' });
         return;
@@ -79,9 +80,11 @@ const updateProduct = async (req, res) => {
     // console.log(req.user);
     try {
 
+
+        // check if the product present or not , if not then send 404 else check the seller of the product
         // const user = req.user;
         // 1. check if the user is actually the seller of the product
-        const userId = await sequelize.query("select sellerId from products where sellerId=:sellerId and id=:id",{
+        const existingProduct = await sequelize.query("select * from products where id=:id",{
             replacements:{
                 sellerId:req.user,
                 id:id
@@ -90,8 +93,15 @@ const updateProduct = async (req, res) => {
         });
 
         // console.log("seller :",userId);
-        if(userId.length===0){
-            res.status(400).json({message:"You are not the owner of this product"})
+        if(existingProduct.length===0){
+            res.status(400).json({message:"This product does not exist"})
+            return;
+        }
+
+        console.log(existingProduct);
+
+        if(existingProduct[0].sellerId!==sellerId){
+            res.status(400).json({message:"You are not the seller of this product"})
             return;
         }
 
@@ -147,7 +157,6 @@ const updateProduct = async (req, res) => {
 
 
         if (product) {
-
             if(status==="sold"){
                 const {finalPrice,buyerId} = req.body
                 if(finalPrice && buyerId) {
