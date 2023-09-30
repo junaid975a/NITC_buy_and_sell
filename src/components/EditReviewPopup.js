@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from "react";
 import StarRating from "./StarRating";
 
-const BoughtItemReviewPopup = ({
-  id,
-  name,
-  category,
-  description,
-  seller_id,
-  condition,
-  created_at,
-  price,
-  onClose,
-  buyer_id,
-  final_price,
-  purchase_date,
-}) => {
+const EditReviewPopup = ({ rating, desc, onClose }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [reviewDetails, setReviewDetails] = useState({
-    rating: 0,
-    desc: "",
+    // values hard coded for now. Will take prop values later
+    rating: rating,
+    desc: desc,
   });
   useEffect(() => {
     // Use a setTimeout to delay the appearance of the popup
@@ -112,4 +100,4 @@ const BoughtItemReviewPopup = ({
   );
 };
 
-export default BoughtItemReviewPopup;
+export default EditReviewPopup;

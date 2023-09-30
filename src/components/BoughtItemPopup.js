@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BoughtItemReviewPopup from "./BoughtItemReviewPopup";
+import ItemReviewDetails from "./ItemReviewDetails";
+import EditReviewPopup from "./EditReviewPopup";
 
 const BoughtItemPopup = ({
   id,
@@ -14,10 +16,17 @@ const BoughtItemPopup = ({
   buyer_id,
   final_price,
   purchase_date,
+  isReviewed,
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   // Added variable for review popup visibility
   const [isReviewVisible, setIsReviewVisible] = useState(false);
+  const [isEditReviewVisible, setIsEditReviewVisible] = useState(false);
+
+  // sample values
+  const rating = 3;
+  const desc = "Sample description for item 123 321 123 321 123 321 123 321";
+
   useEffect(() => {
     // Use a setTimeout to delay the appearance of the popup
     const timeout = setTimeout(() => {
@@ -37,6 +46,9 @@ const BoughtItemPopup = ({
   // Added function to toggle review poppup
   const toggleReview = () => {
     setIsReviewVisible(!isReviewVisible);
+  };
+  const toggleEditReview = () => {
+    setIsEditReviewVisible(!isEditReviewVisible);
   };
 
   return (
@@ -78,13 +90,17 @@ const BoughtItemPopup = ({
 
           {/* to store description and condition */}
 
+          {isReviewed === 1 && (
+            <ItemReviewDetails rating={rating} desc={desc} />
+          )}
+
           {/* buttons */}
           <div className="flex gap-x-5 justify-center">
             <button
-              onClick={toggleReview}
+              onClick={isReviewed === 1 ? toggleEditReview : toggleReview}
               className="bg-green-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-green-600 focus:outline-none"
             >
-              Review
+              {isReviewed === 1 ? "Edit Review" : "Review"}
             </button>
 
             {/* Close button */}
@@ -112,6 +128,13 @@ const BoughtItemPopup = ({
           final_price={final_price}
           purchase_date={purchase_date}
           onClose={toggleReview}
+        />
+      )}
+      {isEditReviewVisible && (
+        <EditReviewPopup
+          rating={rating}
+          desc={desc}
+          onClose={toggleEditReview}
         />
       )}
     </div>
