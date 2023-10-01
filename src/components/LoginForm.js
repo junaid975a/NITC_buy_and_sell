@@ -34,7 +34,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
       className="flex flex-col w-full gap-y-4 mt-6"
     >
       <label className="w-full">
-        <p className="text-[0.875rem] mb-1 leading-[1.375rem]">
+        <p className="text-[0.875rem] mb-1 leading-[1.375rem] text-[#333333]">
           Email Address<sup className="text-rose-500">*</sup>
         </p>
 
@@ -46,12 +46,12 @@ const LoginForm = ({ setIsLoggedIn }) => {
           placeholder="Enter Email Address"
           name="email"
           className="rounded-[0.5rem]
-                        w-full p-[12px]"
+                        w-full p-[12px] border-2 text-[#777777]"
         />
       </label>
 
       <label className="w-full relative">
-        <p className="text-[0.875rem] mb-1 leading-[1.375rem]">
+        <p className="text-[0.875rem] mb-1 leading-[1.375rem] text-[#333333]">
           Password<sup className="text-rose-500">*</sup>
         </p>
 
@@ -63,7 +63,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
           placeholder="Enter Password"
           name="password"
           className="rounded-[0.5rem]
-                        w-full p-[12px]"
+                        w-full p-[12px] border-2 text-[#777777]"
         />
         <span
           onClick={() => setShowPassword((prev) => !prev)}
@@ -83,8 +83,9 @@ const LoginForm = ({ setIsLoggedIn }) => {
       </Link>
 
       <button
-        className="w-full bg-yellow-300 hover:bg-yellow-400 rounded-[8px] font-medium text-black
-                px-[12px] py-[8px] mt-6"
+        className="w-full border border-blue-700 bg-blue-500 hover:bg-blue-600 rounded-[8px] font-medium text-white
+                px-[12px] py-[8px] mt-6
+                transition-all duration-300 ease-out"
       >
         Sign In
       </button>

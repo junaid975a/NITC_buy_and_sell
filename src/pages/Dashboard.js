@@ -12,7 +12,7 @@ const Dashboard = () => {
   // }, [searchParam]);
 
   return (
-    <div className="w-full h-full flex flex-col items-center">
+    <div className="w-full h-full flex flex-col items-center mt-6">
       {/* here import and use DashboardItemCollection component */}
       <div className="w-full flex flex-col items-center mb-[28px]">
         <input
@@ -23,7 +23,7 @@ const Dashboard = () => {
           placeholder="Search Here..."
           name="search"
           className="rounded-[0.5rem]
-                       p-[12px]"
+                       p-[12px] border-2 text-[#777777] w-2/3 max-w-lg"
         />
       </div>
       <DashboardItemCollection searchParam={searchParam}/>

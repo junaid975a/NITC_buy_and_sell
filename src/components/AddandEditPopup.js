@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 
-
-// add 2 radio buttons to select the status of the product -> "sold" or "not sold"
-
-
-
-
 const AddandEditPopup = ({ id, name, category, description, seller_id, condition, created_at, price, onClose, categories }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     useEffect(() => {
@@ -121,7 +115,7 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                         />
                     </label>
 
-                    <label className="w-full flex items-center">
+                    <label className="w-full flex items-center mt-3">
                         <p className="text-[0.875rem] mb-1 leading-[1.375rem] whitespace-nowrap">Condition: </p>
                         <textarea
                             name="condition"
@@ -215,12 +209,14 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                     <div className="flex gap-x-5 justify-center">
                         {/* Close button */}
                         <button onClick={submitHandler}
-                            className="bg-green-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-green-600 focus:outline-none"
+                            className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                            transition-all duration-300 ease-out"
                         >Submit</button>
 
                         {/* Close button */}
                         <button onClick={handleClose}
-                            className="bg-green-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-green-600 focus:outline-none"
+                            className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                            transition-all duration-300 ease-out"
                         >Close</button>
                     </div>
 

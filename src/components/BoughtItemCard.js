@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import BoughtItemPopup from "./BoughtItemPopup";
+import "../css/boughItemCard.css";
 
 const BoughtItemCard = ({
   id,
@@ -22,7 +23,7 @@ const BoughtItemCard = ({
   };
 
   return (
-    <div className="w-[350px] sm:w-[580px] md:w-[740px] lg:w-[980px] h-min m-4 px-4 py-2 flex flex-row rounded-[10px] items-center justify-between shadow-lg">
+    <div className="w-[350px] sm:w-[580px] md:w-[740px] lg:w-[980px] h-min m-4 px-4 py-2 flex flex-row rounded-[10px] items-center justify-between shadow-lg bought-card">
       <div className="flex gap-x-3">
         <div className="flex items-center justify-center">
           <img
@@ -45,7 +46,7 @@ const BoughtItemCard = ({
 
       <button
         className=" py-[6px] px-[20px] border border-blue-700 cursor-pointer
-                rounded-md text-[12px] font-bold bg-blue-500 hover:bg-blue-700 text-white
+                rounded-md text-[12px] font-bold bg-blue-500 hover:bg-blue-600 text-white
                 transition-all duration-300 ease-out"
         onClick={togglePopup}
       >
