@@ -13,7 +13,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
         lastName: "",
         email: "",
         password: "",
-        phoneNo:"",
+        phoneNo: "",
         confirmPassword: "",
     });
     const [pic, setPic] = useState(); // Store the selected image file
@@ -37,7 +37,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
         event.preventDefault();
         setPicLoading(true);
         console.log(formData);
-        if ((!formData.firstName && !formData.lastName) || !formData.email || !formData.password || !formData.confirmPassword || !formData.phoneNo || formData.phoneNo.length!==10) {
+        if ((!formData.firstName && !formData.lastName) || !formData.email || !formData.password || !formData.confirmPassword || !formData.phoneNo || formData.phoneNo.length !== 10) {
             toast.error("Please enter all required fields correctly");
             setPicLoading(false);
             return;
@@ -50,52 +50,53 @@ const SignupForm = ({ setIsLoggedIn }) => {
 
         try {
 
-            const name = formData.firstName+" "+formData.lastName;
+            const name = formData.firstName + " " + formData.lastName;
             const email = formData.email;
             const password = formData.password
             const phoneNo = formData.phoneNo
 
             const config = {
-              headers: {
-                "Content-type": "application/json",
-              },
+                headers: {
+                    "Content-type": "application/json",
+                },
             };
             const { data } = await axios.post(
-              "http://127.0.0.1:5000/auth/register",
-              {
-                name,
-                email,
-                password,
-                phoneNo,
-                pic,
-              },
-              config
+                "http://127.0.0.1:5000/auth/register",
+                {
+                    name,
+                    email,
+                    password,
+                    phoneNo,
+                    pic,
+                },
+                config
             );
             console.log(data);
             toast.success("Registration successful")
+            console.log(data);
             localStorage.setItem("userInfo", JSON.stringify(data));
+            console.log(localStorage.getItem("userInfo"));
             setPicLoading(false);
             const accountData = {
                 ...formData,
             };
-    
+
             const finalData = {
                 ...accountData,
                 accountType,
             };
-    
+
             // You can upload the image (pic) here as needed
-    
+
             console.log(finalData);
             navigate("/dashboard");
-          } catch (error) {
+        } catch (error) {
             console.log(error);
             toast.error("Error occurred while registering")
             setPicLoading(false);
-          }
-        
+        }
 
-        
+
     }
 
     // let imageUrl = "";

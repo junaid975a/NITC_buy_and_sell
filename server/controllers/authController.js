@@ -79,8 +79,13 @@ const registerUser = async (req, res) => {
             email: email,
             password: hashedPassword,
             phoneNo: phoneNo,
-            profilePicture:pic
+            profilePicture: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
         };
+        
+        // Check if pic is provided in req.body
+        if (pic !== undefined) {
+            values.profilePicture = pic;
+        }
 
         const insertQuery = "INSERT INTO users (name, email, password, phoneNo,profilePicture, createdAt, updatedAt) VALUES (:name, :email, :password, :phoneNo, :profilePicture , NOW(), NOW())";
         const user = await sequelize.query(insertQuery, {
@@ -184,8 +189,8 @@ const updateUser = async (req, res) => {
 
 }
 
-const findUser = async (req, res) => {
-    const email = req.params.id;
+const getUser = async (req, res) => {
+    const email = req.user;
     try {
         const userExists = await sequelize.query("SELECT * FROM users WHERE email = :email", {
             replacements: { email }, // Provide the email value here
@@ -204,9 +209,16 @@ const findUser = async (req, res) => {
     }
 }
 
-// const getUser = async (req, res) => {
-    
-// }
+const findUser = async (req, res) => {
+    try {
+        const userId = req.user.id
+        const user = await 
+        res.send(user)
+    } catch (error) {
+        // console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+}
 
 // const allUsers = async (req, res) => {
 //     const keyword = req.query.search ? {

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const LoginForm = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false); 
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,6 +24,25 @@ const LoginForm = ({ setIsLoggedIn }) => {
   function submitHandler(event) {
     event.preventDefault();
     setIsLoggedIn(true);
+    setLoading(true);
+    if (!formData.email || !formData.password) {
+      toast.error("Please enter all required fields correctly");
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+            "Content-type": "application/json",
+            "auth-token":localStorage.getItem("userInfo").token
+        },
+    };
+    } catch (error) {
+      console.log(error);
+      toast.error("Error occurred while registering")
+    }
+
+
     toast.success("Success");
     navigate("/dashboard");
 
@@ -83,9 +103,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
       </Link>
 
       <button
-        className="w-full border border-blue-700 bg-blue-500 hover:bg-blue-600 rounded-[8px] font-medium text-white
-                px-[12px] py-[8px] mt-6
-                transition-all duration-300 ease-out"
+        className="w-full border border-blue-700 bg-blue-500 hover:bg-blue-600 rounded-[8px] font-medium text-white px-[12px] py-[8px] mt-6 transition-all duration-300 ease-out"
       >
         Sign In
       </button>

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/register',registerValidation,registerUser)
 router.post('/login',authUser);
-router.get('/find-user/:id',findUser)
+router.get('/find-user',fetchuser,findUser)
 // login required
 router.put('/update-profile',fetchuser,updateUser)
 router.get('/send-email',sendEmail)
