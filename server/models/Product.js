@@ -34,16 +34,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 0
         },
-        avg_rating: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
-            defaultValue: 0
-        },
-        tot_rating: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            defaultValue: 0
-        },
         status: {
             type: DataTypes.ENUM("sold", "not sold"),
             defaultValue: "not sold"
