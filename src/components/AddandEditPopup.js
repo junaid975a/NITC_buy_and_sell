@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
 
+
+
+// add 2 radio buttons to select the status of the product -> "sold" or "not sold"
+
+
+
+
 const AddandEditPopup = ({ id, name, category, description, seller_id, condition, created_at, price, onClose, categories }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     useEffect(() => {

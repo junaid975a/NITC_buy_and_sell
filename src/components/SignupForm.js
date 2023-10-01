@@ -10,8 +10,10 @@ const SignupForm = ({ setIsLoggedIn }) => {
         lastName: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
     })
+    const [pic, setPic] = useState();
+    const [picLoading, setPicLoading] = useState(false);
     const navigate = useNavigate();
 
     const [showPassword1, setShowPassword1] = useState(false);

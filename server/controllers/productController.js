@@ -318,11 +318,54 @@ const getSearchProducts = async (req, res) => {
 };
 
 
+const getBoughtProducts = async(req, res) => {
+    const buyerId = req.user;
+    try {
+        const selectQuery = "SELECT p.* FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
+        const boughtProducts = await sequelize.query(selectQuery,{
+            replacements:{buyerId},
+            type:QueryTypes.SELECT
+        });
+        if (boughtProducts.length > 0) {
+            res.status(200).json(boughtProducts)
+        }else{
+            res.status(404).json({message:"You have not purchased any products"})
+            return
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+const getPostedProducts = async (req, res) => {
+    const sellerId = req.user;
+    try {
+        const selectQuery = "SELECT * FROM products where sellerId=:sellerId";
+        const postedProducts = await sequelize.query(selectQuery,{
+            replacements:{sellerId},
+            type:QueryTypes.SELECT
+        });
+        if (postedProducts.length > 0) {
+            res.status(200).json(postedProducts)
+        }else{
+            res.status(404).json({message:"You have not posted any products"})
+            return
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
 module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
     getAllProducts,
     getCategories,
-    getSearchProducts
+    getSearchProducts,
+    getBoughtProducts,
+    getPostedProducts
 }

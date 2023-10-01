@@ -18,14 +18,19 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             // unique: true
         },
+        profilePicture:{
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue:"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+        },
         tot_no_rating: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
+            type: DataTypes.INTEGER,
+            allowNull: false,
             defaultValue: 0
         },
         tot_rating: {
             type: DataTypes.INTEGER,
-            allowNull: true,
+            allowNull: false,
             defaultValue: 0
         }
     })
