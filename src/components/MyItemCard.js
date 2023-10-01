@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddandEditPopup from "./AddandEditPopup";
 import { Button } from "@chakra-ui/react";
 import ItemReviewPopup from "./ItemReviewPopup";
+import "../css/boughItemCard.css";
 
 const MyItemCard = ({
   id,
@@ -33,7 +34,7 @@ const MyItemCard = ({
   };
 
   return (
-    <div className="w-[350px] sm:w-[580px] md:w-[740px] lg:w-[980px] h-min m-4 px-4 py-2 flex flex-row rounded-[10px] items-center justify-between shadow-lg">
+    <div className="w-[350px] sm:w-[580px] md:w-[740px] lg:w-[980px] h-min m-4 px-4 py-2 flex flex-row rounded-[10px] items-center justify-between shadow-lg bought-card">
       <div className="flex gap-x-3">
         <div className="flex items-center justify-center">
           <img
@@ -64,16 +65,43 @@ const MyItemCard = ({
       </div>
 
       {/* first button to edit the item */}
-      {!buyer_id && (
-        <button
-          className=" py-[6px] px-[20px] border border-blue-700 cursor-pointer
-                rounded-md text-[12px] font-bold bg-blue-500 hover:bg-blue-700 text-white
+      <div className=" flex flex-wrap justify-end items-center gap-3 sm-sc-btn">
+        {!buyer_id && (
+          <button
+            className=" py-[6px] px-[20px] border border-blue-700 cursor-pointer
+                rounded-md text-[12px] font-bold bg-blue-500 hover:bg-blue-600 text-white
                 transition-all duration-300 ease-out"
-          onClick={togglePopup}
-        >
-          Edit Details
-        </button>
-      )}
+            onClick={togglePopup}
+          >
+            Edit Details
+          </button>
+        )}
+
+        {buyer_id && (
+          <button
+            className=" py-[6px] px-[20px] border border-blue-700
+                rounded-md text-[12px] font-bold bg-blue-400 text-white
+                pointer-events-none opacity-50 cursor-not-allowed"
+            onClick={togglePopup}
+          >
+            SOLD
+          </button>
+        )}
+
+
+        {isReviewed == 1 && (
+          <button
+            className=" py-[6px] px-[20px] border border-blue-700 cursor-pointer
+            rounded-md text-[12px] font-bold bg-blue-500 hover:bg-blue-600 text-white
+            transition-all duration-300 ease-out"
+            onClick={toggleReviewPopup}
+          >
+            View Review
+          </button>
+        )}
+
+
+      </div>
 
       {isPopupVisible && (
         <AddandEditPopup
@@ -90,32 +118,12 @@ const MyItemCard = ({
         />
       )}
 
-      {isReviewed == 1 && (
-        <button
-          className=" py-[6px] px-[20px] border border-blue-700 cursor-pointer
-                rounded-md text-[12px] font-bold bg-blue-500 hover:bg-blue-700 text-white
-                transition-all duration-300 ease-out ml-auto mr-5"
-          onClick={toggleReviewPopup}
-        >
-          View Review
-        </button>
-      )}
       {isReviewPopupVisible && (
         <ItemReviewPopup
           rating={rating}
           desc={desc}
           onClose={toggleReviewPopup}
         />
-      )}
-      {buyer_id && (
-        <button
-          className=" py-[6px] px-[20px] border border-blue-700
-                rounded-md text-[12px] font-bold bg-blue-400 text-white
-                pointer-events-none opacity-50 cursor-not-allowed"
-          onClick={togglePopup}
-        >
-          SOLD
-        </button>
       )}
 
       {/* when item is sold, make another button with no action and puth there taht item is sold */}

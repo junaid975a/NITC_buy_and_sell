@@ -94,13 +94,15 @@ const BoughtItemReviewPopup = ({
             <div className="flex gap-x-5 justify-center">
               <button
                 onClick={handleSubmit}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
+                className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                transition-all duration-300 ease-out"
               >
                 Submit
               </button>
               <button
                 onClick={handleClose}
-                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
+                className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                transition-all duration-300 ease-out"
               >
                 Close
               </button>

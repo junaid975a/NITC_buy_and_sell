@@ -68,13 +68,13 @@ const Navbar = (props) => {
           {!isLoggedIn && (
             <nav>
               <ul className="link-list">
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/">Home</Link>
                 </li>
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/">About</Link>
                 </li>
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/">Contact</Link>
                 </li>
               </ul>
@@ -83,21 +83,21 @@ const Navbar = (props) => {
           {isLoggedIn && (
             <nav>
               <ul className="link-list">
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/bought">Bought</Link>
                 </li>
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/mylist">My List</Link>
                 </li>
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <button onClick={openPopup} className="cursor-pointer">
                     Add Item
                   </button>
                 </li>
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/chatpage">Chats</Link>
                 </li>
-                <li className="group relative mt-2" onClick={hideMenu}>
+                <li className="group relative" onClick={hideMenu}>
                   <Link to="/profile">Profile</Link>
                 </li>
               </ul>
@@ -110,8 +110,9 @@ const Navbar = (props) => {
               {!isLoggedIn && (
                 <Link to="/login">
                   <button
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                            px-[12px] rounded-[8px] border border-richblack-700" onClick={hideMenu}
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out" onClick={hideMenu}
                   >
                     Log In
                   </button>
@@ -120,8 +121,9 @@ const Navbar = (props) => {
               {!isLoggedIn && (
                 <Link to="/signup">
                   <button
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                            px-[12px] rounded-[8px] border border-richblack-700" onClick={hideMenu}
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out" onClick={hideMenu}
                   >
                     Sign Up
                   </button>
@@ -135,8 +137,9 @@ const Navbar = (props) => {
                       setIsLoggedIn(false);
                       toast.success("Logged Out");
                     }}
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                        px-[12px] rounded-[8px] border border-richblack-700"
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out"
                   >
                     Log Out
                   </button>
@@ -145,8 +148,9 @@ const Navbar = (props) => {
               {isLoggedIn && (
                 <Link to="/dashboard">
                   <button
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                            px-[12px] rounded-[8px] border border-richblack-700" onClick={hideMenu}
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out" onClick={hideMenu}
                   >
                     Dashboard
                   </button>
@@ -169,119 +173,7 @@ const Navbar = (props) => {
 
 
     </nav>
-    // <div className="flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
-    //   {!isLoggedIn && (
-    //     <Link to="/">
-    //       <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
-    //     </Link>
-    //   )}
-    //   {isLoggedIn && (
-    //     <Link to="/dashboard">
-    //       <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
-    //     </Link>
-    //   )}
-
-    //   {!isLoggedIn && (
-    //     <nav>
-    //       <ul className="flex gap-x-6">
-    //         <li>
-    //           <Link to="/">Home</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/">About</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/">Contact</Link>
-    //         </li>
-    //       </ul>
-    //     </nav>
-    //   )}
-
-    //   {isLoggedIn && (
-    //     <nav>
-    //       <ul className="flex gap-x-6">
-    //         <li>
-    //           <Link to="/bought">Bought</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/mylist">My List</Link>
-    //         </li>
-    //         <li>
-    //           <button onClick={openPopup} className="cursor-pointer">
-    //             Add Item
-    //           </button>
-    //         </li>
-    //         <li>
-    //           <Link to="/chatpage">Chats</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/profile">Profile</Link>
-    //         </li>
-    //       </ul>
-    //     </nav>
-
-    //   )}
-
-
-
-    //   {/* login-signup-logout-dashboard */}
-    //   <div className="flex items-center gap-x-4">
-    //     {!isLoggedIn && (
-    //       <Link to="/login">
-    //         <button
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                         px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Log In
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {!isLoggedIn && (
-    //       <Link to="/signup">
-    //         <button
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                         px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Sign Up
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {isLoggedIn && (
-    //       <Link to="/">
-    //         <button
-    //           onClick={() => {
-    //             setIsLoggedIn(false);
-    //             toast.success("Logged Out");
-    //           }}
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                     px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Log Out
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {isLoggedIn && (
-    //       <Link to="/dashboard">
-    //         <button
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                         px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Dashboard
-    //         </button>
-    //       </Link>
-    //     )}
-
-    //     {/* Render the popup component with visibility controlled by the state */}
-    //     {isPopupVisible && (
-    //       <AddandEditPopup
-    //         onClose={() => setIsPopupVisible(false)} // Pass a function to close the popup
-    //         categories={categories}
-    //       />
-    //     )}
-
-    //   </div>
-    // </div>
-  );
+      );
 };
 
 export default Navbar;
