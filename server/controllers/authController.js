@@ -47,11 +47,12 @@ const sendEmail = async (req, res) => {
 // Make sure to call the sendEmail function somewhere in your code.
 
 const registerUser = async (req, res) => {
-    const { name, email, password, phoneNo } = req.body;
+    const { name, email, password, phoneNo,pic } = req.body;
     if (!name || !email || !password || !phoneNo) {
         res.status(400).send({ message: 'Invalid credentials' });
         return; // Return to exit the function
     }
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ message: "Email should be valid" });
@@ -77,10 +78,11 @@ const registerUser = async (req, res) => {
             name: name,
             email: email,
             password: hashedPassword,
-            phoneNo: phoneNo
+            phoneNo: phoneNo,
+            profilePicture:pic
         };
 
-        const insertQuery = "INSERT INTO users (name, email, password, phoneNo, createdAt, updatedAt) VALUES (:name, :email, :password, :phoneNo , NOW(), NOW())";
+        const insertQuery = "INSERT INTO users (name, email, password, phoneNo,profilePicture, createdAt, updatedAt) VALUES (:name, :email, :password, :phoneNo, :profilePicture , NOW(), NOW())";
         const user = await sequelize.query(insertQuery, {
             replacements: values,
             type: Sequelize.QueryTypes.INSERT,
