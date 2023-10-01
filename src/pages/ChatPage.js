@@ -9,18 +9,21 @@ const ChatPage = () => {
 
 
     return (
-        
-        <div className="w-[100vw] h-full p-10">
-            <div className="flex">
-                <div className="w-2/6 overflow-y-scroll">
-                    <MyChats />
-                </div>
-                <div className="w-4/6">
-                    <ChatBox/>
+
+        <div className="w-[100vw] h-[85vh] mt-5 flex justify-center items-center bg-blue-300">
+            <div className="flex w-[80%] h-[90%] bg-white p-6 rounded-md">
+                <div className="flex w-full border-2 rounded-md">
+                    <div className="overflow-auto w-2/6">
+                        <MyChats />
+                    </div>
+                    <div className="w-4/6">
+                        <ChatBox />
+                    </div>
                 </div>
             </div>
         </div>
-        
+
+
 
     )
 }

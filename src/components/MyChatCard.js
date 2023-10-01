@@ -21,11 +21,11 @@ const MyChatCard = ({ chat_id, sender_id, receiver_id, sender_name }) => {
         // className={`m-2 p-3 rounded-md max-w-[70%] 
         // ${message.user_id === "m210662ca" ? "bg-[#007bff] 
         // text-white self-end" : "bg-[#f0f0f0] text-[#333] self-start"}`}
-        <div className={`"h-min p-4 flex border-2 rounded-lg items-center cursor-pointer gap-x-1" ${chatId === chat_id ? "bg-blue-300" : "bg-white" }`}
+        <div className={`"h-min p-4 flex gap-1 border-2 rounded-lg items-center cursor-pointer hover:bg-[#f0f0f0] transition-all duration-300 ease-out" ${chatId === chat_id ? "bg-blue-300" : "bg-white" }`}
             onClick={clickHandler}>
 
 
-            <img src="#" alt="user" className="rounded-full" />
+            <img src="#" alt="" className="rounded-full h-[40px] w-[40px] overflow-hidden" />
             <p className="whitespace-nowrap">{sender_name}</p>
 
 
