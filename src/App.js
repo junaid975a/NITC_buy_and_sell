@@ -10,15 +10,19 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import MyList from "./pages/MyList";
 import Bought from "./pages/Bought";
-import ChatPage from './pages/ChatPage';
+import ChatPage from "./pages/ChatPage";
 import { ChatContextProvider } from "./context/chatHelperContext";
-
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div className="">
+      <ToastContainer />
       <Navbar
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
@@ -27,6 +31,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route
           path="/login"
           element={<Login setIsLoggedIn={setIsLoggedIn} />}
@@ -73,7 +79,7 @@ function App() {
           path="/chatpage"
           element={
             <PrivateRoute isLoggedIn={isLoggedIn}>
-              <ChatContextProvider >
+              <ChatContextProvider>
                 <ChatPage />
               </ChatContextProvider>
             </PrivateRoute>
