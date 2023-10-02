@@ -16,7 +16,7 @@ const About = () => {
 
   return (
     <div className={`fade-in ${isVisible ? "active" : ""}`}>
-      <div className="w-screen h-screen flex flex-col justify-center items-center text-center text-xl mt-[-40px]">
+      <div className="w-[100vw] h-[85vh] flex flex-col justify-center items-center text-center text-xl">
         <h1 className="text-4xl font-bold mb-16">
           About Our College Marketplace
         </h1>

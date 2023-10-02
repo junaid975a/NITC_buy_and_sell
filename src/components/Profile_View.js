@@ -41,47 +41,38 @@ function Profile_View({ user, setUser }) {
 
   // renders View or Edit mode depending on state of isEditing variable
   return (
-    <div className="user-profile p-16 border rounded-lg shadow-2xl bg-white font-sans">
+    <div className="w-full sm:w-[380px] md:w-[440px] m-2 p-6 sm:p-12 border rounded-lg shadow-xl bg-white">
       <div className="text-center">
-        <h2 className="text-4xl font-bold mb-12">
+        <h2 className="text-3xl font-bold mb-12 text-[#333333]">
           {isEditing ? "Edit Profile" : "User Profile"}
         </h2>
       </div>
       {isEditing ? (
         <form onSubmit={handleSaveClick}>
           <label className="block mb-4">
-            <strong>Name:</strong>
+            <strong className="text-[#444444]">Name:</strong>
             <input
               type="text"
               name="name"
               value={editedUser.name}
               onChange={handleInputChange}
-              className="border rounded-md p-2 w-full"
+              className="border-2 rounded-md p-2 w-full text-[#666666]"
             />
           </label>
 
           <label className="block mb-4">
-            <strong>Roll Number:</strong>
+            <strong className="text-[#444444]">Roll Number:</strong>
             <input
               type="text"
               name="roll"
               value={editedUser.roll}
               onChange={handleInputChange}
-              className="border rounded-md p-2 w-full"
+              className="border-2 rounded-md p-2 w-full text-[#666666]"
             />
           </label>
+          
           <label className="block mb-4">
-            <strong>Address:</strong>
-            <input
-              type="text"
-              name="address"
-              value={editedUser.address}
-              onChange={handleInputChange}
-              className="border rounded-md p-2 w-full"
-            />
-          </label>
-          <label className="block mb-4">
-            <strong>Phone Number:</strong>
+            <strong className="text-[#444444]">Phone Number:</strong>
             <input
               type="text"
               name="phone"
@@ -89,14 +80,16 @@ function Profile_View({ user, setUser }) {
               onChange={handleInputChange}
               pattern="[0-9]{10}"
               title="Enter a numeric value of 10 digits" // Custom error message
-              className="border rounded-md p-2 w-full"
+              className="border-2 rounded-md p-2 w-full text-[#666666]"
             />
           </label>
           <div className="text-center">
             <button
               type="submit"
               onClick={tempHandleChange}
-              className="bg-yellow-300 hover:bg-yellow-400 rounded-md text-black py-3 px-10 mt-6 font-semibold w-full"
+              className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+              w-[116px] bg-blue-500 hover:bg-blue-600 font-medium text-white
+              transition-all duration-300 ease-out"
             >
               Save
             </button>
@@ -105,32 +98,32 @@ function Profile_View({ user, setUser }) {
       ) : (
         <div>
           <ul>
-            <li className="mb-7">
-              <strong>Name:</strong> {user.name}
+            <li className="mb-7 flex gap-2">
+              <strong className="text-[#444444]">Name:</strong> <p>{user.name}</p>
             </li>
-            <li className="mb-7">
-              <strong>Email:</strong> {user.email}
+            <li className="mb-7 flex gap-2">
+              <strong className="text-[#444444]">Email:</strong> <p>{user.email}</p>
             </li>
-            <li className="mb-7">
-              <strong>Roll Number:</strong> {user.roll}
+            <li className="mb-7 flex gap-2">
+              <strong className="text-[#444444]">Roll No:</strong> <p>{user.roll}</p>
             </li>
-            <li className="mb-7">
-              <strong>Address:</strong> {user.address}
-            </li>
-            <li className="mb-7">
-              <strong>Phone Number:</strong> {user.phone}
+            
+            <li className="mb-7 flex gap-2">
+              <strong className="text-[#444444]">Phone No:</strong> <p>{user.phone}</p>
             </li>
             <li className="mb-7 flex items-center">
               <strong className="mr-2">
-                <img src={star} alt="" className="w-10 h-10" />
+                <img src={star} alt="" className="w-6" />
               </strong>
-              <span className="mt-1">{roundedRating}</span>
+              <span className="mt-1 text-[#444444]">{roundedRating}</span>
             </li>
           </ul>
           <div className="text-center">
             <button
               onClick={handleEditClick}
-              className="bg-yellow-300 hover:bg-yellow-400 rounded-md text-black py-3 px-6 mt-4 font-semibold w-full"
+              className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+              w-[116px] bg-blue-500 hover:bg-blue-600 font-medium text-white
+              transition-all duration-300 ease-out"
             >
               Edit
             </button>

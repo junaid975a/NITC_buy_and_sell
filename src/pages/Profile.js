@@ -14,7 +14,7 @@ const Profile = (formData) => {
     no_of_rating: 7,
   });
   return (
-    <div className="w-screen h-screen flex justify-center items-center text-3xl">
+    <div className="w-[100vw] h-[85vh] flex justify-center items-center">  
       <Profile_View user={user} setUser={setUser} />
     </div>
   );

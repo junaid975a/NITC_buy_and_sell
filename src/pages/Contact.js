@@ -40,8 +40,8 @@ const Contact = () => {
 
   return (
     <div className={`fade-in ${isVisible ? "active" : ""}`}>
-      <div className="bg-gray-100 min-h-screen">
-        <div className="container mx-auto py-16">
+      <div className="bg-gray-100 mt-4">
+        <div className="container mx-auto py-16 w-[100vw] h-[85vh]">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
           <p className="text-gray-600 mb-8">
             Have questions or feedback? Feel free to reach out to us.
@@ -96,7 +96,7 @@ const Contact = () => {
               <div className="mb-6 mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline-blue active:bg-blue-700"
+                  className="bg-blue-500 border border-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline-blue active:bg-blue-700 transition-all duration-300 ease-in-out"
                 >
                   Send Message
                 </button>

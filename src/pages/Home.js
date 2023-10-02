@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <div className={`fade-in ${isVisible ? "active" : ""}`}>
-      <div className="w-screen h-screen flex justify-center items-center text-3xl">
+      <div className="w-[100vw] h-[85vh] flex justify-center items-center text-3xl">
         {" "}
         <img src={img} alt="" className="w-full md:w-3/5 h-auto mb-20" />
         {/* Adjust the margin class */}
