@@ -103,8 +103,9 @@ const Navbar = (props) => {
               {!isLoggedIn && (
                 <Link to="/login">
                   <button
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                            px-[12px] rounded-[8px] border border-richblack-700"
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out"
                     onClick={hideMenu}
                   >
                     Log In
@@ -114,8 +115,9 @@ const Navbar = (props) => {
               {!isLoggedIn && (
                 <Link to="/signup">
                   <button
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                            px-[12px] rounded-[8px] border border-richblack-700"
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out"
                     onClick={hideMenu}
                   >
                     Sign Up
@@ -141,8 +143,9 @@ const Navbar = (props) => {
               {isLoggedIn && (
                 <Link to="/dashboard">
                   <button
-                    className="text-richblack-100 bg-richblack-800 py-[8px]
-                            px-[12px] rounded-[8px] border border-richblack-700"
+                    className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
+                    w-full bg-blue-500 hover:bg-blue-600 font-medium text-white
+                    transition-all duration-300 ease-out"
                     onClick={hideMenu}
                   >
                     Dashboard
