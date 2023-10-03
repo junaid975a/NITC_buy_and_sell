@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginForm = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -20,14 +21,48 @@ const LoginForm = ({ setIsLoggedIn }) => {
     }));
   }
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
-    setIsLoggedIn(true);
-    toast.success("Success");
-    navigate("/dashboard");
 
-    console.log(formData);
+    if (!formData.email || !formData.password) {
+      toast.error("Please enter both email and password");
+      return;
+    }
+
+    try {
+      const email = formData.email;
+      const password = formData.password;
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        "http://127.0.0.1:5000/auth/login",
+        {
+          email,
+          password,
+        },
+        config
+      );
+
+      if (data.token) {
+        // Assuming your server returns a token on successful login
+        setIsLoggedIn(true);
+        toast.success("Login successful");
+        // Save the token in local storage or context for future authenticated requests
+        localStorage.setItem("token", data.token);
+        navigate("/dashboard");
+      } else {
+        toast.error("Invalid credentials");
+      }
+    } catch (error) {
+      toast.error("Invalid credentials");
+    }
   }
+
   return (
     <form
       onSubmit={submitHandler}
@@ -37,7 +72,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
         <p className="text-[0.875rem] mb-1 leading-[1.375rem] text-[#333333]">
           Email Address<sup className="text-rose-500">*</sup>
         </p>
-
         <input
           type="email"
           required
@@ -45,8 +79,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
           onChange={changeHandler}
           placeholder="Enter Email Address"
           name="email"
-          className="rounded-[0.5rem]
-                        w-full p-[12px] border-2 text-[#777777]"
+          className="rounded-[0.5rem] w-full p-[12px] border-2 text-[#777777]"
         />
       </label>
 
@@ -54,7 +87,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
         <p className="text-[0.875rem] mb-1 leading-[1.375rem] text-[#333333]">
           Password<sup className="text-rose-500">*</sup>
         </p>
-
         <input
           type={showPassword ? "text" : "password"}
           required
@@ -62,8 +94,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
           onChange={changeHandler}
           placeholder="Enter Password"
           name="password"
-          className="rounded-[0.5rem]
-                        w-full p-[12px] border-2 text-[#777777]"
+          className="rounded-[0.5rem] w-full p-[12px] border-2 text-[#777777]"
         />
         <span
           onClick={() => setShowPassword((prev) => !prev)}
@@ -83,9 +114,8 @@ const LoginForm = ({ setIsLoggedIn }) => {
       </Link>
 
       <button
-        className="w-full border border-blue-700 bg-blue-500 hover:bg-blue-600 rounded-[8px] font-medium text-white
-                px-[12px] py-[8px] mt-6
-                transition-all duration-300 ease-out"
+        className="w-full border border-blue-700 bg-blue-500 hover:bg-blue-600 rounded-[8px] font-medium text-white px-[12px] py-[8px] mt-6 transition-all duration-300 ease-out"
+        type="submit"
       >
         Sign In
       </button>
