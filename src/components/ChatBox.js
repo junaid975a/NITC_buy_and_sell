@@ -42,7 +42,7 @@ const ChatBox = () => {
             
         // </div>
         <div className="flex flex-col h-full">
-            <div className="flex-grow overflow-y-auto">
+            <div className="flex-grow flex flex-col overflow-y-auto">
                 {/* Display filtered messages */}
                 {filteredMessages.map((message) => (
                     <div
@@ -53,15 +53,16 @@ const ChatBox = () => {
                     </div>
                 ))}
             </div>
-            <div className="input-area flex p-2">
+            <div className="bg-[#fff] border-t-[1px] border-solid border-[#e0e0e0] flex p-2">
                 <input
                     type="text"
                     placeholder="Type your message..."
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
-                    className="flex-grow border rounded-md p-2"
+                    className="flex-grow border border-solid rounded-md p-2 mr-2"
                 />
-                <button onClick={sendMessage} className="bg-blue-500 text-white rounded-md px-4 ml-2">
+                <button onClick={sendMessage} className="bg-blue-500 border border-blue-700 hover:bg-blue-600 text-white rounded-md px-[16px] py-[8px] ml-2
+                transition-all duration-300 ease-in-out">
                     Send
                 </button>
             </div>
