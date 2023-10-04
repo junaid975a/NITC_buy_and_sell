@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 
-const ItemDetailsPopup = ({ id, name, category, description, seller_id, condition, created_at, price, onClose }) => {
+const ItemDetailsPopup = ({ id, name, category, description, sellerId, condition, created_at, price, onClose }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     useEffect(() => {
         // Use a setTimeout to delay the appearance of the popup
@@ -35,7 +35,7 @@ const ItemDetailsPopup = ({ id, name, category, description, seller_id, conditio
                         <div className="flex flex-col justify-end m-4 p-3 items-start">
                             <h4 className="text-[#1faa59] text-xl font-bold">&#8377; {price}</h4>
                             <h4 className="text-2xl">{name}</h4>
-                            <p className="text-sm italic whitespace-nowrap">by <span className="italic text-gray-400 text-sm">seller_name </span></p>
+                            <p className="text-sm italic whitespace-nowrap">by <span className="italic text-gray-400 text-sm">{sellerId}</span></p>
                         </div>
 
                     </div>

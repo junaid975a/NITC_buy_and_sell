@@ -3,11 +3,14 @@ import { toast } from "react-hot-toast";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../context/auth/AuthContext";
+import { useEffect } from "react";
 
 const LoginForm = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
-  const [loading,setLoading] = useState(false); 
-
+  const [loading, setLoading] = useState(false);
+  const {setUser,setIsAuthenticated,getUserData} = useContext(AuthContext)
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -53,6 +56,9 @@ const LoginForm = ({ setIsLoggedIn }) => {
         // Assuming your server returns a token on successful login
         setIsLoggedIn(true);
         toast.success("Login successful");
+        setIsAuthenticated(true);
+        setUser(data.email)
+        
         // Save the token in local storage or context for future authenticated requests
         localStorage.setItem("token", data.token);
         navigate("/dashboard");
@@ -60,9 +66,20 @@ const LoginForm = ({ setIsLoggedIn }) => {
         toast.error("Invalid credentials");
       }
     } catch (error) {
-      toast.error("Invalid credentials");
+      toast.error(error.response.data.message);
     }
   }
+
+  // useEffect(() => {
+  //   const userToken = localStorage.getItem('token');
+  //   if (userToken) {
+  //     // getUserData(user)
+  //     // getAllProducts()
+  //     setIsAuthenticated(true);
+  //     navigate("/dashboard")
+  //   }
+  //   // eslint-disable-next-line
+  // },[])
 
   return (
     <form

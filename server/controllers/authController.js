@@ -67,6 +67,7 @@ const registerUser = async (req, res) => {
 
         if (userExists.length > 0) {
             // User with the same email already exists
+            // console.log("user already exists");
             res.status(400).send({ message: 'User already exists' });
             return; // Return to exit the function
         }
@@ -105,36 +106,44 @@ const registerUser = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
-        res.status(500).send({ error: error.message });
+        res.status(500).send({ message: error.message });
     }
 }
 
 const authUser = async (req, res) => {
     const { email, password } = req.body;
-    const userExists = await sequelize.query("SELECT * FROM users WHERE email = :email", {
-        replacements: { email }, // Provide the email value here
-        type: QueryTypes.SELECT,
-    });
-    if (userExists.length === 0) {
-        res.status(400).json({ error: "Invalid Credentials" });
-        return;
-    }
-    const comparePassword = await bcrypt.compare(password, userExists[0].password)
-    if (!comparePassword) {
-        res.status(400).json({ error: "Invalid Credentials" });
-        return;
-    } else {
-        res.status(201).json({
-            email: email,
-            token: generateToken(email),
+    try {
+        const userExists = await sequelize.query("SELECT * FROM users WHERE email = :email", {
+            replacements: { email }, // Provide the email value here
+            type: QueryTypes.SELECT,
         });
+        if (userExists.length === 0) {
+            res.status(400).json({ message: "No user exists with this email" });
+            return;
+        }
+        const comparePassword = await bcrypt.compare(password, userExists[0].password)
+        if (!comparePassword) {
+            // console.log("not equal");
+            res.status(400).json({ error: "Wrong Password" });
+            return;
+        } else {
+            res.status(201).json({
+                email: email,
+                token: generateToken(email),
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: "Internal Server Error" });
     }
+    
 }
 
 const updateUser = async (req, res) => {
-    const { name, email, password, phoneNo } = req.body;
+    const { name, phoneNo } = req.body;
+    const email = req.user
 
-    if (!name || !password || !phoneNo) {
+    if (!name || !phoneNo) {
         res.status(400).send({ message: 'Invalid credentials' });
         return; // Return to exit the function
     }
@@ -152,18 +161,17 @@ const updateUser = async (req, res) => {
             console.log(userExists);
         }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // const salt = await bcrypt.genSalt(10);
+        // const hashedPassword = await bcrypt.hash(password, salt);
 
-        console.log("password hashed: " + hashedPassword);
+        // console.log("password hashed: " + hashedPassword);
         const values = {
             name: name,
             email: email,
-            password: hashedPassword,
             phoneNo: phoneNo
         }
 
-        const updateQuery = "UPDATE users SET name=:name,password=:password,phoneNo=:phoneNo,updatedAt=NOW() WHERE email = :email"
+        const updateQuery = "UPDATE users SET name=:name,phoneNo=:phoneNo,updatedAt=NOW() WHERE email = :email"
 
         const user = await sequelize.query(updateQuery, {
             replacements: values,
@@ -176,7 +184,6 @@ const updateUser = async (req, res) => {
                 name: name,
                 email: email,
                 phoneNo: phoneNo,
-                token: generateToken(user.email),
             });
         } else {
             res.status(500).send({ message: 'Failed to update user' });
@@ -198,7 +205,7 @@ const getUser = async (req, res) => {
         });
 
         if (userExists.length > 0) {
-            res.status(200).json({ user: userExists[0] });
+            res.status(200).json(userExists[0]);
         } else {
             res.status(404).json({ error: "User not found" });
             // console.log(userExists);
@@ -211,11 +218,14 @@ const getUser = async (req, res) => {
 
 const findUser = async (req, res) => {
     try {
-        const userId = req.user.id
-        const user = await 
-        res.send(user)
+        const userId = req.body.email
+        const userData = await sequelize.query("select name,email,tot_rating,tot_no_rating,phoneNo from users where email=:userId",{
+            replacements:{ userId},
+            type:QueryTypes.SELECT
+        })
+        res.status(200).json(userData[0]);
     } catch (error) {
-        // console.error(error.message);
+        console.error(error.message);
         res.status(500).send("Internal Server Error");
     }
 }
@@ -231,4 +241,4 @@ const findUser = async (req, res) => {
 //     return res.send(users)
 // }
 
-module.exports = { registerUser, registerValidation, authUser, updateUser, findUser, sendEmail }
+module.exports = { registerUser, registerValidation, authUser, updateUser, findUser, sendEmail, getUser }

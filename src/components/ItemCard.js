@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ItemDetailsPopup from "./ItemDetailsPopup";
 
-const ItemCard = ({ id, name, category, description, seller_id, condition, created_at, price }) => {
+const ItemCard = ({ id, name, category, description, sellerId, condition, created_at, price }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
 
@@ -41,7 +41,7 @@ const ItemCard = ({ id, name, category, description, seller_id, condition, creat
                     name={name}
                     category={category}
                     description={description}
-                    seller_id={seller_id}
+                    sellerId={sellerId}
                     condition={condition}
                     created_at={created_at}
                     price={price}

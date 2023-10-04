@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
+import imageCompressor from "image-compressor.js";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 
 const AddandEditPopup = ({ id, name, category, description, seller_id, condition, created_at, price, onClose, categories }) => {
+
+    const [pic, setPic] = useState(); // Store the selected image file
+    const [picLoading, setPicLoading] = useState(false);
+
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+
     useEffect(() => {
         // Use a setTimeout to delay the appearance of the popup
         const timeout = setTimeout(() => {
@@ -58,6 +66,58 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
         // on submit, what to do
 
     }
+
+    const postDetails = async (pics) => {
+        setPicLoading(true);
+
+        if (pics === undefined) {
+            toast.error("Please provide an image")
+            setPicLoading(false);
+            return;
+        }
+
+        console.log(pics);
+        if (pics.type === "image/jpeg" || pics.type === "image/png") {
+            let compressedBlob = pics;
+            const compressor = new imageCompressor();
+
+            try {
+                // Compress the image
+                compressedBlob = await compressor.compress(pics, { quality: 0.5 });
+            } catch (error) {
+                console.error("Image compression error:", error);
+                setPicLoading(false);
+                return;
+            }
+
+            const data = new FormData();
+            data.append("file", compressedBlob);
+            data.append("upload_preset", "chatapp");
+            data.append("cloud_name", "dlkpb4vzg");
+
+            await fetch("https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload", {
+                method: "post",
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    // Update the pic state here
+                    setPic(data.url.toString());
+                    setPicLoading(false);
+                    // console.log(pic);
+                    // console.log(imageUrl);
+                })
+                .catch((err) => {
+                    toast.error("Error occurred while uploading")
+                    console.error("Image upload error:", err);
+                    setPicLoading(false);
+                });
+        } else {
+            toast.error("Please select a valid image of .jpg or .png type")
+            setPicLoading(false);
+            return;
+        }
+    };
 
 
     return (

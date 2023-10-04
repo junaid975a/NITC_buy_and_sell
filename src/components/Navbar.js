@@ -4,11 +4,13 @@ import logo from "../assets/nitc_logo_icon.svg";
 import { toast } from "react-hot-toast";
 import AddandEditPopup from "./AddandEditPopup";
 import "../css/navbar.css";
+import { useContext } from "react";
+import AuthContext from "../context/auth/AuthContext";
 
 const Navbar = (props) => {
   let isLoggedIn = props.isLoggedIn;
   let setIsLoggedIn = props.setIsLoggedIn;
-
+  const {isAuthenticated,setIsAuthenticated} = useContext(AuthContext)
   const categories = [
     { category_id: 1, category_name: "electronics" },
     { category_id: 2, category_name: "furniture" },
@@ -54,7 +56,7 @@ const Navbar = (props) => {
           checked={isMenuVisible}
           onChange={toggleMenu}
         />
-        <label className="menu-button-container" for="menu-toggle">
+        <label className="menu-button-container" htmlFor="menu-toggle">
           <div className="menu-button"></div>
         </label>
 
@@ -100,7 +102,7 @@ const Navbar = (props) => {
           {/* login-signup-logout-dashboard */}
           <nav>
             <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-4">
-              {!isLoggedIn && (
+              {!isAuthenticated && (
                 <Link to="/login">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -112,7 +114,7 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {!isLoggedIn && (
+              {!isAuthenticated && (
                 <Link to="/signup">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -124,7 +126,7 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {isLoggedIn && (
+              {isAuthenticated && (
                 <Link to="/">
                   <button
                     onClick={() => {
@@ -140,7 +142,7 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {isLoggedIn && (
+              {isAuthenticated && (
                 <Link to="/dashboard">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700

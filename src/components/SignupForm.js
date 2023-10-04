@@ -6,7 +6,6 @@ import "../css/signupform.css";
 import imageCompressor from "image-compressor.js";
 import axios from "axios";
 
-
 const SignupForm = ({ setIsLoggedIn }) => {
     const [formData, setFormData] = useState({
         firstName: "",
@@ -16,27 +15,26 @@ const SignupForm = ({ setIsLoggedIn }) => {
         phoneNo: "",
         confirmPassword: "",
     });
-    const [pic, setPic] = useState(); // Store the selected image file
+    const [pic, setPic] = useState(); // Store the selected image URL
     const [picLoading, setPicLoading] = useState(false);
     const navigate = useNavigate();
-    const [imageUrl, setImageUrl] = useState("")
 
     const [showPassword1, setShowPassword1] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [accountType, setAccountType] = useState("student");
+    const [selectedImage, setSelectedImage] = useState(null); // State to store selected image
 
     const changeHandler = (event) => {
         setFormData((prev) => ({
             ...prev,
             [event.target.name]: event.target.value,
         }));
-    }
-
+    };
 
     const submitHandler = async (event) => {
         event.preventDefault();
         setPicLoading(true);
-        console.log(formData);
+
         if ((!formData.firstName && !formData.lastName) || !formData.email || !formData.password || !formData.confirmPassword || !formData.phoneNo || formData.phoneNo.length !== 10) {
             toast.error("Please enter all required fields correctly");
             setPicLoading(false);
@@ -44,22 +42,29 @@ const SignupForm = ({ setIsLoggedIn }) => {
         }
         if (formData.password !== formData.confirmPassword) {
             toast.error("Passwords do not match");
+            setPicLoading(false);
             return;
         }
+
         setIsLoggedIn(true);
 
         try {
-
             const name = formData.firstName + " " + formData.lastName;
             const email = formData.email;
-            const password = formData.password
-            const phoneNo = formData.phoneNo
+            const password = formData.password;
+            const phoneNo = formData.phoneNo;
 
             const config = {
                 headers: {
                     "Content-type": "application/json",
                 },
             };
+
+            // Upload the selected image (if any) to the server
+            if (selectedImage) {
+                await postDetails(selectedImage);
+            }
+
             const { data } = await axios.post(
                 "http://127.0.0.1:5000/auth/register",
                 {
@@ -71,12 +76,13 @@ const SignupForm = ({ setIsLoggedIn }) => {
                 },
                 config
             );
+
             console.log(data);
-            toast.success("Registration successful")
-            console.log(data);
+            toast.success("Registration successful");
             localStorage.setItem("userInfo", JSON.stringify(data));
             console.log(localStorage.getItem("userInfo"));
             setPicLoading(false);
+
             const accountData = {
                 ...formData,
             };
@@ -86,39 +92,20 @@ const SignupForm = ({ setIsLoggedIn }) => {
                 accountType,
             };
 
-            // You can upload the image (pic) here as needed
-
             console.log(finalData);
             navigate("/dashboard");
         } catch (error) {
             console.log(error);
-            toast.error("Error occurred while registering")
+            toast.error(error.response.data.message);
             setPicLoading(false);
         }
-
-
-    }
-
-    // let imageUrl = "";
+    };
 
     const postDetails = async (pics) => {
         setPicLoading(true);
 
-        if (pics === undefined) {
-            toast({
-                title: "Please Select an Image!",
-                status: "warning",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom",
-            });
-            setPicLoading(false);
-            return;
-        }
-
-        console.log(pics);
         if (pics.type === "image/jpeg" || pics.type === "image/png") {
-            let compressedBlob;
+            let compressedBlob = pics;
             const compressor = new imageCompressor();
 
             try {
@@ -143,30 +130,18 @@ const SignupForm = ({ setIsLoggedIn }) => {
                 .then((data) => {
                     // Update the pic state here
                     setPic(data.url.toString());
-                    console.log(data.url.toString());
-                    setImageUrl(data.url.toString())
                     setPicLoading(false);
-                    console.log(pic);
-                    console.log(imageUrl);
                 })
                 .catch((err) => {
+                    toast.error("Error occurred while uploading");
                     console.error("Image upload error:", err);
                     setPicLoading(false);
                 });
         } else {
-            toast({
-                title: "Please Select an Image!",
-                status: "warning",
-                duration: 5000,
-                isClosable: true,
-                position: "bottom",
-            });
+            toast.error("Please select a valid image of .jpg or .png type");
             setPicLoading(false);
-            return;
         }
     };
-
-
     return (
         <div className="mt-6">
             <form
@@ -284,7 +259,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
                         accept="image/*"
                         name="profilePicture"
                         className="rounded-[0.5rem] text-[#777777] border-2 w-full p-[12px]"
-                        onChange={(e) => postDetails(e.target.files[0])}
+                        onChange={(e) => setSelectedImage(e.target.files[0])} // Store selected image in state
                     />
                 </label>
 

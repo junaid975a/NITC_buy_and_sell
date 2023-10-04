@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import star from "./images/Star_icon.png";
+import { useContext } from "react";
+import AuthContext from "../context/auth/AuthContext";
+import toast from "react-hot-toast";
 
-function Profile_View({ user, setUser }) {
+function Profile_View() {
+  const {userData,setUserData,editUser}  = useContext(AuthContext)
+  // console.log(userData);
+  const [editedUser, setEditedUser] = useState(userData);
   // calculating rating variable
-  const rating = user.tot_rating / user.no_of_rating;
+  const rating = userData.tot_rating / userData.tot_no_rating;
   const roundedRating = rating.toFixed(2);
   // useState variable to toggle between View and Edit state
   const [isEditing, setIsEditing] = useState(false);
   // useState variable to keep Edited data that will replace existing data
-  const [editedUser, setEditedUser] = useState(user);
-
   // function to continuously edit isEditing variable with each user input
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -17,6 +21,7 @@ function Profile_View({ user, setUser }) {
       ...editedUser,
       [name]: value,
     });
+    // console.log(editedUser);
   };
 
   // function to go into Edit mode
@@ -28,15 +33,17 @@ function Profile_View({ user, setUser }) {
     // Here, you can implement the logic to save the edited user data
     // You may send a request to your server to update the user's details
     // Once saved, you can also update the 'user' state with the edited data if needed
-
+    // console.log(editedUser);
     // For this example, let's just exit the edit mode
+    editUser(editedUser)
+    toast.success("Edited successfully")
 
     setIsEditing(false);
   };
 
   // Temporary function to showcase edit working
   const tempHandleChange = () => {
-    setUser(editedUser);
+    setUserData(editedUser);
   };
 
   // renders View or Edit mode depending on state of isEditing variable
@@ -60,23 +67,23 @@ function Profile_View({ user, setUser }) {
             />
           </label>
 
-          <label className="block mb-4">
+          {/* <label className="block mb-4">
             <strong className="text-[#444444]">Roll Number:</strong>
             <input
               type="text"
               name="roll"
-              value={editedUser.roll}
+              value={editedUser.rollNo}
               onChange={handleInputChange}
               className="border-2 rounded-md p-2 w-full text-[#666666]"
             />
-          </label>
+          </label> */}
           
           <label className="block mb-4">
             <strong className="text-[#444444]">Phone Number:</strong>
             <input
               type="text"
-              name="phone"
-              value={editedUser.phone}
+              name="phoneNo"
+              value={editedUser.phoneNo}
               onChange={handleInputChange}
               pattern="[0-9]{10}"
               title="Enter a numeric value of 10 digits" // Custom error message
@@ -99,17 +106,17 @@ function Profile_View({ user, setUser }) {
         <div>
           <ul>
             <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Name:</strong> <p>{user.name}</p>
+              <strong className="text-[#444444]">Name:</strong> <p>{userData.name}</p>
             </li>
             <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Email:</strong> <p>{user.email}</p>
+              <strong className="text-[#444444]">Email:</strong> <p>{userData.email}</p>
             </li>
-            <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Roll No:</strong> <p>{user.roll}</p>
-            </li>
+            {/* <li className="mb-7 flex gap-2">
+              <strong className="text-[#444444]">Roll No:</strong> <p>{userData.roll}</p>
+            </li> */}
             
             <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Phone No:</strong> <p>{user.phone}</p>
+              <strong className="text-[#444444]">Phone No:</strong> <p>{userData.phoneNo}</p>
             </li>
             <li className="mb-7 flex items-center">
               <strong className="mr-2">

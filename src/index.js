@@ -6,17 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { ChakraProvider } from '@chakra-ui/react';
+import AuthState from "./context/auth/AuthState";
+import ProductState from './context/product/ProductState';
 // import ChatProvider from './context/chatProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ChakraProvider >
     <BrowserRouter>
-
-      <App />
-
-      <Toaster />
-
+      <AuthState>
+        <ProductState>
+          <App />
+          <Toaster />
+        </ProductState>
+      </AuthState>
     </BrowserRouter>
   </ChakraProvider>
 
