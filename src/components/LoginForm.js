@@ -4,7 +4,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
-import AuthContext from "../context/auth/AuthContext";
+import AuthContext from "../context/auth/authContext";
 import { useEffect } from "react";
 
 const LoginForm = ({ setIsLoggedIn }) => {
