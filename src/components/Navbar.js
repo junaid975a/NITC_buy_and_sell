@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import AddandEditPopup from "./AddandEditPopup";
 import "../css/navbar.css";
 import { useContext } from "react";
-import AuthContext from "../context/auth/AuthContext";
+import AuthContext from "../context/auth/authContext";
 
 const Navbar = (props) => {
   let isLoggedIn = props.isLoggedIn;
