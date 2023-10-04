@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import BoughtItemPopup from "./BoughtItemPopup";
 import "../css/boughItemCard.css";
+import ProductContext from "../context/product/ProductContext";
 
 const BoughtItemCard = ({
   id,
@@ -17,8 +18,9 @@ const BoughtItemCard = ({
   isReviewed,
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-
+  const {getReview} = useContext(ProductContext)
   const togglePopup = () => {
+    getReview(id)
     setIsPopupVisible(!isPopupVisible);
   };
 

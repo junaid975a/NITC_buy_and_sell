@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         sellerId: {
             type: DataTypes.STRING,
             references: {
-                model: 'users', // Reference the 'products' table
-                key: 'email', // Reference the 'id' column in 'products'
+                model: 'users',
+                key: 'email',
             }
         },
         description: {
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM("sold", "not sold"),
             defaultValue: "not sold"
         },
+    });
 
-    })
-    return Product
-}
+    return Product;
+};

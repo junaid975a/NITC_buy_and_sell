@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import BoughtItemReviewPopup from "./BoughtItemReviewPopup";
 import ItemReviewDetails from "./ItemReviewDetails";
 import EditReviewPopup from "./EditReviewPopup";
+import { useContext } from "react";
+import ProductContext from "../context/product/ProductContext";
+import { useRef } from "react";
 
 const BoughtItemPopup = ({
   id,
@@ -22,17 +25,24 @@ const BoughtItemPopup = ({
   // Added variable for review popup visibility
   const [isReviewVisible, setIsReviewVisible] = useState(false);
   const [isEditReviewVisible, setIsEditReviewVisible] = useState(false);
-
+  const {productReview} = useContext(ProductContext)
   // sample values
-  const rating = 3;
-  const desc = "Sample description for item 123 321 123 321 123 321 123 321";
+  let rating = 0;
+  let desc = ""; 
+  if(productReview){
+    rating = productReview.rating;
+    desc = productReview.review;
+  }
+
+  
+
 
   useEffect(() => {
     // Use a setTimeout to delay the appearance of the popup
     const timeout = setTimeout(() => {
       setIsPopupVisible(true);
     }, 300); // Adjust the delay time (in milliseconds) as needed
-
+    
     // Clean up the timeout when the component unmounts
     return () => clearTimeout(timeout);
   }, []);

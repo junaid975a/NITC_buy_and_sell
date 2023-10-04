@@ -77,6 +77,12 @@ const createRating = async (req, res) => {
         })
 
         if (finalRating) {
+            await sequelize.query("update solditems set isReviewed=true where productId=:productId",{
+                replacements:{
+                    productId
+                },
+                type: QueryTypes.UPDATE
+            })
             // find the user of the product and update their avg_rating
             const sellerId = await sequelize.query("select sellerId from products where id=:productId", {
                 replacements: { productId },
@@ -296,7 +302,7 @@ const getRating = async (req, res) => {
         res.status(404).json({ message: "Rating not found" });
         return;
     }
-    res.status(200).json(rating)
+    res.status(200).json(rating[0])
 }
 
 module.exports = {

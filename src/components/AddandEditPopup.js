@@ -62,7 +62,7 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
 
     function submitHandler(event) {
         event.preventDefault();
-
+        
         // on submit, what to do
 
     }

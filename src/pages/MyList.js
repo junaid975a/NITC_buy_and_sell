@@ -1,7 +1,12 @@
-import React from "react";
+import React,{useEffect,useContext} from "react";
 import MyListItemsCollection from '../components/MyListItemsCollection';
+import ProductContext from "../context/product/ProductContext";
 const MyList = () => {
-  
+  const {getPostedItems} = useContext(ProductContext)
+    useEffect(() => {
+      getPostedItems()
+        // eslint-disable-next-line
+      }, [])  
 
   return (
     <div>

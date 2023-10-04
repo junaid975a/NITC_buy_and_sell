@@ -1,7 +1,14 @@
-import React from "react";
+import React,{useEffect,useContext} from "react";
 import MyBoughtItemsCollection from "../components/MyBoughtItemsCollection";
+import ProductContext from "../context/product/ProductContext";
 
 const Bought = () => {
+    const {getBoughtItems} = useContext(ProductContext)
+    useEffect(() => {
+        getBoughtItems()
+        // eslint-disable-next-line
+      }, [])
+
     return (
 
         <div>

@@ -14,11 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     buyerId: {
-        type: DataTypes.STRING,
-        references: {
-            model: 'users', // Reference the 'products' table
-            key: 'email', // Reference the 'id' column in 'products'
-        }
+      type: DataTypes.STRING,
+      references: {
+        model: 'users', // Reference the 'products' table
+        key: 'email', // Reference the 'id' column in 'products'
+      }
+    },
+    isReviewed: { // New attribute
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   });
 

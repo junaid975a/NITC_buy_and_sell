@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/nitc_logo_icon.svg";
 import { toast } from "react-hot-toast";
 import AddandEditPopup from "./AddandEditPopup";
@@ -10,6 +10,7 @@ import AuthContext from "../context/auth/AuthContext";
 const Navbar = (props) => {
   let isLoggedIn = props.isLoggedIn;
   let setIsLoggedIn = props.setIsLoggedIn;
+  const navigate = useNavigate();
   const {isAuthenticated,setIsAuthenticated} = useContext(AuthContext)
   const categories = [
     { category_id: 1, category_name: "electronics" },
@@ -132,6 +133,9 @@ const Navbar = (props) => {
                     onClick={() => {
                       hideMenu();
                       setIsLoggedIn(false);
+                      setIsAuthenticated(false);
+                      localStorage.removeItem("token");
+                      navigate("/login")
                       toast.success("Logged Out");
                     }}
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700

@@ -9,7 +9,7 @@ import ProductContext from "../context/product/ProductContext";
 
 const Dashboard = () => {
   const { user, isAuthenticated, getUserData, userData } = useContext(AuthContext)
-  const {getAllProducts} = useContext(ProductContext)
+  const {getAllProducts,getCategories} = useContext(ProductContext)
   const [searchParam, setSearchParam] = useState("");
   const changeHandler = (e) => {
     setSearchParam(e.target.value);
@@ -21,10 +21,11 @@ const Dashboard = () => {
   // }, [searchParam]);
   useEffect(() => {
     // console.log(user,isAuthenticated);
-    const userToken = localStorage.getItem('token');
-    if (userToken) {
+    // const userToken = localStorage.getItem('token');
+    if (isAuthenticated) {
       getUserData(user)
       getAllProducts()
+      getCategories()
     } else {
       navigate("/login")
     }

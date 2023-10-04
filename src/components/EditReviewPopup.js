@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import StarRating from "./StarRating";
+import { useContext } from "react";
+import ProductContext from "../context/product/ProductContext";
+import toast from "react-hot-toast";
 
 const EditReviewPopup = ({ rating, desc, onClose }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const { updateProductReview, productReview } = useContext(ProductContext);
   const [reviewDetails, setReviewDetails] = useState({
     // values hard coded for now. Will take prop values later
-    rating: rating,
-    desc: desc,
+    rating: productReview.rating,
+    desc: productReview.review,
   });
   useEffect(() => {
     // Use a setTimeout to delay the appearance of the popup
@@ -23,10 +27,18 @@ const EditReviewPopup = ({ rating, desc, onClose }) => {
     // Delay the closing of the popup to allow the animation to complete
     onClose(0);
   };
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     // Will be modified later during merging
     // Simply closes popup for now
     setIsPopupVisible(false);
+    updateProductReview({
+      id: productReview.productId,
+      rating: reviewDetails.rating,
+      review: reviewDetails.desc
+    })
+    toast.success("Edited successfully")
+
     // Delay the closing of the popup to allow the animation to complete
     onClose(0);
   };
@@ -41,15 +53,13 @@ const EditReviewPopup = ({ rating, desc, onClose }) => {
 
   return (
     <div
-      className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${
-        isPopupVisible ? "opacity-100" : "opacity-0"
-      }`}
+      className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"
+        }`}
     >
       {/* Create a centered square popup */}
       <div
-        className={`bg-white rounded-lg shadow-md w-[80%] sm:w-[400px] h-[60%] sm:h-auto overflow-y-auto p-8 px-8 text-center z-10 transform transition-transform ease-in duration-500 ${
-          isPopupVisible ? "scale-100" : "scale-90"
-        }`}
+        className={`bg-white rounded-lg shadow-md w-[80%] sm:w-[400px] h-[60%] sm:h-auto overflow-y-auto p-8 px-8 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"
+          }`}
       >
         {/* Heading */}
         <h2 className="text-2xl font-bold mb-4">Review your purchase</h2>
@@ -58,6 +68,7 @@ const EditReviewPopup = ({ rating, desc, onClose }) => {
         <div className="flex flex-col justify-between h-full">
           {/* top details div */}
           <form className="flex flex-col h-full text-left ml-2 mt-4">
+            
             <label className="block mb-4">
               <strong>Rating:</strong>
               <StarRating
@@ -84,6 +95,7 @@ const EditReviewPopup = ({ rating, desc, onClose }) => {
                 onClick={handleSubmit}
                 className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
                 transition-all duration-300 ease-out"
+                type="submit"
               >
                 Submit
               </button>

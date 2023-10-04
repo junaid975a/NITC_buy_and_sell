@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import StarRating from "./StarRating";
+import { useContext } from "react";
+import ProductContext from "../context/product/ProductContext";
+import toast from "react-hot-toast";
 
 const BoughtItemReviewPopup = ({
   id,
@@ -16,6 +19,7 @@ const BoughtItemReviewPopup = ({
   purchase_date,
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const { createReview, productReview } = useContext(ProductContext);
   const [reviewDetails, setReviewDetails] = useState({
     rating: 0,
     desc: "",
@@ -35,13 +39,24 @@ const BoughtItemReviewPopup = ({
     // Delay the closing of the popup to allow the animation to complete
     onClose(0);
   };
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    
     // Will be modified later during merging
     // Simply closes popup for now
+    console.log(productReview,reviewDetails);
     setIsPopupVisible(false);
+    createReview({
+      id: id,
+      rating: reviewDetails.rating,
+      review: reviewDetails.desc
+    });
+    toast.success("Reviewed successfully");
+    
     // Delay the closing of the popup to allow the animation to complete
     onClose(0);
   };
+  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;

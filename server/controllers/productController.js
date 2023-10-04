@@ -14,7 +14,7 @@ const createProduct = async (req, res) => {
             replacements: { categoryName },
             type: QueryTypes.SELECT
         })
-        console.log(categoryId);
+        // console.log(categoryId);
         if (categoryId.length === 0) {
             await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:categoryName,NOW(),NOW())", {
                 replacements: { categoryName },
@@ -27,7 +27,7 @@ const createProduct = async (req, res) => {
             })
         }
         categoryId = categoryId[0].id
-        console.log(categoryId);
+        // console.log(categoryId);
         const insertQuery = "INSERT INTO products (name, description,image_url,pdt_condition, createdAt,updatedAt,item_price,categoryId,sellerId) VALUES (:name, :description, :image_url, :pdt_condition, NOW(),NOW(), :price, :categoryId, :sellerId)"
 
         const productData = {
@@ -98,7 +98,7 @@ const updateProduct = async (req, res) => {
             return;
         }
 
-        console.log(existingProduct);
+        // console.log(existingProduct);
 
         if(existingProduct[0].sellerId!==sellerId){
             res.status(400).json({message:"You are not the seller of this product"})
@@ -122,7 +122,7 @@ const updateProduct = async (req, res) => {
             replacements: { lCategoryName },
             type: QueryTypes.SELECT
         })
-        console.log(categoryId);
+        // console.log(categoryId);
         if (categoryId.length === 0) {
             await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:lCategoryName,NOW(),NOW())", {
                 replacements: { lCategoryName },
@@ -135,7 +135,7 @@ const updateProduct = async (req, res) => {
             })
         }
         categoryId = categoryId[0].id
-        console.log(categoryId, id);
+        // console.log(categoryId, id);
         
         const productData = {
             name: name,
@@ -171,7 +171,7 @@ const updateProduct = async (req, res) => {
                         })
                         return;
                     }
-                    console.log(buyer);
+                    // console.log(buyer);
                     const insertQuery = "INSERT INTO solditems (finalPrice,buyerId,productId,createdAt,updatedAt) values (:finalPrice,:buyerId,:id,NOW(),NOW())";
                     const soldData = {
                         finalPrice: finalPrice,
@@ -242,7 +242,7 @@ const deleteProduct = async(req, res) => {
             type: QueryTypes.SELECT
         });
 
-        console.log(userId);
+        // console.log(userId);
         if(userId.length===0){
             res.status(500).json({message:"Unauthorized access"})
             return;
@@ -274,7 +274,7 @@ const getAllProducts = async(req, res) => {
         const allProducts = await sequelize.query("select * from products where status='not sold'",{
             type:QueryTypes.SELECT
         })
-        console.log(allProducts);
+        // console.log(allProducts);
         res.status(200).json(allProducts)
     } catch (error) {
         console.log(error);
@@ -289,7 +289,7 @@ const getCategories = async(req, res) => {
         const allCategories = await sequelize.query("select * from categories",{
             type:QueryTypes.SELECT
         })
-        console.log(allCategories);
+        // console.log(allCategories);
         res.status(200).json(allCategories)
     } catch (error) {
         console.log(error);
@@ -298,9 +298,9 @@ const getCategories = async(req, res) => {
 }
 
 const getSearchProducts = async (req, res) => {
-    console.log(req.params);
+    // console.log(req.params);
     const { query } = req.params;
-    console.log(query);
+    // console.log(query);
     const searchQuery = query.trim().toLowerCase();
     
     try {
@@ -309,7 +309,7 @@ const getSearchProducts = async (req, res) => {
             type: QueryTypes.SELECT
         });
         
-        console.log(searchedProducts);
+        // console.log(searchedProducts);
         res.status(200).json(searchedProducts);
     } catch (error) {
         console.error(error);
@@ -321,7 +321,7 @@ const getSearchProducts = async (req, res) => {
 const getBoughtProducts = async(req, res) => {
     const buyerId = req.user;
     try {
-        const selectQuery = "SELECT p.* FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
+        const selectQuery = "SELECT p.*,s.isReviewed FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
         const boughtProducts = await sequelize.query(selectQuery,{
             replacements:{buyerId},
             type:QueryTypes.SELECT
@@ -338,11 +338,10 @@ const getBoughtProducts = async(req, res) => {
     }
 }
 
-
 const getPostedProducts = async (req, res) => {
     const sellerId = req.user;
     try {
-        const selectQuery = "SELECT * FROM products where sellerId=:sellerId";
+        const selectQuery = "SELECT * FROM products where sellerId=:sellerId order by status";
         const postedProducts = await sequelize.query(selectQuery,{
             replacements:{sellerId},
             type:QueryTypes.SELECT
