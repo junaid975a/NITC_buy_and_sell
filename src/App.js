@@ -32,7 +32,7 @@ function App() {
 
 
   return (
-    <div>
+    <div className="h-[100vh] w-[100vw]">
       <ToastContainer />
       <Navbar
         isLoggedIn={isLoggedIn}

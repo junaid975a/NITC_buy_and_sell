@@ -9,10 +9,10 @@ const MyList = () => {
       }, [])  
 
   return (
-    <div>
+    <div className="">
         {/* is page pr hum apni upload ki hui items show karenge */}
         {/* isme dono include hongi-->> sold wali + unslod wali */}
-        <MyListItemsCollection />
+        <MyListItemsCollection  />
     </div>
   );
 };
