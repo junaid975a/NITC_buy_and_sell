@@ -35,7 +35,7 @@ const DashboardItemCollection = ({ searchParam }) => {
                                     name={item.name}
                                     category={item.categoryId}
                                     description={item.description}
-                                    seller_id={item.sellerId}
+                                    sellerId={item.sellerId}
                                     condition={item.condition}
                                     created_at={item.createdAt}
                                     price={item.item_price}

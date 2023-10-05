@@ -1,25 +1,26 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ItemDetailsPopup = ({ id, name, category, description, sellerId, condition, created_at, price, onClose }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     useEffect(() => {
         // Use a setTimeout to delay the appearance of the popup
         const timeout = setTimeout(() => {
-          setIsPopupVisible(true);
+            setIsPopupVisible(true);
         }, 300); // Adjust the delay time (in milliseconds) as needed
-    
+
         // Clean up the timeout when the component unmounts
         return () => clearTimeout(timeout);
-      }, []);
-      const handleClose = () => {
+    }, []);
+    const handleClose = () => {
         setIsPopupVisible(false);
-      
+
         // Delay the closing of the popup to allow the animation to complete
         setTimeout(() => {
-          onClose();
+            onClose();
         }, 300); // Adjust the delay time to match your transition duration
-      };
-    
+    };
+
     return (
         <div className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"}`}>
             {/* Create a centered square popup */}
@@ -59,16 +60,22 @@ const ItemDetailsPopup = ({ id, name, category, description, sellerId, condition
                     {/* buttons */}
                     <div className="flex gap-x-5 justify-center">
                         {/* Close button */}
-                        <button onClick={handleClose}
-                            className="border border-blue-700 bg-blue-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-blue-600 focus:outline-none
-                            transition-all duration-300 ease-out"
-                        >Message</button>
+                        <Link
+                            to={{
+                                pathname: "/chatpage",
+                                state: { sellerId }
+                            }}
+                            className="border border-blue-700 bg-blue-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-blue-600 focus:outline-none transition-all duration-300 ease-out"
+                        >
+                            Message
+                        </Link>
+
 
                         {/* Close button */}
-                        <button onClick={handleClose}
+                        <Link onClick={handleClose}
                             className="border border-blue-700 bg-blue-500 text-white px-4 py-2 mt-4 rounded-md hover:bg-blue-600 focus:outline-none
                             transition-all duration-300 ease-out"
-                        >Close</button>
+                        >Close</Link>
                     </div>
 
                 </div>

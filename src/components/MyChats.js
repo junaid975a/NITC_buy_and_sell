@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MyChatCard from "./MyChatCard";
 import { useContext } from "react";
 import { ChatContext } from "../context/chatHelperContext";
 
 const MyChats = () => {
 
-    const { Chats } = useContext(ChatContext);
-
+    const { allChats,getAllChats } = useContext(ChatContext);
+    // let allChats = [];
+    useEffect(() => {
+        getAllChats();
+        console.log(allChats);
+        // allChats = allChats
+      
+    }, [])
+    
     return (
         <div>
-            {Chats.length === 0 ?
+            {allChats.length === 0 ?
                 (
                     <div>
-                        <p>No chats available</p>
+                        <p>No Chats available</p>
                     </div>
                 ) :
                 // sold + unsold items dono bhejenge
@@ -23,9 +30,9 @@ const MyChats = () => {
                         <div className="">
                             {
                                 // unsold items
-                                Chats.map((chat) => (
-                                    <MyChatCard key={chat.chat_id}
-                                        chat_id={chat.chat_id}
+                                allChats.map((chat) => (
+                                    <MyChatCard key={chat.id}
+                                        chat_id={chat.id}
                                         sender_id={chat.sender_id}
                                         receiver_id={chat.receiver_id}
                                         sender_name={chat.sender_name}
