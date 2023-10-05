@@ -11,7 +11,7 @@ const Navbar = (props) => {
   let isLoggedIn = props.isLoggedIn;
   let setIsLoggedIn = props.setIsLoggedIn;
   const navigate = useNavigate();
-  const {isAuthenticated,setIsAuthenticated} = useContext(AuthContext)
+  // const {isLoggedIn,setIsAuthenticated} = useContext(AuthContext)
   const categories = [
     { category_id: 1, category_name: "electronics" },
     { category_id: 2, category_name: "furniture" },
@@ -103,7 +103,7 @@ const Navbar = (props) => {
           {/* login-signup-logout-dashboard */}
           <nav>
             <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-4">
-              {!isAuthenticated && (
+              {!isLoggedIn && (
                 <Link to="/login">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -115,7 +115,7 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {!isAuthenticated && (
+              {!isLoggedIn && (
                 <Link to="/signup">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -127,13 +127,13 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {isAuthenticated && (
+              {isLoggedIn && (
                 <Link to="/">
                   <button
                     onClick={() => {
                       hideMenu();
                       setIsLoggedIn(false);
-                      setIsAuthenticated(false);
+                      // setIsAuthenticated(false);
                       localStorage.removeItem("token");
                       navigate("/login")
                       toast.success("Logged Out");
@@ -146,7 +146,7 @@ const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {isAuthenticated && (
+              {isLoggedIn && (
                 <Link to="/dashboard">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700

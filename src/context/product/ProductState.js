@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ProductContext from './ProductContext'
 import axios from "axios";
 import imageCompressor from "image-compressor.js";
+import toast from "react-hot-toast";
 
 const ProductState = (props) => {
     const [allProducts, setAllProducts] = useState([]);
@@ -121,12 +122,12 @@ const ProductState = (props) => {
             };
             
             console.log(finalData);
-            
-            return {status:"success",mesage:"Product created successfully"};
+            toast.success('Product created successfully');
+            // return {status:"success",mesage:"Product created successfully"};
         } catch (error) {
             console.log(error);
             setPicLoading(false);
-            return {status:"error",mesage:`${error.response.data.message}`};
+            toast.error(error.response.data.message)
         }
     }
 
