@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ItemDetailsPopup from "./ItemDetailsPopup";
 
-const ItemCard = ({ id, name, category, description, sellerId, condition, created_at, price }) => {
+const ItemCard = ({ id, name, category, description, sellerId, condition, created_at, price,imageUrl }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
 
@@ -13,7 +13,7 @@ const ItemCard = ({ id, name, category, description, sellerId, condition, create
     return (
         <div className="w-[260px] sm:w-[300px] md:w-[340px] h-min m-4 p-4 flex flex-col rounded-[10px] items-center shadow-md">
 
-            <img src="#" className="w-[250px] sm:w-[280px] md:w-[320px] aspect-square object-cover " alt="item image" />
+            <img src={imageUrl} className="w-[250px] sm:w-[280px] md:w-[320px] aspect-square object-cover " alt="item image" />
 
 
             <div className="my-[10px] mx-[5px] w-[250px] xs:w-[240px sm:w-[280px] md:w-[320px]">

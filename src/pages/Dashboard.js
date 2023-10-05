@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DashboardItemCollection from "../components/DashboardItemCollection";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import AuthContext from "../context/auth/authContext";
+import AuthContext from "../context/auth/AuthContext";
 import ProductContext from "../context/product/ProductContext";
 
 

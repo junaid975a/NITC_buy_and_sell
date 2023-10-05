@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import star from "./images/Star_icon.png";
 import { useContext } from "react";
-import AuthContext from "../context/auth/authContext";
+import AuthContext from "../context/auth/AuthContext";
 import toast from "react-hot-toast";
 
 function Profile_View() {

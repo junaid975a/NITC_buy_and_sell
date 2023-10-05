@@ -1,123 +1,200 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import imageCompressor from "image-compressor.js";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import ProductContext from "../context/product/ProductContext";
+import { useNavigate } from "react-router-dom";
 
 
-const AddandEditPopup = ({ id, name, category, description, seller_id, condition, created_at, price, onClose, categories }) => {
+const AddandEditPopup = ({ id, name, category, description, condition, price, onClose,}) => {
 
-    const [pic, setPic] = useState(); // Store the selected image file
-    const [picLoading, setPicLoading] = useState(false);
-
+    // const [pic, setPic] = useState(); // Store the selected image file
+    const {
+        getCategories,
+        allCategories,
+        setAllCategories,
+        picLoading,
+        setPicLoading,
+        setSelectedImage,
+        createNewProduct
+    } = useContext(ProductContext)
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    
+
+
+    const navigate = useNavigate();
 
     useEffect(() => {
+        getCategories();
+        console.log(allCategories);
         // Use a setTimeout to delay the appearance of the popup
         const timeout = setTimeout(() => {
             setIsPopupVisible(true);
-        }, 300); // Adjust the delay time (in milliseconds) as needed
+        }, 150); // Adjust the delay time (in milliseconds) as needed
 
         // Clean up the timeout when the component unmounts
         return () => clearTimeout(timeout);
     }, []);
+
     const handleClose = () => {
         setIsPopupVisible(false);
 
         // Delay the closing of the popup to allow the animation to complete
         setTimeout(() => {
             onClose();
-        }, 300); // Adjust the delay time to match your transition duration
+        }, 100); // Adjust the delay time to match your transition duration
     };
 
 
     const [itemData, setItemData] = useState({
-        // item_id will be automatic generated
         itemname: name,
-        // category id will be fetched and placed 
         category: category,
         description: description,
-        // seller id is the ID of the current user
-        // seller_id: "",
         condition: condition,
         price: price,
-        // attribute-> created_at, will be taken from sql.now() function
-        // status will be unsold by default
-        categories: categories //list of categories as a prop
+        categories: allCategories 
     });
 
-    function changeHandler(event) {
+    const changeHandler = (event) => {
         const { name, value } = event.target;
-
         // Update the itemData state
         setItemData((prev) => ({
             ...prev,
             [name]: value,
         }));
-
-        // console.log(name, value);
-        console.log(itemData);
-
         
     }
 
-    function submitHandler(event) {
+    const submitHandler = async(event) => {
         event.preventDefault();
-        
-        // on submit, what to do
+        setPicLoading(true);
+        if (!itemData.itemname || !itemData.category || !itemData.description || !itemData.condition || !itemData.price) {
+            toast.error("Please enter all required fields correctly");
+            setPicLoading(false);
+            return;
+        }
+
+        const message = createNewProduct(itemData)
+
+        // toast(message.status)(`${message.message}`);
+        if(message.status==="success"){
+            toast.success(message.message)
+        }else if(message.status==="error"){
+            toast.error(message.message)
+        }
+
+
+        // try {
+        //     const name = itemData.itemname;
+        //     const description = itemData.description;
+        //     const condition = itemData.condition;
+        //     const price = itemData.price;
+        //     const categoryName = itemData.category;
+
+        //     const config = {
+        //         headers: {
+        //             "Content-type": "application/json",
+        //             "auth-token":localStorage.getItem("token")
+        //         },
+        //     };
+
+        //     // Upload the selected image (if any) to the server
+        //     if (selectedImage) {
+        //         await postDetails(selectedImage);
+        //     }
+        //     console.log(selectedImage);
+
+        //     if(!pic){
+        //         toast.error("Error in upload product, please try again")
+        //         return;
+        //     }
+
+        //     const { data } = await axios.post(
+        //         "http://127.0.0.1:5000/product/create",
+        //         {
+        //             name,
+        //             description,
+        //             pic,
+        //             condition,
+        //             categoryName,
+        //             price
+        //         },
+        //         config
+        //     );
+
+        //     console.log(data);
+        //     toast.success("Product created successfully");
+        //     setPicLoading(false);
+
+        //     const productData = {
+        //         ...itemData,
+        //     };
+
+        //     const finalData = {
+        //         ...productData,
+        //     };
+
+        //     console.log(finalData);
+        //     navigate("/dashboard");
+        // } catch (error) {
+        //     console.log(error);
+        //     toast.error(error.response.data.message);
+        //     setPicLoading(false);
+        // }
 
     }
 
-    const postDetails = async (pics) => {
-        setPicLoading(true);
+    // const postDetails = async (pics) => {
+    //     setPicLoading(true);
 
-        if (pics === undefined) {
-            toast.error("Please provide an image")
-            setPicLoading(false);
-            return;
-        }
+    //     if (pics === undefined) {
+    //         toast.error("Please provide an image")
+    //         setPicLoading(false);
+    //         return;
+    //     }
 
-        console.log(pics);
-        if (pics.type === "image/jpeg" || pics.type === "image/png") {
-            let compressedBlob = pics;
-            const compressor = new imageCompressor();
+    //     console.log(pics);
+    //     if (pics.type === "image/jpeg" || pics.type === "image/png") {
+    //         let compressedBlob = pics;
+    //         const compressor = new imageCompressor();
 
-            try {
-                // Compress the image
-                compressedBlob = await compressor.compress(pics, { quality: 0.5 });
-            } catch (error) {
-                console.error("Image compression error:", error);
-                setPicLoading(false);
-                return;
-            }
+    //         try {
+    //             // Compress the image
+    //             compressedBlob = await compressor.compress(pics, { quality: 0.5 });
+    //         } catch (error) {
+    //             console.error("Image compression error:", error);
+    //             setPicLoading(false);
+    //             return;
+    //         }
 
-            const data = new FormData();
-            data.append("file", compressedBlob);
-            data.append("upload_preset", "chatapp");
-            data.append("cloud_name", "dlkpb4vzg");
+    //         const data = new FormData();
+    //         data.append("file", compressedBlob);
+    //         data.append("upload_preset", "chatapp");
+    //         data.append("cloud_name", "dlkpb4vzg");
 
-            await fetch("https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload", {
-                method: "post",
-                body: data,
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    // Update the pic state here
-                    setPic(data.url.toString());
-                    setPicLoading(false);
-                    // console.log(pic);
-                    // console.log(imageUrl);
-                })
-                .catch((err) => {
-                    toast.error("Error occurred while uploading")
-                    console.error("Image upload error:", err);
-                    setPicLoading(false);
-                });
-        } else {
-            toast.error("Please select a valid image of .jpg or .png type")
-            setPicLoading(false);
-            return;
-        }
-    };
+    //         await fetch("https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload", {
+    //             method: "post",
+    //             body: data,
+    //         })
+    //             .then((res) => res.json())
+    //             .then((data) => {
+    //                 // Update the pic state here
+    //                 setPic(data.url.toString());
+    //                 setPicLoading(false);
+    //                 // console.log(pic);
+    //                 // console.log(imageUrl);
+    //             })
+    //             .catch((err) => {
+    //                 toast.error("Error occurred while uploading")
+    //                 console.error("Image upload error:", err);
+    //                 setPicLoading(false);
+    //             });
+    //     } else {
+    //         toast.error("Please select a valid image of .jpg or .png type")
+    //         setPicLoading(false);
+    //         return;
+    //     }
+    // };
 
 
     return (
@@ -126,7 +203,8 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
             <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-[600px] md:w-[720px] h-min max-h-[600px]  overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
                 {/* container to show all the details */}
                 <form
-                    onSubmit={submitHandler} 
+                    onSubmit={submitHandler}
+                    encType="multipart/form-data"
                     className="flex flex-col">
 
                     <label className="w-full flex items-center gap-x">
@@ -152,10 +230,10 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                             value={itemData.categories}
                             className="rounded-[0.5rem] w-full p-[12px]"
                         >
-                            <option value={itemData.category}>{itemData.category}</option>
-                            {categories.map((categoryOption) => (
-                                <option key={categoryOption.category_id} value={categoryOption.category_name}>
-                                    {categoryOption.category_name}
+                            {/* <option value={itemData.category}>{itemData.category}</option> */}
+                            {allCategories.map((categoryOption) => (
+                                <option key={categoryOption.id} value={categoryOption.name}>
+                                    {categoryOption.name}
                                 </option>
                             ))}
                         </select>
@@ -206,14 +284,12 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
 
                     {/* this will be added to image table */}
                     <label className="w-full">
-
                         <input
                             type="file"
                             accept="image/*"
-                            multiple
                             required
-                            name="images"
-                            onChange={changeHandler}
+                            name="productImage"
+                            onChange={(e) => setSelectedImage(e.target.files[0])}
                             placeholder="choose image file"
                             className="rounded-[0.5rem] 
                         w-full p-[12px]"
@@ -271,7 +347,10 @@ const AddandEditPopup = ({ id, name, category, description, seller_id, condition
                         <button onClick={submitHandler}
                             className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
                             transition-all duration-300 ease-out"
-                        >Submit</button>
+                            type="submit"
+                            
+                            
+                        >{picLoading ? "Creating your product..." : "Submit"}</button>
 
                         {/* Close button */}
                         <button onClick={handleClose}

@@ -259,7 +259,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
                         accept="image/*"
                         name="profilePicture"
                         className="rounded-[0.5rem] text-[#777777] border-2 w-full p-[12px]"
-                        onChange={(e) => setSelectedImage(e.target.files[0])} // Store selected image in state
+                         // Store selected image in state
                     />
                 </label>
 

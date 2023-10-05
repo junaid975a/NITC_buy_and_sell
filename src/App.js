@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
@@ -16,17 +16,27 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AuthContext from "./context/auth/AuthContext";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {isAuthenticated,setIsAuthenticated} = useContext(AuthContext)
+
+  useEffect(() => {
+    const localToken = localStorage.getItem("token");
+    if (localToken) {
+      setIsAuthenticated(true);
+    }
+  }, [])
+  
+
 
   return (
-    <div className="">
+    <div>
       <ToastContainer />
       <Navbar
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
-        className=""
       />
 
       <Routes>

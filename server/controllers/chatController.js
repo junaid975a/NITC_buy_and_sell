@@ -27,7 +27,7 @@ const createChat = async (req, res) => {
         })
         console.log(existingChat);
         if(existingChat.length>0){
-            res.status(200).json(existingChat)
+            res.status(200).json(existingChat[0])
             return;
         }
 
@@ -53,11 +53,11 @@ const createChat = async (req, res) => {
 }
 
 const getChats = async (req, res) => {
-    const buyerId = req.user
+    const userId = req.user
     try {
-        const chats = await sequelize.query("select * from chats where buyerId = :buyerId or sellerId=:buyerId",{
+        const chats = await sequelize.query("select * from chats where buyerId = :userId or sellerId=:userId",{
             replacements:{
-                buyerId:buyerId
+                userId:userId
             },
             type:QueryTypes.SELECT
         })

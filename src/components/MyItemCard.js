@@ -18,6 +18,7 @@ const MyItemCard = ({
   purchase_date,
   categories,
   isReviewed,
+  imageUrl,
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isReviewPopupVisible, setIsReviewPopupVisible] = useState(false);
@@ -38,7 +39,7 @@ const MyItemCard = ({
       <div className="flex gap-x-3">
         <div className="flex items-center justify-center">
           <img
-            src="#"
+            src={imageUrl}
             className="w-[80px] rounded-full aspect-square object-cover "
             alt="item image"
           />

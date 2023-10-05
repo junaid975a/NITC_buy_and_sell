@@ -1,22 +1,6 @@
 const { QueryTypes } = require("sequelize");
 const { sequelize } = require("../models");
 
-
-function isEmailContained(email, obj1, obj2) {
-    // Check obj1
-    if (obj1.some(item => item.email === email)) {
-        return true;
-    }
-
-    // Check obj2
-    if (obj2.some(item => item.email === email)) {
-        return true;
-    }
-
-    // Email not found in either obj1 or obj2
-    return false;
-}
-
 const sendMessage = async (req, res) => {
     const { message_text, chatId } = req.body;
     const senderId = req.user;
@@ -33,7 +17,7 @@ const sendMessage = async (req, res) => {
         })
 
         if (chat.length === 0) {
-            res.status(404).json({ message: "this chat does not exist" })
+            res.status(404).json({ message: "This chat does not exist" })
             return
         } 
 

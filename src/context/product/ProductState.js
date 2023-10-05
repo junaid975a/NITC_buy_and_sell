@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import ProductContext from './ProductContext'
 import axios from "axios";
+import imageCompressor from "image-compressor.js";
 
 const ProductState = (props) => {
     const [allProducts, setAllProducts] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
     const [sellerDetails, setSellerDetails] = useState(null);
     const [productReview, setProductReview] = useState(null);
+    const [picLoading, setPicLoading] = useState(false);
+    const [pic, setPic] = useState("http://www.sitech.co.id/assets/img/products/default.jpg"); // Store the selected image file
+    const [selectedImage, setSelectedImage] = useState(null); 
     const [alert, setAlert] = useState(null);
     const host = "http://127.0.0.1:5000"
     const config = {
@@ -15,13 +19,115 @@ const ProductState = (props) => {
             "auth-token": localStorage.getItem("token"),
         },
     };
+    const postDetails = async (pics) => {
+        setPicLoading(true);
+
+        if (pics === undefined) {
+            // toast.error("Please provide an image")
+            setPicLoading(false);
+            return;
+        }
+
+        console.log(pics);
+        if (pics.type === "image/jpeg" || pics.type === "image/png") {
+            let compressedBlob = pics;
+            const compressor = new imageCompressor();
+
+            try {
+                // Compress the image
+                compressedBlob = await compressor.compress(pics, { quality: 0.5 });
+            } catch (error) {
+                console.error("Image compression error:", error);
+                setPicLoading(false);
+                return  ;
+            }
+
+            const data = new FormData();
+            data.append("file", compressedBlob);
+            data.append("upload_preset", "chatapp");
+            data.append("cloud_name", "dlkpb4vzg");
+
+            await fetch("https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload", {
+                method: "post",
+                body: data,
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    // Update the pic state here
+                    setPic(data.url.toString());
+                    setPicLoading(false);
+                    // console.log(pic);
+                    // console.log(imageUrl);
+                })
+                .catch((err) => {
+                    console.error("Image upload error: ", err);
+                    setPicLoading(false);
+                    return {status:"error",mesage:"Error occurred while uploading"}
+                });
+        } else {
+            setPicLoading(false);
+            return {status:"success",mesage:"Please select a valid image of .jpg or .png type"};
+        }
+    };
+
     const getAllProducts = async () => {
         const response = await axios.get(`${host}/product/all-products`, config);
         setAllProducts(response.data);
     }
 
-    const createNewProduct = async () => {
+    const createNewProduct = async (itemData) => {
+        try {
+            const name = itemData.itemname;
+            const description = itemData.description;
+            const condition = itemData.condition;
+            const price = itemData.price;
+            const categoryName = itemData.category;
 
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    "auth-token":localStorage.getItem("token")
+                },
+            };
+
+            // Upload the selected image (if any) to the server
+            if (selectedImage) {
+                await postDetails(selectedImage);
+            }   
+            console.log(pic);
+
+            const { data } = await axios.post(
+                "http://127.0.0.1:5000/product/create",
+                {
+                    name,
+                    description,
+                    pic,
+                    condition,
+                    categoryName,
+                    price
+                },
+                config
+            );
+
+            // console.log(data);
+            setPicLoading(false);
+            
+            const productData = {
+                ...itemData,
+            };
+            
+            const finalData = {
+                ...productData,
+            };
+            
+            console.log(finalData);
+            
+            return {status:"success",mesage:"Product created successfully"};
+        } catch (error) {
+            console.log(error);
+            setPicLoading(false);
+            return {status:"error",mesage:`${error.response.data.message}`};
+        }
     }
 
     const getBoughtItems = async () => {
@@ -135,6 +241,7 @@ const ProductState = (props) => {
         <ProductContext.Provider value={{
             allProducts,
             getAllProducts,
+            setAllProducts,
             getBoughtItems,
             getPostedItems,
             createNewProduct,
@@ -149,7 +256,10 @@ const ProductState = (props) => {
             deleteProductReview,
             updateProductReview,
             createReview,
-            getReview
+            getReview,
+            picLoading,
+            setPicLoading,
+            setSelectedImage
         }}>
             {props.children}
         </ProductContext.Provider>

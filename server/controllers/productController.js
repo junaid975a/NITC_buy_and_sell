@@ -3,8 +3,9 @@ const { sequelize } = require("../models");
 
 
 const createProduct = async (req, res) => {
-    const { name, description, image_url, condition, categoryName, price } = req.body;
-    if (!name || !description || !image_url || !condition || !categoryName || !price) {
+    const { name, description, pic, condition, categoryName, price } = req.body;
+    console.log(req.body);
+    if (!name || !description || !pic || !condition || !categoryName || !price) {
         res.status(400).send({ message: 'Invalid inputs' });
         return;
     }
@@ -33,7 +34,7 @@ const createProduct = async (req, res) => {
         const productData = {
             name: name,
             description: description,
-            image_url: image_url,
+            image_url: pic,
             pdt_condition: condition,
             categoryId: categoryId,
             sellerId: req.user,
@@ -49,7 +50,7 @@ const createProduct = async (req, res) => {
             res.status(201).json({
                 name: name,
                 description: description,
-                image_url: image_url,
+                image_url: pic,
                 pdt_condition: condition,
                 categoryName: categoryName,
                 price: price,
@@ -66,7 +67,7 @@ const createProduct = async (req, res) => {
 }
 
 const updateProduct = async (req, res) => {
-    const { name, description, image_url, condition, categoryName, price, newStatus } = req.body;
+    const { name, description, pic, condition, categoryName, price, newStatus } = req.body;
     // let status = req.body
     const id = req.params.id;
     const sellerId = req.user;
@@ -140,7 +141,7 @@ const updateProduct = async (req, res) => {
         const productData = {
             name: name,
             description: description,
-            image_url: image_url,
+            image_url: pic,
             pdt_condition: condition,
             categoryId: categoryId,
             price: price,
@@ -190,7 +191,7 @@ const updateProduct = async (req, res) => {
                         res.status(201).json({
                             name: name,
                             description: description,
-                            image_url: image_url,
+                            image_url: pic,
                             pdt_condition: condition,
                             categoryName: categoryName,
                             price: price,
@@ -207,7 +208,7 @@ const updateProduct = async (req, res) => {
             res.status(201).json({
                 name: name,
                 description: description,
-                image_url: image_url,
+                image_url: pic,
                 pdt_condition: condition,
                 categoryName: categoryName,
                 price: price,
