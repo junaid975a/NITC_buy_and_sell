@@ -68,6 +68,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
     const submitHandler = async(event) => {
         event.preventDefault();
         setPicLoading(true);
+        console.log(itemData);
         if (!itemData.itemname || !itemData.category || !itemData.description || !itemData.condition || !itemData.price) {
             console.log(itemData)
             // toast.error(itemData)
@@ -76,129 +77,11 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             return;
         }
 
-        const message = createNewProduct(itemData)
-
-        // toast(message.status)(`${message.message}`);
-        if(message.status==="success"){
-            toast.success(message.message)
-        }else if(message.status==="error"){
-            toast.error(message.message)
-        }
-
-
-        // try {
-        //     const name = itemData.itemname;
-        //     const description = itemData.description;
-        //     const condition = itemData.condition;
-        //     const price = itemData.price;
-        //     const categoryName = itemData.category;
-
-        //     const config = {
-        //         headers: {
-        //             "Content-type": "application/json",
-        //             "auth-token":localStorage.getItem("token")
-        //         },
-        //     };
-
-        //     // Upload the selected image (if any) to the server
-        //     if (selectedImage) {
-        //         await postDetails(selectedImage);
-        //     }
-        //     console.log(selectedImage);
-
-        //     if(!pic){
-        //         toast.error("Error in upload product, please try again")
-        //         return;
-        //     }
-
-        //     const { data } = await axios.post(
-        //         "http://127.0.0.1:5000/product/create",
-        //         {
-        //             name,
-        //             description,
-        //             pic,
-        //             condition,
-        //             categoryName,
-        //             price
-        //         },
-        //         config
-        //     );
-
-        //     console.log(data);
-        //     toast.success("Product created successfully");
-        //     setPicLoading(false);
-
-        //     const productData = {
-        //         ...itemData,
-        //     };
-
-        //     const finalData = {
-        //         ...productData,
-        //     };
-
-        //     console.log(finalData);
-        //     navigate("/dashboard");
-        // } catch (error) {
-        //     console.log(error);
-        //     toast.error(error.response.data.message);
-        //     setPicLoading(false);
-        // }
-
+        createNewProduct(itemData)
+        handleClose();
     }
 
-    // const postDetails = async (pics) => {
-    //     setPicLoading(true);
-
-    //     if (pics === undefined) {
-    //         toast.error("Please provide an image")
-    //         setPicLoading(false);
-    //         return;
-    //     }
-
-    //     console.log(pics);
-    //     if (pics.type === "image/jpeg" || pics.type === "image/png") {
-    //         let compressedBlob = pics;
-    //         const compressor = new imageCompressor();
-
-    //         try {
-    //             // Compress the image
-    //             compressedBlob = await compressor.compress(pics, { quality: 0.5 });
-    //         } catch (error) {
-    //             console.error("Image compression error:", error);
-    //             setPicLoading(false);
-    //             return;
-    //         }
-
-    //         const data = new FormData();
-    //         data.append("file", compressedBlob);
-    //         data.append("upload_preset", "chatapp");
-    //         data.append("cloud_name", "dlkpb4vzg");
-
-    //         await fetch("https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload", {
-    //             method: "post",
-    //             body: data,
-    //         })
-    //             .then((res) => res.json())
-    //             .then((data) => {
-    //                 // Update the pic state here
-    //                 setPic(data.url.toString());
-    //                 setPicLoading(false);
-    //                 // console.log(pic);
-    //                 // console.log(imageUrl);
-    //             })
-    //             .catch((err) => {
-    //                 toast.error("Error occurred while uploading")
-    //                 console.error("Image upload error:", err);
-    //                 setPicLoading(false);
-    //             });
-    //     } else {
-    //         toast.error("Please select a valid image of .jpg or .png type")
-    //         setPicLoading(false);
-    //         return;
-    //     }
-    // };
-
-
+    
     return (
         <div className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"}`}>
             {/* Create a centered square popup */}
