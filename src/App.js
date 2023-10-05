@@ -21,7 +21,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <div className="">
+    <div className="h-[100vh] w-[100vw]">
       <ToastContainer />
       <Navbar
         isLoggedIn={isLoggedIn}

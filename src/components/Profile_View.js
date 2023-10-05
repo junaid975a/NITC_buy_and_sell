@@ -5,8 +5,9 @@ import AuthContext from "../context/auth/authContext";
 import toast from "react-hot-toast";
 
 function Profile_View() {
-  const {userData,setUserData,editUser}  = useContext(AuthContext)
+  const { userData, setUserData, editUser } = useContext(AuthContext)
   // console.log(userData);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [editedUser, setEditedUser] = useState(userData);
   // calculating rating variable
   const rating = userData.tot_rating / userData.tot_no_rating;
@@ -24,6 +25,7 @@ function Profile_View() {
     // console.log(editedUser);
   };
 
+
   // function to go into Edit mode
   const handleEditClick = () => {
     setIsEditing(true);
@@ -37,7 +39,7 @@ function Profile_View() {
     // For this example, let's just exit the edit mode
     editUser(editedUser)
     toast.success("Edited successfully")
-
+    // console.log(editedUser)
     setIsEditing(false);
   };
 
@@ -48,11 +50,10 @@ function Profile_View() {
 
   // renders View or Edit mode depending on state of isEditing variable
   return (
+
     <div className="w-full sm:w-[380px] md:w-[440px] m-2 p-6 sm:p-12 border rounded-lg shadow-xl bg-white">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-12 text-[#333333]">
-          {isEditing ? "Edit Profile" : "User Profile"}
-        </h2>
+      <div className="flex justify-center mb-6 mt-[-16px]">
+        <img src={userData.profilePicture} className="w-[80px] rounded-full" />
       </div>
       {isEditing ? (
         <form onSubmit={handleSaveClick}>
@@ -67,19 +68,10 @@ function Profile_View() {
             />
           </label>
 
-          {/* <label className="block mb-4">
-            <strong className="text-[#444444]">Roll Number:</strong>
-            <input
-              type="text"
-              name="roll"
-              value={editedUser.rollNo}
-              onChange={handleInputChange}
-              className="border-2 rounded-md p-2 w-full text-[#666666]"
-            />
-          </label> */}
-          
+
+
           <label className="block mb-4">
-            <strong className="text-[#444444]">Phone Number:</strong>
+            <strong className="text-[#444444]">Phone No:</strong>
             <input
               type="text"
               name="phoneNo"
@@ -90,6 +82,18 @@ function Profile_View() {
               className="border-2 rounded-md p-2 w-full text-[#666666]"
             />
           </label>
+
+          <label className="block mb-4">
+          <strong className="text-[#444444]">Profile Pic:</strong>
+            <input
+              type="file"
+              accept="image/*"
+              name="profilePicture"
+              className="rounded-md text-[#666666] border-2 w-full p-2"
+              onChange={(e) => setSelectedImage(e.target.files[0])}// Store selected image in state
+            />
+          </label>
+
           <div className="text-center">
             <button
               type="submit"
@@ -114,7 +118,7 @@ function Profile_View() {
             {/* <li className="mb-7 flex gap-2">
               <strong className="text-[#444444]">Roll No:</strong> <p>{userData.roll}</p>
             </li> */}
-            
+
             <li className="mb-7 flex gap-2">
               <strong className="text-[#444444]">Phone No:</strong> <p>{userData.phoneNo}</p>
             </li>

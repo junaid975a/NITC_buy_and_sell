@@ -133,8 +133,8 @@ const MyBoughtItemsCollection = ({ searchParam }) => {
       {/* fetch data */}
 
       {soldItems.length === 0 ? (
-        <div>
-          <p>No items available</p>
+        <div className="mt-12">
+          <p>No items Bought</p>
         </div>
       ) : (
         // sold + unsold items dono bhejenge
