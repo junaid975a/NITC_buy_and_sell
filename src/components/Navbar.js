@@ -12,11 +12,7 @@ const Navbar = (props) => {
   let setIsLoggedIn = props.setIsLoggedIn;
   const navigate = useNavigate();
   const {isAuthenticated,setIsAuthenticated} = useContext(AuthContext)
-  const categories = [
-    { category_id: 1, category_name: "electronics" },
-    { category_id: 2, category_name: "furniture" },
-    { category_id: 3, category_name: "others" },
-  ];
+  
 
   // State to control the visibility of the popup
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -163,7 +159,7 @@ const Navbar = (props) => {
               {isPopupVisible && (
                 <AddandEditPopup
                   onClose={() => setIsPopupVisible(false)} // Pass a function to close the popup
-                  categories={categories}
+                  
                 />
               )}
             </div>

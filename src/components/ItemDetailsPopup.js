@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const ItemDetailsPopup = ({ id, name, category, description, sellerId, condition, created_at, price, onClose }) => {
+const ItemDetailsPopup = ({ id, name, category, description, sellerId, condition, created_at, price, imageUrl, onClose }) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     useEffect(() => {
         // Use a setTimeout to delay the appearance of the popup
@@ -24,14 +24,14 @@ const ItemDetailsPopup = ({ id, name, category, description, sellerId, condition
     return (
         <div className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"}`}>
             {/* Create a centered square popup */}
-            <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-min h-min max-h-[600px] overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
+            <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-[580px] h-min max-h-[600px]  p-4 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
                 {/* container to show all the details */}
                 <div className="flex flex-col justify-between">
 
                     {/* top details div */}
                     <div className="flex flex-col sm:flex-row">
 
-                        <img src='#' alt='item-image' className="w-[300px] aspect-square object-cover  p-3" />
+                        <img src={imageUrl} alt='item-image' className="w-[300px] h-[300px] aspect-square object-cover  p-3" />
                         {/* name, price, seller */}
                         <div className="flex flex-col justify-end m-4 p-3 items-start">
                             <h4 className="text-[#1faa59] text-xl font-bold">&#8377; {price}</h4>
