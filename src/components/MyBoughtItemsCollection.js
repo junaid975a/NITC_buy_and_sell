@@ -1,15 +1,32 @@
-import React,{ useContext } from "react";
+import React, { useContext } from "react";
 import BoughtItemCard from "./BoughtItemCard";
 import ProductContext from "../context/product/ProductContext";
+import { useEffect } from "react";
 
 const MyBoughtItemsCollection = ({ searchParam }) => {
   // this datafile just pasted here for testing
 
-  const {allProducts,getBoughtItems} = useContext(ProductContext)
+  const { allProducts, getBoughtItems } = useContext(ProductContext)
 
-  const soldItems = allProducts
-  
-  // const soldItems = [
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            // Await the response from getBoughtItems
+            await getBoughtItems();
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Call the fetchData function
+    fetchData();
+    console.log(allProducts);
+}, []);
+
+
+  const boughtItems = allProducts
+
+  // const boughtItems = [
   //   {
   //     item_id: 1,
   //     item_name: "phone",
@@ -132,7 +149,7 @@ const MyBoughtItemsCollection = ({ searchParam }) => {
 
       {/* fetch data */}
 
-      {soldItems.length === 0 ? (
+      {boughtItems.length === 0 ? (
         <div className="mt-12">
           <p>No items Bought</p>
         </div>
@@ -145,7 +162,7 @@ const MyBoughtItemsCollection = ({ searchParam }) => {
             // sold items
             // need to handle the parameters, will do that at the time of backend integration
             // buyer_id:'m210694ca', final_price: '100', purchase_date: ''
-            soldItems.map((item) => (
+            boughtItems.map((item) => (
               <BoughtItemCard
                 key={item.id}
                 id={item.id}
@@ -160,6 +177,7 @@ const MyBoughtItemsCollection = ({ searchParam }) => {
                 final_price={item.finalPrice}
                 purchase_date={item.updatedAt}
                 isReviewed={item.isReviewed}
+                imageUrl = {item.image_url}
               />
             ))
           }

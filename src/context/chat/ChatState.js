@@ -58,6 +58,15 @@ const ChatState = (props) => {
             "auth-token": localStorage.getItem("token"),
         },
     };
+    const createNewChat = async (receiverId) => {
+        try {
+            const {data} = await axios.post(`${host}/chats`,{sellerId: receiverId},config);
+            setAllChats([...allChats,data]);
+            return data.id
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const getAllChats = async() =>{
         try {
             const { data } = await axios.get(`${host}/chats`,config);
@@ -99,6 +108,7 @@ const ChatState = (props) => {
         allMessages,
         setAllMessages,
         getAllMessages,
+        createNewChat,
     }}>
         {props.children}
     </ChatContext.Provider>)

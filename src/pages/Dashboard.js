@@ -25,12 +25,15 @@ const Dashboard = () => {
     // console.log(user,isAuthenticated);
     // const userToken = localStorage.getItem('token');
     if (isAuthenticated) {
-      getUserData(user)
+      if(!userData){
+        console.log("getting data");
+        getUserData(user)
+      }
       getAllProducts()
       getCategories()
-      getAllChats()
+      
       console.log(user)
-      console.log(userData)
+      console.log("user data :"+ userData)
     } else {
       navigate("/login")
     }

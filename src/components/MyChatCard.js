@@ -18,7 +18,7 @@ const MyChatCard = (props) => {
         phoneNo:""
     });
     const {user,getOtherUserData} = useContext(AuthContext)
-    const { IsPopupVisible, 
+    const { isPopupVisible, 
             setIsPopupVisible,
             setChatId, 
             chatId,

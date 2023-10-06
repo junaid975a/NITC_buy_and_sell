@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MyChats from "../components/MyChats";
 import ChatBox from "../components/ChatBox";
 import { useLocation } from "react-router-dom";
+import ChatContext from "../context/chat/ChatContext";
 
 
 
 const ChatPage = () => {
     // const location = useLocation();
     // const { sellerId } = location.state;
+    const {setSelectedChat,setChatId,getAllChats} = useContext(ChatContext)
     useEffect(() => {
-        
+        getAllChats()
+        return ()=>{
+            setSelectedChat(null);
+            setChatId(null);
+        }
     }, [])
     
 

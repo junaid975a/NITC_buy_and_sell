@@ -8,7 +8,7 @@ const MyChats = () => {
 
     const { allChats, setSelectedChat } = useContext(ChatContext);
     useEffect(() => {
-        setSelectedChat(null);
+        // setSelectedChat(null);
         return () => {
             setSelectedChat(null)
         }

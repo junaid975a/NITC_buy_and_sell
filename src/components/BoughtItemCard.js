@@ -16,6 +16,7 @@ const BoughtItemCard = ({
   final_price,
   purchase_date,
   isReviewed,
+  imageUrl
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const {getReview} = useContext(ProductContext)
@@ -29,7 +30,7 @@ const BoughtItemCard = ({
       <div className="flex gap-x-3">
         <div className="flex items-center justify-center">
           <img
-            src="#"
+            src={imageUrl}
             className="w-[80px] rounded-full aspect-square object-cover "
             alt="item image"
           />
@@ -74,6 +75,7 @@ const BoughtItemCard = ({
           purchase_date={purchase_date}
           isReviewed={isReviewed}
           onClose={togglePopup}
+          imageUrl={imageUrl}
         />
       )}
     </div>

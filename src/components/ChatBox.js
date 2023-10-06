@@ -16,14 +16,17 @@ const ChatBox = () => {
     } = useContext(ChatContext);
     const scrollToBottom = () => {
         try {
-            if (messagesEndRef.current) {
-                messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-            }
+            setTimeout(() => {
+                if (messagesEndRef.current) {
+                    messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+                }
+            }, 0);
         } catch (error) {
             // Handle any potential errors here
             console.error("Error while scrolling:", error);
         }
     };
+    
 
 
     const { user } = useContext(AuthContext);
@@ -38,7 +41,7 @@ const ChatBox = () => {
         // const scrollToBottom = () => {
         //     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         // };
-
+        setLoadingMessages(true);
         getAllMessages()
             .then(() => {
                 setMessages(allMessages);
@@ -47,9 +50,9 @@ const ChatBox = () => {
             })
             .catch((error) => {
                 console.error("Error loading messages:", error);
+                setLoadingMessages(false)
             });
-
-        scrollToBottom();
+        
     }, [selectedChat]);
 
     const typingHandler = (e) => {
@@ -65,7 +68,6 @@ const ChatBox = () => {
                     "auth-token": localStorage.getItem("token"),
                 },
             };
-            setNewMessage("");
             const { data } = await axios.post(
                 "http://127.0.0.1:5000/chats/messages/send-message",
                 {
@@ -74,6 +76,7 @@ const ChatBox = () => {
                 },
                 config
             );
+            setNewMessage("");
             setMessages([...messages, data]);
             scrollToBottom(); // Scroll to the end after sending a message
         } catch (error) {

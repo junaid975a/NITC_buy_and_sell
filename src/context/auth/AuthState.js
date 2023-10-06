@@ -29,7 +29,7 @@ const AuthState = (props) => {
             //     throw new Error(`Request failed with status: ${response.status}`);
             // }
 
-            const dataUser = response // Parse JSON data from the response
+            const dataUser = response.data // Parse JSON data from the response
 
             setUserData(dataUser); // Set the parsed data to state
         } catch (error) {

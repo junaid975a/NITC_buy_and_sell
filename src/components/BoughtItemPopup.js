@@ -20,6 +20,7 @@ const BoughtItemPopup = ({
   final_price,
   purchase_date,
   isReviewed,
+  imageUrl
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   // Added variable for review popup visibility
@@ -78,7 +79,7 @@ const BoughtItemPopup = ({
           {/* top details div */}
           <div className="flex flex-col sm:flex-row">
             <img
-              src="#"
+              src={imageUrl}
               alt="item-image"
               className="w-[300px] aspect-square object-cover  p-3"
             />
@@ -91,10 +92,10 @@ const BoughtItemPopup = ({
               <p className="text-sm italic whitespace-nowrap">
                 by{" "}
                 <span className="italic text-gray-400 text-sm">
-                  seller_name{" "}
+                  {seller_id}
                 </span>
               </p>
-              <p className="text-sm">{purchase_date}</p>
+              <p className="text-sm"> on {purchase_date.substring(0,10)}</p>
             </div>
           </div>
 
