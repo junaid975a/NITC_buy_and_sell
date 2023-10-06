@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import star from "./images/Star_icon.png";
 import { useContext } from "react";
 import AuthContext from "../context/auth/AuthContext";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 function Profile_View() {
-  const { userData, setUserData, editUser } = useContext(AuthContext)
+  const { userData, setUserData, editUser } = useContext(AuthContext);
+
   // console.log(userData);
   const [selectedImage, setSelectedImage] = useState(null);
   const [editedUser, setEditedUser] = useState(userData);
@@ -25,22 +27,68 @@ function Profile_View() {
     // console.log(editedUser);
   };
 
-
   // function to go into Edit mode
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    // Here, you can implement the logic to save the edited user data
-    // You may send a request to your server to update the user's details
-    // Once saved, you can also update the 'user' state with the edited data if needed
-    // console.log(editedUser);
-    // For this example, let's just exit the edit mode
-    editUser(editedUser)
-    toast.success("Edited successfully")
-    // console.log(editedUser)
-    setIsEditing(false);
+  const handleSaveClick = async () => {
+    try {
+      //Perform any image upload logic here if selectedImage is not null
+      if (selectedImage) {
+        // Implement image upload logic and update editedUser.profilePicture accordingly
+        const imageUrl = await uploadImage(selectedImage);
+
+        // Update the edited user's profilePicture field with the new image URL
+        setEditedUser({
+          ...editedUser,
+          profilePicture: imageUrl,
+        });
+      }
+
+      // Call the editUser function from the context to update user data
+      // if (selectedImage) {
+      //   await editUser({
+      //     name: editedUser.name,
+      //     phoneNo: editedUser.phoneNo,
+      //     profilePicture: editedUser.profilePicture,
+      //     // Add any other fields you want to update here
+      //   });
+      // } else {
+      await editUser({
+        name: editedUser.name,
+        phoneNo: editedUser.phoneNo,
+        // Add any other fields you want to update here
+      });
+      // }
+
+      toast.success("Edited successfully");
+
+      // Exit the edit mode
+      setIsEditing(false);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  const uploadImage = async (image) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", image);
+
+      // Make an HTTP request to upload the image
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload",
+        formData
+      );
+
+      if (response.status === 200) {
+        return response.data.imageUrl; // Replace with the actual key for the image URL in the response
+      } else {
+        throw new Error("Image upload failed");
+      }
+    } catch (error) {
+      throw new Error("Image upload failed");
+    }
   };
 
   // Temporary function to showcase edit working
@@ -50,7 +98,6 @@ function Profile_View() {
 
   // renders View or Edit mode depending on state of isEditing variable
   return (
-
     <div className="w-full sm:w-[380px] md:w-[440px] m-2 p-6 sm:p-12 border rounded-lg shadow-xl bg-white">
       <div className="flex justify-center mb-6 mt-[-16px]">
         <img src={userData.profilePicture} className="w-[80px] rounded-full" />
@@ -68,8 +115,6 @@ function Profile_View() {
             />
           </label>
 
-
-
           <label className="block mb-4">
             <strong className="text-[#444444]">Phone No:</strong>
             <input
@@ -84,13 +129,13 @@ function Profile_View() {
           </label>
 
           <label className="block mb-4">
-          <strong className="text-[#444444]">Profile Pic:</strong>
+            <strong className="text-[#444444]">Profile Pic:</strong>
             <input
               type="file"
               accept="image/*"
               name="profilePicture"
               className="rounded-md text-[#666666] border-2 w-full p-2"
-              onChange={(e) => setSelectedImage(e.target.files[0])}// Store selected image in state
+              onChange={(e) => setSelectedImage(e.target.files[0])}
             />
           </label>
 
@@ -110,17 +155,20 @@ function Profile_View() {
         <div>
           <ul>
             <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Name:</strong> <p>{userData.name}</p>
+              <strong className="text-[#444444]">Name:</strong>{" "}
+              <p>{userData?.name}</p>
             </li>
             <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Email:</strong> <p>{userData.email}</p>
+              <strong className="text-[#444444]">Email:</strong>{" "}
+              <p>{userData?.email}</p>
             </li>
             {/* <li className="mb-7 flex gap-2">
               <strong className="text-[#444444]">Roll No:</strong> <p>{userData.roll}</p>
             </li> */}
 
             <li className="mb-7 flex gap-2">
-              <strong className="text-[#444444]">Phone No:</strong> <p>{userData.phoneNo}</p>
+              <strong className="text-[#444444]">Phone No:</strong>{" "}
+              <p>{userData?.phoneNo}</p>
             </li>
             <li className="mb-7 flex items-center">
               <strong className="mr-2">

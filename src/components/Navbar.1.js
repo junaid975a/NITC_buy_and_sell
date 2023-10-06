@@ -13,15 +13,6 @@ export const Navbar = (props) => {
 
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
-
-
-
-
-
-
-
-
-
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   // Function to open the popup
@@ -57,7 +48,8 @@ export const Navbar = (props) => {
           id="menu-toggle"
           type="checkbox"
           checked={isMenuVisible}
-          onChange={toggleMenu} />
+          onChange={toggleMenu}
+        />
         <label className="menu-button-container" htmlFor="menu-toggle">
           <div className="menu-button"></div>
         </label>
@@ -134,7 +126,7 @@ export const Navbar = (props) => {
                     onClick={() => {
                       hideMenu();
                       setIsLoggedIn(false);
-                      // setIsAuthenticated(false);
+                      setIsAuthenticated(false);
                       localStorage.removeItem("token");
                       navigate("/login");
                       toast.success("Logged Out");

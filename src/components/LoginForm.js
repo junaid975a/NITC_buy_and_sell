@@ -10,7 +10,9 @@ import { useEffect } from "react";
 const LoginForm = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const {setUser,setIsAuthenticated,getUserData} = useContext(AuthContext)
+  // const {setUser,setIsAuthenticated,getUserData} = useContext(AuthContext)
+  const { setIsAuthenticated, setUser, getUserData, isAuthenticated } =
+    useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -57,10 +59,14 @@ const LoginForm = ({ setIsLoggedIn }) => {
         setIsLoggedIn(true);
         toast.success("Login successful");
         setIsAuthenticated(true);
-        setUser(data.email)
-        
+        setUser(data.email);
+
         // Save the token in local storage or context for future authenticated requests
         localStorage.setItem("token", data.token);
+
+        // Fetch user data if needed
+        getUserData(data.email); // Call this function to fetch user data
+
         navigate("/dashboard");
       } else {
         toast.error("Invalid credentials");
