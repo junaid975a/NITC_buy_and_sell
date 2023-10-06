@@ -172,13 +172,14 @@ const MyBoughtItemsCollection = ({ searchParam }) => {
                 seller_id={item.sellerId}
                 condition={item.pdt_condition}
                 created_at={item.createdAt}
+              
                 price={item.item_price}
                 imageUrl={item.image_url}
                 buyer_id={item.buyerId}
                 final_price={item.finalPrice}
-                purchase_date={item.purchasedAt}
+                purchase_date={item.updatedAt}
                 isReviewed={item.isReviewed}
-                imageUrl = {item.image_url}
+                
               />
             ))
           }

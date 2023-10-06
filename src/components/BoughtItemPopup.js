@@ -21,7 +21,6 @@ const BoughtItemPopup = ({
   final_price,
   purchase_date,
   isReviewed,
-  imageUrl
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   // Added variable for review popup visibility
@@ -103,7 +102,7 @@ const BoughtItemPopup = ({
           {/* to store description and condition */}
 
           {isReviewed === 1 && (
-            <ItemReviewDetails rating={rating} desc={desc} />
+            <ItemReviewDetails rating={rating} desc={desc}  />
           )}
 
           {/* buttons */}

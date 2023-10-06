@@ -25,9 +25,9 @@ const ItemReviewDetails = ({ rating, desc,buyer }) => {
       <div className="mb-4">
         <strong>Description:</strong> {desc}
       </div>
-      <div className="mb-4 flex gap-2 items-center">
+      {/* <div className="mb-4 flex gap-2 items-center">
         <p className="font-bold text-[#777777] italic">by:</p> <p className="text-sm text-[#666666]">{buyer}</p>
-      </div>
+      </div> */}
     </div>
   );
 };
