@@ -29,6 +29,8 @@ const Dashboard = () => {
       getAllProducts()
       getCategories()
       getAllChats()
+      console.log(user)
+      console.log(userData)
     } else {
       navigate("/login")
     }

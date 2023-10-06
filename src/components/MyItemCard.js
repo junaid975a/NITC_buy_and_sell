@@ -19,6 +19,7 @@ const MyItemCard = ({
   categories,
   isReviewed,
   imageUrl,
+  status
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isReviewPopupVisible, setIsReviewPopupVisible] = useState(false);

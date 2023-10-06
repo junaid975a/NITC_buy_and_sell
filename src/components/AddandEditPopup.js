@@ -62,7 +62,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             ...prev,
             [name]: value,
         }));
-        
+        console.log(itemData);
     }
 
     const submitHandler = async(event) => {
@@ -70,6 +70,8 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
         setPicLoading(true);
         console.log(itemData);
         if (!itemData.itemname || !itemData.category || !itemData.description || !itemData.condition || !itemData.price) {
+            console.log(itemData)
+            // toast.error(itemData)
             toast.error("Please enter all required fields correctly");
             setPicLoading(false);
             return;
@@ -110,7 +112,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                         <select
                             name="category"
                             onChange={changeHandler}
-                            value={itemData.categories}
+                            value={itemData.category}
                             className="rounded-[0.5rem] w-full p-[12px]"
                         >
                             {/* <option value={itemData.category}>{itemData.category}</option> */}

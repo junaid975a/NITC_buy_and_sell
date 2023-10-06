@@ -38,6 +38,7 @@ const ItemCard = ({ id, name, category, description, sellerId, condition, create
             {isPopupVisible && (
                 <ItemDetailsPopup
                     id={id}
+                    imageUrl={imageUrl}
                     name={name}
                     category={category}
                     description={description}
