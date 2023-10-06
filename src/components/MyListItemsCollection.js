@@ -191,10 +191,16 @@ const MyListItemsCollection = ({ searchParam }) => {
                   sellerId={item.sellerId}
                   condition={item.pdt_condition}
                   createdAt={item.createdAt}
+                  soldAt={item.updatedAt}
                   price={item.item_price}
+                  final_price={item.finalPrice}
+                  buyer_id={item.buyerId}
                   imageUrl={item.image_url}
                   status={item.status}
+                  isReviewed={item.isReviewed}
                   categories={categories}
+                  rating={item.rating}
+                  review={item.review}
                 />
               ))
             }

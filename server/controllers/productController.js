@@ -322,7 +322,7 @@ const getSearchProducts = async (req, res) => {
 const getBoughtProducts = async(req, res) => {
     const buyerId = req.user;
     try {
-        const selectQuery = "SELECT p.*,s.isReviewed FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
+        const selectQuery = "SELECT p.*,s.isReviewed,s.updatedAt as purchasedAt, s.finalPrice as finalPrice FROM products as p INNER JOIN solditems as s on s.buyerId=:buyerId and s.productId=p.id";
         const boughtProducts = await sequelize.query(selectQuery,{
             replacements:{buyerId},
             type:QueryTypes.SELECT
@@ -342,7 +342,7 @@ const getBoughtProducts = async(req, res) => {
 const getPostedProducts = async (req, res) => {
     const sellerId = req.user;
     try {
-        const selectQuery = "SELECT * FROM products where sellerId=:sellerId order by status";
+        const selectQuery = "SELECT p.*, s.*,r.rating, r.review FROM products as p left join solditems as s on p.id=s.productId left join ratings as r on p.id=r.productId where p.sellerId=:sellerId order by p.status desc";
         const postedProducts = await sequelize.query(selectQuery,{
             replacements:{sellerId},
             type:QueryTypes.SELECT

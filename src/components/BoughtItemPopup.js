@@ -17,6 +17,7 @@ const BoughtItemPopup = ({
   price,
   onClose,
   buyer_id,
+  imageUrl,
   final_price,
   purchase_date,
   isReviewed,
@@ -69,7 +70,7 @@ const BoughtItemPopup = ({
     >
       {/* Create a centered square popup */}
       <div
-        className={`bg-white rounded-lg shadow-md w-[90%] sm:w-min h-min max-h-[600px] overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${
+        className={`bg-white rounded-lg shadow-md w-[90%] sm:w-[580px] h-min max-h-[600px] overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${
           isPopupVisible ? "scale-100" : "scale-90"
         }`}
       >
@@ -78,7 +79,7 @@ const BoughtItemPopup = ({
           {/* top details div */}
           <div className="flex flex-col sm:flex-row">
             <img
-              src="#"
+              src={imageUrl}
               alt="item-image"
               className="w-[300px] aspect-square object-cover  p-3"
             />
@@ -91,10 +92,10 @@ const BoughtItemPopup = ({
               <p className="text-sm italic whitespace-nowrap">
                 by{" "}
                 <span className="italic text-gray-400 text-sm">
-                  seller_name{" "}
+                  {seller_id}
                 </span>
               </p>
-              <p className="text-sm">{purchase_date}</p>
+              <p className="text-xs">{purchase_date}</p>
             </div>
           </div>
 

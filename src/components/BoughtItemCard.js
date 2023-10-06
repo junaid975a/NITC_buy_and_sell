@@ -12,6 +12,7 @@ const BoughtItemCard = ({
   condition,
   created_at,
   price,
+  imageUrl,
   buyer_id,
   final_price,
   purchase_date,
@@ -29,7 +30,7 @@ const BoughtItemCard = ({
       <div className="flex gap-x-3">
         <div className="flex items-center justify-center">
           <img
-            src="#"
+            src={imageUrl}
             className="w-[80px] rounded-full aspect-square object-cover "
             alt="item image"
           />
@@ -41,7 +42,7 @@ const BoughtItemCard = ({
               &#8377; {final_price}
             </h4>
             <h4 className="text-lg">{name}</h4>
-            <h4 className="text-sm italic">{purchase_date}</h4>
+            <h4 className="text-xs italic">{purchase_date}</h4>
           </div>
         </div>
       </div>
@@ -70,6 +71,7 @@ const BoughtItemCard = ({
           created_at={created_at}
           price={price}
           buyer_id={buyer_id}
+          imageUrl={imageUrl}
           final_price={final_price}
           purchase_date={purchase_date}
           isReviewed={isReviewed}

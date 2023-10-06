@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import StarRating from "./StarRating";
 import ItemReviewDetails from "./ItemReviewDetails";
 
-const ItemReviewPopup = ({ rating, desc, onClose }) => {
+const ItemReviewPopup = ({ rating, desc, buyer, onClose }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   useEffect(() => {
     // Use a setTimeout to delay the appearance of the popup
@@ -43,7 +43,7 @@ const ItemReviewPopup = ({ rating, desc, onClose }) => {
         {/* container to show all the details */}
         <div className="flex flex-col justify-between h-full items-center">
           {/* top details div */}
-          <ItemReviewDetails rating={rating} desc={desc} />
+          <ItemReviewDetails rating={rating} desc={desc} buyer={buyer} />
           <button
             onClick={handleClose}
             className="mt-6 border border-blue-700 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none

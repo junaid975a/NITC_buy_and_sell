@@ -9,24 +9,26 @@ const MyItemCard = ({
   name,
   category,
   description,
-  seller_id,
+  sellerId,
   condition,
   created_at,
+  soldAt,
   price,
-  buyer_id,
   final_price,
-  purchase_date,
-  categories,
-  isReviewed,
+  buyer_id,
   imageUrl,
-  status
+  status,
+  isReviewed,
+  categories,
+  rating,
+  review,
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isReviewPopupVisible, setIsReviewPopupVisible] = useState(false);
 
   // sample values
-  const rating = 3;
-  const desc = "Sample description for item 123 321 123 321 123 321 123 321";
+  // const rating = 3;
+  // const desc = "Sample description for item 123 321 123 321 123 321 123 321";
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
@@ -49,7 +51,7 @@ const MyItemCard = ({
         <div className="my-[10px] mx-[5px] max-w-[310px]">
           <div className="">
             <h4 className="text-[#1faa59] text-md font-bold">
-              &#8377; {price}
+              &#8377; {buyer_id ? final_price : price}
             </h4>
             <h4 className="text-lg">{name}</h4>
           </div>
@@ -111,7 +113,7 @@ const MyItemCard = ({
           name={name}
           category={category}
           description={description}
-          seller_id={seller_id}
+          seller_id={sellerId}
           condition={condition}
           created_at={created_at}
           price={price}
@@ -123,7 +125,8 @@ const MyItemCard = ({
       {isReviewPopupVisible && (
         <ItemReviewPopup
           rating={rating}
-          desc={desc}
+          desc={review}
+          buyer={buyer_id}
           onClose={toggleReviewPopup}
         />
       )}
