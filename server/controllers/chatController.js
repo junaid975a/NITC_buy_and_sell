@@ -19,14 +19,14 @@ const createChat = async (req, res) => {
         }
 
         const existingChat = await sequelize.query("SELECT * FROM chats WHERE (buyerId = :buyerId AND sellerId = :sellerId) OR (buyerId = :sellerId AND sellerId = :buyerId)", {
-            replacements:{
-                buyerId:buyerId,
-                sellerId:sellerId
+            replacements: {
+                buyerId: buyerId,
+                sellerId: sellerId
             },
-            type:QueryTypes.SELECT
+            type: QueryTypes.SELECT
         })
         console.log(existingChat);
-        if(existingChat.length>0){
+        if (existingChat.length > 0) {
             res.status(200).json(existingChat[0])
             return;
         }
@@ -55,17 +55,34 @@ const createChat = async (req, res) => {
 const getChats = async (req, res) => {
     const userId = req.user
     try {
-        const chats = await sequelize.query("select * from chats where buyerId = :userId or sellerId=:userId",{
-            replacements:{
-                userId:userId
+        const insertQuery = `
+    SELECT
+        c.*,
+        u1.name as sellerName,
+        u1.phoneNo as sellerPhoneNo,
+        u1.profilePicture as sellerProfilePicture,
+        u2.name as buyerName,
+        u2.phoneNo as buyerPhoneNo,
+        u2.profilePicture as buyerProfilePicture
+    FROM chats as c
+    INNER JOIN users as u1 ON c.sellerId = u1.email
+    INNER JOIN users as u2 ON c.buyerId = u2.email
+    WHERE c.sellerId = :userId OR c.buyerId = :userId
+    ORDER BY c.updatedAt DESC
+`;
+
+        const chats = await sequelize.query(insertQuery, {
+            replacements: {
+                userId: userId
             },
-            type:QueryTypes.SELECT
+            type: QueryTypes.SELECT
         })
-        if(chats){
+        if (chats) {
+            console.log(chats);
             res.status(200).json(chats)
             return;
-        }else{
-            res.status(400).json({message:"failed fetch chats"})
+        } else {
+            res.status(400).json({ message: "failed fetch chats" })
             return;
         }
     } catch (error) {

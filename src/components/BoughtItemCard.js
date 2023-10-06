@@ -17,6 +17,7 @@ const BoughtItemCard = ({
   final_price,
   purchase_date,
   isReviewed,
+  imageUrl
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const {getReview} = useContext(ProductContext)
@@ -76,6 +77,7 @@ const BoughtItemCard = ({
           purchase_date={purchase_date}
           isReviewed={isReviewed}
           onClose={togglePopup}
+          imageUrl={imageUrl}
         />
       )}
     </div>

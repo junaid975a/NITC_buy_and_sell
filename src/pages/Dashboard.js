@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/auth/AuthContext";
 import ProductContext from "../context/product/ProductContext";
+import ChatContext from "../context/chat/ChatContext";
 
 
 
 const Dashboard = () => {
   const { user, isAuthenticated, getUserData, userData } = useContext(AuthContext)
   const {getAllProducts,getCategories} = useContext(ProductContext)
+  const { getAllChats } = useContext(ChatContext);
   const [searchParam, setSearchParam] = useState("");
   const changeHandler = (e) => {
     setSearchParam(e.target.value);
@@ -23,11 +25,15 @@ const Dashboard = () => {
     // console.log(user,isAuthenticated);
     // const userToken = localStorage.getItem('token');
     if (isAuthenticated) {
-      getUserData(user)
+      if(!userData){
+        console.log("getting data");
+        getUserData(user)
+      }
       getAllProducts()
       getCategories()
+      
       console.log(user)
-      console.log(userData)
+      console.log("user data :"+ userData)
     } else {
       navigate("/login")
     }

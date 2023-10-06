@@ -22,20 +22,14 @@ const AuthState = (props) => {
         }
 
         try {
-            const response = await fetch(`${host}/auth/find-user`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": localStorage.getItem('token')
-                },
-            });
+            const response = await axios.get(`${host}/auth/find-user`,config);
 
-            if (!response.ok) {
-                // Handle non-successful response (e.g., 404 or 500)
-                throw new Error(`Request failed with status: ${response.status}`);
-            }
+            // if (!response.ok) {
+            //     // Handle non-successful response (e.g., 404 or 500)
+            //     throw new Error(`Request failed with status: ${response.status}`);
+            // }
 
-            const dataUser = await response.json(); // Parse JSON data from the response
+            const dataUser = response.data // Parse JSON data from the response
 
             setUserData(dataUser); // Set the parsed data to state
         } catch (error) {
@@ -44,30 +38,23 @@ const AuthState = (props) => {
         }
     };
 
-    const getSellerData = async (id) => {
+    const getOtherUserData = async (id) => {
         if (id === null) {
             // setUserData(null);
             return; // Exit the function early
         }
 
         try {
-            const response = await fetch(`${host}/auth/fetch-user`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "auth-token": localStorage.getItem('token')
-                },
-                body:JSON.stringify({email:id})
-            });
+            const response = await axios.get(`${host}/auth/fetch-user/${id}`,config);
 
-            if (!response.ok) {
-                // Handle non-successful response (e.g., 404 or 500)
-                throw new Error(`Request failed with status: ${response.status}`);
-            }
+            // if (!response.ok) {
+            //     // Handle non-successful response (e.g., 404 or 500)
+            //     throw new Error(`Request failed with status: ${response.status}`);
+            // }
 
-            const sellerData = await response.json(); // Parse JSON data from the response
+            const otherUserData = response; // Parse JSON data from the response
 
-            return sellerData
+            return otherUserData
             
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -82,10 +69,10 @@ const AuthState = (props) => {
                 phoneNo:data.phoneNo,
             },config)
 
-            if (!response.ok) {
-                // Handle non-successful response (e.g., 404 or 500)
-                throw new Error(`Request failed with status: ${response.status}`);
-            }
+            // if (!response.ok) {
+            //     // Handle non-successful response (e.g., 404 or 500)
+            //     throw new Error(`Request failed with status: ${response.status}`);
+            // }
 
             const updatedData = await response.json();
 
@@ -99,7 +86,17 @@ const AuthState = (props) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, setUser, isAuthenticated, setIsAuthenticated, userData, getUserData, setUserData,getSellerData,editUser }}>
+        <AuthContext.Provider value={{ 
+            user,
+            setUser, 
+            isAuthenticated, 
+            setIsAuthenticated, 
+            userData, 
+            getUserData, 
+            setUserData,
+            getOtherUserData,
+            editUser 
+            }}>
             {props.children}
         </AuthContext.Provider>
     )

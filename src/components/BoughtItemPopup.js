@@ -21,6 +21,7 @@ const BoughtItemPopup = ({
   final_price,
   purchase_date,
   isReviewed,
+  imageUrl
 }) => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   // Added variable for review popup visibility
@@ -95,7 +96,7 @@ const BoughtItemPopup = ({
                   {seller_id}
                 </span>
               </p>
-              <p className="text-xs">{purchase_date}</p>
+              <p className="text-xs"> on {purchase_date.substring(0,10)}</p>
             </div>
           </div>
 

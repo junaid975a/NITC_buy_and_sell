@@ -11,12 +11,12 @@ import Profile from "./pages/Profile";
 import MyList from "./pages/MyList";
 import Bought from "./pages/Bought";
 import ChatPage from "./pages/ChatPage";
-import { ChatContextProvider } from "./context/chatHelperContext";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthContext from "./context/auth/AuthContext";
+import ChatState from "./context/chat/ChatState";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,7 +56,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn}>
+            <PrivateRoute isLoggedIn={isAuthenticated}>
               <Dashboard />
             </PrivateRoute>
           }
@@ -64,7 +64,7 @@ function App() {
         <Route
           path="/mylist"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn}>
+            <PrivateRoute isLoggedIn={isAuthenticated}>
               <MyList />
             </PrivateRoute>
           }
@@ -72,7 +72,7 @@ function App() {
         <Route
           path="/bought"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn}>
+            <PrivateRoute isLoggedIn={isAuthenticated}>
               <Bought />
             </PrivateRoute>
           }
@@ -80,7 +80,7 @@ function App() {
         <Route
           path="/profile"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn}>
+            <PrivateRoute isLoggedIn={isAuthenticated}>
               <Profile />
             </PrivateRoute>
           }
@@ -88,10 +88,8 @@ function App() {
         <Route
           path="/chatpage"
           element={
-            <PrivateRoute isLoggedIn={isLoggedIn}>
-              <ChatContextProvider>
+            <PrivateRoute isLoggedIn={isAuthenticated}>
                 <ChatPage />
-              </ChatContextProvider>
             </PrivateRoute>
           }
         />

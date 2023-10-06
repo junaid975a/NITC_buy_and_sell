@@ -20,6 +20,7 @@ const ProductState = (props) => {
             "auth-token": localStorage.getItem("token"),
         },
     };
+    
     const postDetails = async (pics) => {
         setPicLoading(true);
 
@@ -134,6 +135,7 @@ const ProductState = (props) => {
     const getBoughtItems = async () => {
         try {
             const response = await axios.get(`${host}/product/bought-products`, config)
+            console.log(response);
             setAllProducts(response.data);
         } catch (error) {
             // setAlert(error.response.data.message)

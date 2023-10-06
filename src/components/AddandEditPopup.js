@@ -52,7 +52,9 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
         description: description,
         condition: condition,
         price: price,
-        categories: allCategories 
+        categories: allCategories ,
+        buyerId:"",
+        finalPrice:0,
     });
 
     const changeHandler = (event) => {
@@ -76,8 +78,14 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             setPicLoading(false);
             return;
         }
-
-        createNewProduct(itemData)
+        const uploadProduct = async() => {
+            try {
+                createNewProduct(itemData)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        uploadProduct();
         handleClose();
     }
 
@@ -199,10 +207,10 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                                 <input
                                     type="text"
                                     required
-                                    name="buyer_id"
+                                    name="buyerId"
                                     onChange={changeHandler}
-                                    placeholder="Enter Item Name"
-                                    value="buyer_name/buyer_id"
+                                    placeholder="buyer_name/buyer_id"
+                                    value={itemData.buyerId}
                                     className="rounded-[0.5rem] 
                         w-full p-[12px]"
                                 />
@@ -212,10 +220,10 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                                 <input
                                     type="number"
                                     required
-                                    name="final_price"
+                                    name="finalPrice"
                                     onChange={changeHandler}
                                     placeholder="Enter Item Price"
-                                    value={0}
+                                    value={itemData.finalPrice}
                                     className="rounded-[0.5rem] 
                         w-full p-[12px]"
                                 />
