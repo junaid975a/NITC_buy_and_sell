@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import { ChakraProvider } from '@chakra-ui/react';
 import AuthState from "./context/auth/AuthState";
 import ProductState from './context/product/ProductState';
+import ChatState from './context/chat/ChatState';
 // import ChatProvider from './context/chatProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,7 +17,9 @@ root.render(
     <BrowserRouter>
       <AuthState>
         <ProductState>
-          <App />
+          <ChatState>
+            <App/>
+          </ChatState>
           <Toaster />
         </ProductState>
       </AuthState>

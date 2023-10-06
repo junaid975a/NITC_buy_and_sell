@@ -218,8 +218,8 @@ const getUser = async (req, res) => {
 
 const findUser = async (req, res) => {
     try {
-        const userId = req.body.email
-        const userData = await sequelize.query("select name,email,tot_rating,tot_no_rating,phoneNo from users where email=:userId",{
+        const userId = req.params.id
+        const userData = await sequelize.query("select name,email,tot_rating,tot_no_rating,phoneNo,profilePicture from users where email=:userId",{
             replacements:{ userId},
             type:QueryTypes.SELECT
         })

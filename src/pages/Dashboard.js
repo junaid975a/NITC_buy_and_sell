@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../context/auth/AuthContext";
 import ProductContext from "../context/product/ProductContext";
+import ChatContext from "../context/chat/ChatContext";
 
 
 
 const Dashboard = () => {
   const { user, isAuthenticated, getUserData, userData } = useContext(AuthContext)
   const {getAllProducts,getCategories} = useContext(ProductContext)
+  const { getAllChats } = useContext(ChatContext);
   const [searchParam, setSearchParam] = useState("");
   const changeHandler = (e) => {
     setSearchParam(e.target.value);
@@ -26,6 +28,7 @@ const Dashboard = () => {
       getUserData(user)
       getAllProducts()
       getCategories()
+      getAllChats()
     } else {
       navigate("/login")
     }

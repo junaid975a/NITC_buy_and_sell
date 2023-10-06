@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import MyChatCard from "./MyChatCard";
 import { useContext } from "react";
-import { ChatContext } from "../context/chatHelperContext";
+import ChatContext from "../context/chat/ChatContext";
+
 
 const MyChats = () => {
 
-    const { allChats,getAllChats } = useContext(ChatContext);
-    // let allChats = [];
+    const { allChats, setSelectedChat } = useContext(ChatContext);
     useEffect(() => {
-        getAllChats();
-        console.log(allChats);
-        // allChats = allChats
-      
+        setSelectedChat(null);
+        return () => {
+            setSelectedChat(null)
+        }
     }, [])
-    
+
     return (
         <div>
             {allChats.length === 0 ?
@@ -32,14 +32,9 @@ const MyChats = () => {
                                 // unsold items
                                 allChats.map((chat) => (
                                     <MyChatCard key={chat.id}
-                                        chat_id={chat.id}
-                                        sender_id={chat.sender_id}
-                                        receiver_id={chat.receiver_id}
-                                        sender_name={chat.sender_name}
-                                        
+                                        chatDetails={chat}
                                     />
                                 ))
-
                             }
 
                         </div>

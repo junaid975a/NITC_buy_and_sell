@@ -62,9 +62,12 @@ const sendMessage = async (req, res) => {
             type: QueryTypes.UPDATE,
             namedBindings: true
         });
-        
+        const thisMsg = await sequelize.query("select * from messages where id=:messageId",{
+            replacements: {messageId},
+            type: QueryTypes.SELECT
+        })
         if(fMessage){
-            res.status(200).json({ message: fMessage})
+            res.status(200).json(thisMsg[0])
             return;
         }else{
             res.status(404).json({ message:"failed to send message" })
@@ -102,6 +105,7 @@ const allMessages = async (req, res) => {
             type:QueryTypes.SELECT
         })
         if(messages){
+            console.log(messages);
             res.status(200).json(messages)
             return
         }else{
@@ -109,6 +113,7 @@ const allMessages = async (req, res) => {
             return
         }
     } catch (error) {
+        console.log(error);
         res.status(400).json(error.message)
     }
 }
