@@ -271,9 +271,14 @@ const deleteProduct = async(req, res) => {
 // }
 
 const getAllProducts = async(req, res) => {
+    const sellerId = req.user;
+    console.log(sellerId)
     try {
-        const allProducts = await sequelize.query("select * from products where status='not sold'",{
-            type:QueryTypes.SELECT
+        const allProducts = await sequelize.query("select * from products where status='not sold' and sellerId != :sellerId",{
+            type:QueryTypes.SELECT,
+            replacements: {
+                sellerId : sellerId
+            }
         })
         // console.log(allProducts);
         res.status(200).json(allProducts)
@@ -320,7 +325,7 @@ const getSearchProducts = async (req, res) => {
 
 
 const getBoughtProducts = async(req, res) => {
-    const buyerId = req.user;
+    
     try {
         const selectQuery = "SELECT p.*,s.* FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
         const boughtProducts = await sequelize.query(selectQuery,{

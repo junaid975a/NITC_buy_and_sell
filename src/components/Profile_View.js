@@ -9,7 +9,13 @@ function Profile_View() {
   const { userData, setUserData, editUser } = useContext(AuthContext);
 
   // console.log(userData);
+  useEffect(()=>{
+    console.log(userData)
+    // console.log(editUser)
+  },[])
+
   const [selectedImage, setSelectedImage] = useState(null);
+  
   const [editedUser, setEditedUser] = useState(userData);
   // calculating rating variable
   const rating = userData.tot_rating / userData.tot_no_rating;
