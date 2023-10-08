@@ -38,64 +38,21 @@ function Profile_View() {
     setIsEditing(true);
   };
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (e) => {
+    e.preventDefault();
     try {
-      //Perform any image upload logic here if selectedImage is not null
-      if (selectedImage) {
-        // Implement image upload logic and update editedUser.profilePicture accordingly
-        const imageUrl = await uploadImage(selectedImage);
-
-        // Update the edited user's profilePicture field with the new image URL
-        setEditedUser({
-          ...editedUser,
-          profilePicture: imageUrl,
-        });
-      }
-
-      // Call the editUser function from the context to update user data
-      // if (selectedImage) {
-      //   await editUser({
-      //     name: editedUser.name,
-      //     phoneNo: editedUser.phoneNo,
-      //     profilePicture: editedUser.profilePicture,
-      //     // Add any other fields you want to update here
-      //   });
-      // } else {
       await editUser({
         name: editedUser.name,
         phoneNo: editedUser.phoneNo,
-        // Add any other fields you want to update here
       });
-      // }
 
       toast.success("Edited successfully");
-
-      // Exit the edit mode
       setIsEditing(false);
     } catch (error) {
       toast.error(error.message);
     }
   };
-  const uploadImage = async (image) => {
-    try {
-      const formData = new FormData();
-      formData.append("image", image);
-
-      // Make an HTTP request to upload the image
-      const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/dlkpb4vzg/image/upload",
-        formData
-      );
-
-      if (response.status === 200) {
-        return response.data.imageUrl; // Replace with the actual key for the image URL in the response
-      } else {
-        throw new Error("Image upload failed");
-      }
-    } catch (error) {
-      throw new Error("Image upload failed");
-    }
-  };
+  
 
   // Temporary function to showcase edit working
   const tempHandleChange = () => {
@@ -134,16 +91,6 @@ function Profile_View() {
             />
           </label>
 
-          <label className="block mb-4">
-            <strong className="text-[#444444]">Profile Pic:</strong>
-            <input
-              type="file"
-              accept="image/*"
-              name="profilePicture"
-              className="rounded-md text-[#666666] border-2 w-full p-2"
-              onChange={(e) => setSelectedImage(e.target.files[0])}
-            />
-          </label>
 
           <div className="text-center">
             <button

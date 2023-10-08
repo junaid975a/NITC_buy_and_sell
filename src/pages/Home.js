@@ -7,9 +7,6 @@ const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-
-    
-
     // Trigger the fade-in animation after a delay (e.g., 1000 milliseconds)
     const timeout = setTimeout(() => {
       setIsVisible(true);

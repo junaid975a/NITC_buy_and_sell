@@ -7,7 +7,7 @@ import { useContext } from "react";
 import AuthContext from "../context/auth/AuthContext";
 import { useEffect } from "react";
 
-const LoginForm = ({ setIsLoggedIn }) => {
+const LoginForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   // const {setUser,setIsAuthenticated,getUserData} = useContext(AuthContext)
@@ -56,7 +56,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
 
       if (data.token) {
         // Assuming your server returns a token on successful login
-        setIsLoggedIn(true);
         toast.success("Login successful");
         setIsAuthenticated(true);
         setUser(data.email);

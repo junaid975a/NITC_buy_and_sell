@@ -55,7 +55,7 @@ const ChatState = (props) => {
     const config = {
         headers: {
             "Content-type": "application/json",
-            "auth-token": localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     };
     const createNewChat = async (receiverId) => {

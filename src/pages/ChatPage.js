@@ -11,7 +11,10 @@ const ChatPage = () => {
     // const { sellerId } = location.state;
     const {setSelectedChat,setChatId,getAllChats} = useContext(ChatContext)
     useEffect(() => {
-        getAllChats()
+        const getAllChatsFunction = async() => {
+            await getAllChats();
+        }
+        getAllChatsFunction();
         return ()=>{
             setSelectedChat(null);
             setChatId(null);

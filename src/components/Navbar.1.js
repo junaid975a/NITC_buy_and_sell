@@ -6,9 +6,7 @@ import AddandEditPopup from "./AddandEditPopup";
 import { useContext } from "react";
 import AuthContext from "../context/auth/AuthContext";
 
-export const Navbar = (props) => {
-  let isLoggedIn = props.isLoggedIn;
-  let setIsLoggedIn = props.setIsLoggedIn;
+export const Navbar = () => {
   const navigate = useNavigate();
 
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
@@ -38,7 +36,7 @@ export const Navbar = (props) => {
     <nav className="flex justify-between items-center h-fit pt-4 relative px-4">
       {/* image */}
       <div className="flex items-center align-baseline pl-6">
-        <Link to={isLoggedIn ? "/dashboard" : "/"}>
+        <Link to={isAuthenticated ? "/dashboard" : "/"}>
           <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
         </Link>
       </div>
@@ -55,7 +53,7 @@ export const Navbar = (props) => {
         </label>
 
         <div className="menu">
-          {!isLoggedIn && (
+          {!isAuthenticated && (
             <nav>
               <ul className="link-list">
                 <li className="group relative" onClick={hideMenu}>
@@ -70,7 +68,7 @@ export const Navbar = (props) => {
               </ul>
             </nav>
           )}
-          {isLoggedIn && (
+          {isAuthenticated && (
             <nav>
               <ul className="link-list">
                 <li className="group relative" onClick={hideMenu}>
@@ -96,7 +94,7 @@ export const Navbar = (props) => {
           {/* login-signup-logout-dashboard */}
           <nav>
             <div className="flex items-center justify-center flex-wrap gap-x-4 gap-y-4">
-              {!isLoggedIn && (
+              {!isAuthenticated && (
                 <Link to="/login">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -108,7 +106,7 @@ export const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {!isLoggedIn && (
+              {!isAuthenticated && (
                 <Link to="/signup">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -120,12 +118,11 @@ export const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {isLoggedIn && (
+              {isAuthenticated && (
                 <Link to="/">
                   <button
                     onClick={() => {
                       hideMenu();
-                      setIsLoggedIn(false);
                       setIsAuthenticated(false);
                       localStorage.removeItem("token");
                       navigate("/login");
@@ -139,7 +136,7 @@ export const Navbar = (props) => {
                   </button>
                 </Link>
               )}
-              {isLoggedIn && (
+              {isAuthenticated && (
                 <Link to="/dashboard">
                   <button
                     className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
@@ -163,109 +160,5 @@ export const Navbar = (props) => {
         </div>
       </div>
     </nav>
-    // <div className="flex justify-between items-center w-11/12 max-w-[1160px] py-4 mx-auto">
-    //   {!isLoggedIn && (
-    //     <Link to="/">
-    //       <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
-    //     </Link>
-    //   )}
-    //   {isLoggedIn && (
-    //     <Link to="/dashboard">
-    //       <img src={logo} alt="logo" width={60} height={32} loading="lazy" />
-    //     </Link>
-    //   )}
-    //   {!isLoggedIn && (
-    //     <nav>
-    //       <ul className="flex gap-x-6">
-    //         <li>
-    //           <Link to="/">Home</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/">About</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/">Contact</Link>
-    //         </li>
-    //       </ul>
-    //     </nav>
-    //   )}
-    //   {isLoggedIn && (
-    //     <nav>
-    //       <ul className="flex gap-x-6">
-    //         <li>
-    //           <Link to="/bought">Bought</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/mylist">My List</Link>
-    //         </li>
-    //         <li>
-    //           <button onClick={openPopup} className="cursor-pointer">
-    //             Add Item
-    //           </button>
-    //         </li>
-    //         <li>
-    //           <Link to="/chatpage">Chats</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/profile">Profile</Link>
-    //         </li>
-    //       </ul>
-    //     </nav>
-    //   )}
-    //   {/* login-signup-logout-dashboard */}
-    //   <div className="flex items-center gap-x-4">
-    //     {!isLoggedIn && (
-    //       <Link to="/login">
-    //         <button
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                         px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Log In
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {!isLoggedIn && (
-    //       <Link to="/signup">
-    //         <button
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                         px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Sign Up
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {isLoggedIn && (
-    //       <Link to="/">
-    //         <button
-    //           onClick={() => {
-    //             setIsLoggedIn(false);
-    //             toast.success("Logged Out");
-    //           }}
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                     px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Log Out
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {isLoggedIn && (
-    //       <Link to="/dashboard">
-    //         <button
-    //           className="text-richblack-100 bg-richblack-800 py-[8px]
-    //                         px-[12px] rounded-[8px] border border-richblack-700"
-    //         >
-    //           Dashboard
-    //         </button>
-    //       </Link>
-    //     )}
-    //     {/* Render the popup component with visibility controlled by the state */}
-    //     {isPopupVisible && (
-    //       <AddandEditPopup
-    //         onClose={() => setIsPopupVisible(false)} // Pass a function to close the popup
-    //         categories={categories}
-    //       />
-    //     )}
-    //   </div>
-    // </div>
-  );
+     );
 };

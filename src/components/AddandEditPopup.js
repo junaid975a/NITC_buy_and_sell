@@ -80,7 +80,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
         }
         const uploadProduct = async() => {
             try {
-                createNewProduct(itemData)
+                await createNewProduct(itemData)
             } catch (error) {
                 console.log(error);
             }

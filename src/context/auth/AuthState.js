@@ -11,7 +11,7 @@ const AuthState = (props) => {
     const config = {
         headers: {
             "Content-type": "application/json",
-            "auth-token": localStorage.getItem("token")
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     };
 
@@ -64,10 +64,7 @@ const AuthState = (props) => {
 
     const editUser = async (data) => {
         try {
-            const response = await axios.put(`${host}/auth/update-profile`,{
-                name:data.name,
-                phoneNo:data.phoneNo,
-            },config)
+            const response = await axios.put(`${host}/auth/update-profile`,data,config)
 
             // if (!response.ok) {
             //     // Handle non-successful response (e.g., 404 or 500)

@@ -30,7 +30,7 @@ const sendMessage = async (req, res) => {
             type:QueryTypes.SELECT
         })
 
-        // console.log(isUser);
+        // // console.log(isUser);
 
         if(isUser[0].buyerId !== req.user && isUser[0].sellerId !== req.user){
             res.status(404).json({ message: "you are not the member of this chat" })
@@ -52,7 +52,7 @@ const sendMessage = async (req, res) => {
         
         // set the latestMessageId of that chat 
         const messageId = fMessage[0];
-        console.log(fMessage)
+        // console.log(fMessage)
         const updateQuery = "UPDATE chats SET latestMessage=:mId,updatedAt=NOW() WHERE id=:chatId"
         const lMsgId = await sequelize.query(updateQuery,{
             replacements: {
@@ -81,7 +81,7 @@ const sendMessage = async (req, res) => {
 
 const allMessages = async (req, res) => {
     try {
-        // console.log(req.params)
+        // // console.log(req.params)
         const id = req.params.chatId
         
         // check if the user is either seller or buyer 
@@ -93,7 +93,7 @@ const allMessages = async (req, res) => {
             type:QueryTypes.SELECT
         })
 
-        // console.log(isUser);
+        // // console.log(isUser);
 
         if(isUser[0].buyerId !== req.user && isUser[0].sellerId !== req.user){
             res.status(404).json({ message: "you are not the member of this chat" })
@@ -105,7 +105,7 @@ const allMessages = async (req, res) => {
             type:QueryTypes.SELECT
         })
         if(messages){
-            console.log(messages);
+            // console.log(messages);
             res.status(200).json(messages)
             return
         }else{
@@ -113,7 +113,7 @@ const allMessages = async (req, res) => {
             return
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(400).json(error.message)
     }
 }

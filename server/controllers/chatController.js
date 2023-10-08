@@ -25,7 +25,7 @@ const createChat = async (req, res) => {
             },
             type: QueryTypes.SELECT
         })
-        console.log(existingChat);
+        // console.log(existingChat);
         if (existingChat.length > 0) {
             res.status(200).json(existingChat[0])
             return;
@@ -39,7 +39,7 @@ const createChat = async (req, res) => {
             type: QueryTypes.INSERT
         })
 
-        console.log(chat);
+        // console.log(chat);
         if (chat) {
             res.status(200).json(chat)
             return;
@@ -78,7 +78,7 @@ const getChats = async (req, res) => {
             type: QueryTypes.SELECT
         })
         if (chats) {
-            console.log(chats);
+            // console.log(chats);
             res.status(200).json(chats)
             return;
         } else {

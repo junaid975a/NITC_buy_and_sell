@@ -13,6 +13,7 @@ const ChatBox = () => {
         chatId,
         Messages,
         selectedChat,
+        setAllMessages,
     } = useContext(ChatContext);
     const scrollToBottom = () => {
         try {
@@ -26,7 +27,7 @@ const ChatBox = () => {
             console.error("Error while scrolling:", error);
         }
     };
-    
+
 
 
     const { user } = useContext(AuthContext);
@@ -41,18 +42,27 @@ const ChatBox = () => {
         // const scrollToBottom = () => {
         //     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
         // };
-        setLoadingMessages(true);
-        getAllMessages()
-            .then(() => {
-                setMessages(allMessages);
+        const getMessageFunction = async () => {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            };
+            if (!selectedChat) return;
+            try {
+                console.log(selectedChat);
+                const { data } = await axios.get(`http://127.0.0.1:5000/chats/messages/${selectedChat}`, config);
+                setAllMessages(data);
+                setMessages(data);
                 setLoadingMessages(false); // Set loading to false when messages are loaded
                 scrollToBottom(); // Scroll to the end after loading
-            })
-            .catch((error) => {
-                console.error("Error loading messages:", error);
-                setLoadingMessages(false)
-            });
-        
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getMessageFunction()
+        setLoadingMessages(false);
     }, [selectedChat]);
 
     const typingHandler = (e) => {
@@ -65,7 +75,7 @@ const ChatBox = () => {
             const config = {
                 headers: {
                     "Content-type": "application/json",
-                    "auth-token": localStorage.getItem("token"),
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
             };
             const { data } = await axios.post(

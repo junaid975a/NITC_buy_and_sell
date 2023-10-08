@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "../css/signupform.css";
 import imageCompressor from "image-compressor.js";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../context/auth/AuthContext";
 
 const SignupForm = ({ setIsLoggedIn }) => {
     const [formData, setFormData] = useState({
@@ -23,6 +25,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
     const [showPassword2, setShowPassword2] = useState(false);
     const [accountType, setAccountType] = useState("student");
     const [selectedImage, setSelectedImage] = useState(null); // State to store selected image
+    const {setIsAuthenticated,setUser,setUserData} = useContext(AuthContext)
 
     const changeHandler = (event) => {
         setFormData((prev) => ({
@@ -46,7 +49,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
             return;
         }
 
-        setIsLoggedIn(true);
+        
 
         try {
             const name = formData.firstName + " " + formData.lastName;
@@ -79,10 +82,11 @@ const SignupForm = ({ setIsLoggedIn }) => {
 
             console.log(data);
             toast.success("Registration successful");
-            localStorage.setItem("userInfo", JSON.stringify(data));
-            console.log(localStorage.getItem("userInfo"));
+            localStorage.setItem("token", data.token);
             setPicLoading(false);
-
+            setIsAuthenticated(true);
+            setUser(data.email);
+            setUserData(data);
             const accountData = {
                 ...formData,
             };
@@ -142,6 +146,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
             setPicLoading(false);
         }
     };
+    
     return (
         <div className="mt-6">
             <form

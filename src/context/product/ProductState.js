@@ -17,7 +17,7 @@ const ProductState = (props) => {
     const config = {
         headers: {
             "Content-type": "application/json",
-            "auth-token": localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
     };
     
@@ -30,7 +30,7 @@ const ProductState = (props) => {
             return;
         }
 
-        console.log(pics);
+        // console.log(pics);
         if (pics.type === "image/jpeg" || pics.type === "image/png") {
             let compressedBlob = pics;
             const compressor = new imageCompressor();
@@ -58,8 +58,8 @@ const ProductState = (props) => {
                     // Update the pic state here
                     setPic(data.url.toString());
                     setPicLoading(false);
-                    // console.log(pic);
-                    // console.log(imageUrl);
+                    // // console.log(pic);
+                    // // console.log(imageUrl);
                 })
                 .catch((err) => {
                     console.error("Image upload error: ", err);
@@ -96,7 +96,7 @@ const ProductState = (props) => {
             if (selectedImage) {
                 await postDetails(selectedImage);
             }   
-            console.log(pic);
+            // console.log(pic);
 
             const { data } = await axios.post(
                 "http://127.0.0.1:5000/product/create",
@@ -111,7 +111,7 @@ const ProductState = (props) => {
                 config
             );
 
-            // console.log(data);
+            // // console.log(data);
             setPicLoading(false);
             
             const productData = {
@@ -122,11 +122,11 @@ const ProductState = (props) => {
                 ...productData,
             };
             
-            console.log(finalData);
+            // console.log(finalData);
             toast.success('Product created successfully');
             // return {status:"success",mesage:"Product created successfully"};
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             setPicLoading(false);
             toast.error(error.response.data.message)
         }
@@ -135,11 +135,11 @@ const ProductState = (props) => {
     const getBoughtItems = async () => {
         try {
             const response = await axios.get(`${host}/product/bought-products`, config)
-            console.log(response);
+            // console.log(response);
             setAllProducts(response.data);
         } catch (error) {
             // setAlert(error.response.data.message)
-            console.log(error);
+            // console.log(error);
             setAllProducts([])
         }
     }
@@ -150,7 +150,7 @@ const ProductState = (props) => {
             setAllProducts(response.data);
         } catch (error) {
             // setAlert(error.response.data.message)
-            console.log(error);
+            // console.log(error);
             setAllProducts([])
         }
     }
@@ -171,7 +171,7 @@ const ProductState = (props) => {
             const response = await axios.get(`${host}/auth/fetch-user`, { email: id }, config);
             setSellerDetails(response)
         } catch (error) {
-            console.log("Error fetching seller information", error);
+            // console.log("Error fetching seller information", error);
             // setAlert(error.response.data.message)
             setSellerDetails(null);
         }
@@ -182,9 +182,9 @@ const ProductState = (props) => {
         try {
             const response = await axios.get(`${host}/rating/get-rating/${id}`, config);
             setProductReview(response.data)
-            // console.log(productReview);
+            // // console.log(productReview);
         } catch (error) {
-            console.log("Error fetching review of product", error.response.data.message);
+            // console.log("Error fetching review of product", error.response.data.message);
             // setAlert(error.response.data.message)
             setProductReview(null);
         }
@@ -207,26 +207,26 @@ const ProductState = (props) => {
             setAlert("Review saved successfully")
         } catch (error) {
             // setAlert(error.response.data.message)
-            console.log("Error creating review of product", error);
+            // console.log("Error creating review of product", error);
         }
 
     }
 
     const updateProductReview = async (data) => {
-        // console.log(data);
+        // // console.log(data);
         try {
-            // console.log(data);
+            // // console.log(data);
             const response = await axios.put(`${host}/rating/update-rating/${data.id}`, {
                 rating: data.rating,
                 review: data.review
             }, config)
-            // console.log(response);
+            // // console.log(response);
             const updatedData = response.data
-            // console.log(updatedData);
+            // // console.log(updatedData);
             setProductReview(updatedData)
         } catch (error) {
             // setAlert(error.response.data.message)
-            console.log("Error updating review of product", error);
+            // console.log("Error updating review of product", error);
         }
     }
 
@@ -236,7 +236,7 @@ const ProductState = (props) => {
             setProductReview(null)
         } catch (error) {
             // setAlert(error.response.data.message)
-            console.log("Error deleting review of product", error);
+            // console.log("Error deleting review of product", error);
         }
     }
 

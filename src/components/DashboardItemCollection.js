@@ -28,9 +28,7 @@ const DashboardItemCollection = ({ searchParam }) => {
         // console.log(items)
         // console.log(searchParam)
     },[searchParam, allProducts])
-    // console.log(allProducts);
-    // this datafile just pasted here for testing
-    const items = allProducts
+    
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="sm:text-xl sm:m-[4vh] md:text-lg md:m-[3vh] lg:text-4xl lg:m-[6vh]">

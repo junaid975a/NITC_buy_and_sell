@@ -10,30 +10,26 @@ import ChatContext from "../context/chat/ChatContext";
 
 const Dashboard = () => {
   const { user, isAuthenticated, getUserData, userData } = useContext(AuthContext)
-  const {getAllProducts,getCategories} = useContext(ProductContext)
+  const { getAllProducts, getCategories } = useContext(ProductContext)
   const { getAllChats } = useContext(ChatContext);
   const [searchParam, setSearchParam] = useState("");
+  const navigate = useNavigate();
   const changeHandler = (e) => {
     setSearchParam(e.target.value);
     // console.log(searchParam);
   };
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //     console.log(searchParam); // This will log the updated value of searchParam
-  // }, [searchParam]);
   useEffect(() => {
-    // console.log(user,isAuthenticated);
-    // const userToken = localStorage.getItem('token');
+    const getUserDataFunction = async() => {
+      await getUserData(user)
+      await getAllProducts()
+      await getCategories()
+    }
     if (isAuthenticated) {
-      if(!userData){
+      if (!userData) {
         console.log("getting data");
-        getUserData(user)
       }
-      getAllProducts()
-      getCategories()
-      
+      getUserDataFunction();
       console.log(user)
-      console.log("user data :"+ userData)
     } else {
       navigate("/login")
     }

@@ -88,7 +88,7 @@ const createRating = async (req, res) => {
                 replacements: { productId },
                 type: QueryTypes.SELECT
             })
-            console.log(sellerId[0]);
+            // console.log(sellerId[0]);
             // find the rating details of the seller
             const ratingsData = await sequelize.query("select tot_no_rating,tot_rating from users where email=:sellerId", {
                 replacements: {
@@ -96,7 +96,7 @@ const createRating = async (req, res) => {
                 },
                 type: QueryTypes.SELECT
             })
-            console.log(ratingsData);
+            // console.log(ratingsData);
             const no_of_ratings = ratingsData[0].tot_no_rating + 1;
             const total_ratings = ratingsData[0].tot_rating + fRating
             // update the rating details of the seller
@@ -143,7 +143,7 @@ const updateRating = async (req, res) => {
             replacements: { productId },
             type: QueryTypes.SELECT
         })
-        // console.log(ra);
+        // // console.log(ra);
         if (existedRating.length === 0) {
             res.status(404).json({ message: "Rating not found" });
             return;
@@ -185,7 +185,7 @@ const updateRating = async (req, res) => {
                 replacements: { productId },
                 type: QueryTypes.SELECT
             })
-            console.log(sellerId[0]);
+            // console.log(sellerId[0]);
             // find the rating details of the seller
             const ratingsData = await sequelize.query("select tot_no_rating,tot_rating from users where email=:sellerId", {
                 replacements: {
@@ -193,7 +193,7 @@ const updateRating = async (req, res) => {
                 },
                 type: QueryTypes.SELECT
             })
-            console.log(ratingsData);
+            // console.log(ratingsData);
             const total_ratings = (ratingsData[0].tot_rating - prevRating) + fRating
             // update the rating details of the seller
             const updateQuery = "UPDATE users SET tot_rating=:total_ratings,updatedAt=NOW() WHERE email = :sellerId"
@@ -217,7 +217,7 @@ const updateRating = async (req, res) => {
             return
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({ message: error.message })
         return;
     }
@@ -257,7 +257,7 @@ const deleteRating = async (req, res) => {
             replacements: { productId },
             type: QueryTypes.SELECT
         })
-        console.log(sellerId[0]);
+        // console.log(sellerId[0]);
         // find the rating details of the seller
         const ratingsData = await sequelize.query("select tot_no_rating,tot_rating from users where email=:sellerId", {
             replacements: {
@@ -265,7 +265,7 @@ const deleteRating = async (req, res) => {
             },
             type: QueryTypes.SELECT
         })
-        console.log(ratingsData);
+        // console.log(ratingsData);
         const no_of_ratings = ratingsData[0].tot_no_rating + 1;
         const total_ratings = (ratingsData[0].tot_rating - prevRating)
         // update the rating details of the seller

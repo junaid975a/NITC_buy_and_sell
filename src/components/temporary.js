@@ -5,7 +5,7 @@ import { useContext } from "react";
 import ChatContext from "../context/chat/ChatContext";
 import AuthContext from "../context/auth/AuthContext";
 
-const MyChatCard = ({ chat }) => {
+const TempCard = ({ chat }) => {
     
     // in starting, this above useState variable will be false
     // and so, the chatbox will not be shown thill that is false
@@ -52,4 +52,4 @@ const MyChatCard = ({ chat }) => {
     )
 }
 
-export default MyChatCard;
+export default TempCard;
