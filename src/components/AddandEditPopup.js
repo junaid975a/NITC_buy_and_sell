@@ -6,7 +6,7 @@ import ProductContext from "../context/product/ProductContext";
 import { useNavigate } from "react-router-dom";
 
 
-const AddandEditPopup = ({ id, name, category, description, condition, price, onClose,}) => {
+const AddandEditPopup = ({ id, name, category, description, condition, price, onClose, }) => {
 
     // const [pic, setPic] = useState(); // Store the selected image file
     const {
@@ -16,12 +16,47 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
         picLoading,
         setPicLoading,
         setSelectedImage,
-        createNewProduct
+        createNewProduct,
+        updateOldProduct
     } = useContext(ProductContext)
+
+    const [otherCategory, setOtherCategory] = useState(""); // State for the "Other" category input field
+    const [showOtherInput, setShowOtherInput] = useState(false); // State to control when to show the "Other" input field
+    const [optionsVisible, setOptionsVisible] = useState(false);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-    
 
+    const toggleOptions = () => {
+        setOptionsVisible(!optionsVisible);
+    };
+    const selectCategory = (selectedCategory) => {
+        setOptionsVisible(false)
 
+        if (selectedCategory === "Other") {
+            // If "Other" is selected, show the input field
+            setShowOtherInput(true);
+        } else {
+            // If a category is selected from the dropdown, hide the input field
+            setShowOtherInput(false);
+
+            // Update the selected category in itemData
+            setItemData((prev) => ({
+                ...prev,
+                category: selectedCategory,
+            }));
+            
+        }
+    };
+    const handleOtherCategoryChange = (event) => {
+        const { value } = event.target;
+        // Update the "Other" category input field value
+        setOtherCategory(value);
+
+        // Update the selected category in itemData as the user types
+        setItemData((prev) => ({
+            ...prev,
+            category: value, // Update itemData.category with the user's input
+        }));
+    };
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,13 +83,13 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
 
     const [itemData, setItemData] = useState({
         itemname: name,
-        category: category,
+        category: null,
         description: description,
         condition: condition,
         price: price,
-        categories: allCategories ,
-        buyerId:"",
-        finalPrice:0,
+        categories: allCategories,
+        buyerId: "",
+        finalPrice: 0,
     });
 
     const changeHandler = (event) => {
@@ -67,9 +102,10 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
         console.log(itemData);
     }
 
-    const submitHandler = async(event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
         setPicLoading(true);
+        console.log(itemData)
         console.log(itemData);
         if (!itemData.itemname || !itemData.category || !itemData.description || !itemData.condition || !itemData.price) {
             console.log(itemData)
@@ -78,18 +114,35 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             setPicLoading(false);
             return;
         }
-        const uploadProduct = async() => {
+        const uploadProduct = async () => {
             try {
-                createNewProduct(itemData)
+                // Create a new product using the createNewProduct function
+                await createNewProduct(itemData);
+
+                // Show a success message
+                toast.success("Product created successfully!");
+
+                // Close the popup
+                handleClose();
             } catch (error) {
-                console.log(error);
+                console.error(error);
+                toast.error("Failed to create the product");
             }
-        }
+        };
+
         uploadProduct();
-        handleClose();
     }
 
-    
+    const updateHandler = async (event) => {
+
+    }
+    const sellHandler = async (event) => {
+
+    }
+
+
+
+
     return (
         <div className={`fixed inset-0 h-full w-full bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-50 transition-opacity ease-in duration-500 ${isPopupVisible ? "opacity-100" : "opacity-0"}`}>
             {/* Create a centered square popup */}
@@ -114,23 +167,55 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                         />
                     </label>
 
-                    {/* here category dropdown will be added */}
-                    <label className="w-full flex items-center">
+
+                    <label className="w-full flex items-center gap-x" onClick={toggleOptions}>
                         <p className="text-[0.875rem] mb-1 leading-[1.375rem] whitespace-nowrap">Category<sup className="text-rose-500">*</sup> :</p>
-                        <select
-                            name="category"
-                            onChange={changeHandler}
-                            value={itemData.category}
-                            className="rounded-[0.5rem] w-full p-[12px]"
-                        >
-                            {/* <option value={itemData.category}>{itemData.category}</option> */}
-                            {allCategories.map((categoryOption) => (
-                                <option key={categoryOption.id} value={categoryOption.name}>
-                                    {categoryOption.name}
-                                </option>
-                            ))}
-                        </select>
+                        <div className="relative w-full">
+                            <input
+                                type="text"
+                                required
+                                name="category"
+                                value={itemData.category}
+                                placeholder="Select a category"
+                                className="rounded-[0.5rem] w-full p-[12px]"
+                                readOnly // Make the input read-only
+                            />
+                            {optionsVisible && (
+                                <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    {allCategories.map((categoryOption) => (
+                                        <div
+                                            key={categoryOption.id}
+                                            onClick={() => selectCategory(categoryOption.name)}
+                                            className="cursor-pointer p-2 hover:bg-gray-100"
+                                        >
+                                            {categoryOption.name}
+                                        </div>
+                                    ))}
+                                    <div // Add the "Other" option here
+                                        onClick={() => selectCategory("Other")}
+                                        className="cursor-pointer p-2 hover:bg-gray-100"
+                                    >
+                                        Other
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </label>
+                    {showOtherInput && (
+                        <label className="w-full flex items-center">
+                            <p className="text-[0.875rem] mb-1 leading-[1.375rem] whitespace-nowrap">Enter Other Category:</p>
+                            <input
+                                type="text"
+                                required
+                                name="category"
+                                value={otherCategory}
+                                onChange={handleOtherCategoryChange}
+                                placeholder="Enter a new category"
+                                className="rounded-[0.5rem] w-full p-[12px]"
+                            />
+                        </label>
+                    )}
+
 
                     <label className="w-full flex items-center">
                         <p className="text-[0.875rem] mb-1 leading-[1.375rem] whitespace-nowrap">Description: </p>
@@ -235,15 +320,40 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
 
 
                     {/* buttons */}
+
                     <div className="flex gap-x-5 justify-center">
-                        {/* Close button */}
-                        <button onClick={submitHandler}
-                            className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                        {/* to add new product */}
+                        {!id && (
+                            <button onClick={submitHandler}
+                                className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
                             transition-all duration-300 ease-out"
-                            type="submit"
-                            
-                            
-                        >{picLoading ? "Creating your product..." : "Submit"}</button>
+                                type="submit"
+
+
+                            >{picLoading ? "Creating your product..." : "Add product"}</button>
+                        )}
+                        {id && (
+                            <button onClick={updateHandler}
+                                className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                            transition-all duration-300 ease-out"
+                                type="submit"
+
+
+                            >Update</button>
+                        )
+                        }
+                        {id && (
+                            <button onClick={sellHandler}
+                                className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
+                            transition-all duration-300 ease-out"
+                                type="submit"
+
+
+                            >Sell</button>
+                        )
+                        }
+
+
 
                         {/* Close button */}
                         <button onClick={handleClose}
