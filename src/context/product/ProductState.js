@@ -132,6 +132,8 @@ const ProductState = (props) => {
         }
     }
 
+    
+
     const getBoughtItems = async () => {
         try {
             const response = await axios.get(`${host}/product/bought-products`, config)

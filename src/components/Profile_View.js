@@ -9,13 +9,13 @@ function Profile_View() {
   const { userData, setUserData, editUser } = useContext(AuthContext);
 
   // console.log(userData);
-  useEffect(()=>{
-    console.log(userData)
+  useEffect(() => {
+    console.log(userData);
     // console.log(editUser)
-  },[])
+  }, []);
 
   const [selectedImage, setSelectedImage] = useState(null);
-  
+
   const [editedUser, setEditedUser] = useState(userData);
   // calculating rating variable
   const rating = userData.tot_rating / userData.tot_no_rating;
@@ -55,9 +55,9 @@ function Profile_View() {
   
 
   // Temporary function to showcase edit working
-  const tempHandleChange = () => {
-    setUserData(editedUser);
-  };
+  // const tempHandleChange = () => {
+  // setUserData(editedUser);
+  // };
 
   // renders View or Edit mode depending on state of isEditing variable
   return (
@@ -95,7 +95,7 @@ function Profile_View() {
           <div className="text-center">
             <button
               type="submit"
-              onClick={tempHandleChange}
+              onClick={handleSaveClick}
               className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
               w-[116px] bg-blue-500 hover:bg-blue-600 font-medium text-white
               transition-all duration-300 ease-out"
