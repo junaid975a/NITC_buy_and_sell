@@ -1,12 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import ItemCard from "./ItemCard";
 import { useContext } from "react";
 import ProductContext from "../context/product/ProductContext";
+import { useEffect } from "react";
 
 
 const DashboardItemCollection = ({ searchParam }) => {
 
     const {allProducts} = useContext(ProductContext)
+    const [filteredItems, setFilteredItems] = useState([]);
+
+
+    useEffect(() => {
+        // filter the products based on the product name and product category
+        if(!searchParam) {
+            setFilteredItems(allProducts);
+        } else{
+            const filteredProducts = allProducts.filter((item) => {
+                const nameMatch = item.name.toLowerCase().includes(searchParam.toLowerCase());
+                const categoryMatch = item.categoryName.toLowerCase().includes(searchParam.toLowerCase());
+
+                return nameMatch || categoryMatch;
+            });
+
+            setFilteredItems(filteredProducts);
+        }
+        // console.log(items)
+        // console.log(searchParam)
+    },[searchParam, allProducts])
     // console.log(allProducts);
     // this datafile just pasted here for testing
     const items = allProducts
@@ -20,7 +41,7 @@ const DashboardItemCollection = ({ searchParam }) => {
 
                 {/* fetch data */}
 
-                {items.length === 0 ?
+                {filteredItems.length === 0 ?
                     (
                         <div>
                             <p>No items available</p>
@@ -29,7 +50,7 @@ const DashboardItemCollection = ({ searchParam }) => {
                     <div className="flex flex-wrap justify-center max-w-[1380px] my-0 mx-auto">
                         {
 
-                            items.map((item) => (
+                            filteredItems.map((item) => (
                                 <ItemCard key={item.id}
                                     id={item.id}
                                     name={item.name}

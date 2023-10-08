@@ -272,15 +272,16 @@ const deleteProduct = async(req, res) => {
 
 const getAllProducts = async(req, res) => {
     const sellerId = req.user;
-    console.log(sellerId)
+    // console.log(sellerId)
     try {
-        const allProducts = await sequelize.query("select * from products where status='not sold' and sellerId != :sellerId",{
+        const allProducts = await sequelize.query("select p.*, c.name as categoryName from products as p join categories as c on p.categoryId = c.id where p.status='not sold' and p.sellerId != :sellerId",{
             type:QueryTypes.SELECT,
             replacements: {
                 sellerId : sellerId
             }
         })
         // console.log(allProducts);
+        console.log(allProducts)
         res.status(200).json(allProducts)
     } catch (error) {
         console.log(error);
@@ -325,7 +326,7 @@ const getSearchProducts = async (req, res) => {
 
 
 const getBoughtProducts = async(req, res) => {
-    
+    const buyerId = req.user
     try {
         const selectQuery = "SELECT p.*,s.* FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
         const boughtProducts = await sequelize.query(selectQuery,{
