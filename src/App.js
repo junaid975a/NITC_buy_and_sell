@@ -20,7 +20,9 @@ import AuthState from "./context/auth/AuthState";
 import ChatState from "./context/chat/ChatState";
 
 function App() {
-  const { setIsAuthenticated } = useContext(AuthContext);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, setIsAuthenticated, userData, setUserData } =
+    useContext(AuthContext);
 
   useEffect(() => {
     const localToken = localStorage.getItem("token");
@@ -30,10 +32,10 @@ function App() {
   }, []);
 
   return (
-    <AuthState>
-      <div className="h-[100vh] w-[100vw]">
+    <div className="h-[100vh] w-[100vw]">
+      <AuthState>
         <ToastContainer />
-        <Navbar />
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -41,18 +43,18 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/login"
-            element={<Login/>}
+            element={<Login setIsLoggedIn={setIsLoggedIn} />}
           />
           <Route
             path="/signup"
-            element={<Signup/>}
+            element={<Signup setIsLoggedIn={setIsLoggedIn} />}
           />
           {/* <Route path="mylist" element={<MyList/>}/>
         <Route path="/bought" element={<Bought/>}/> */}
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute>
+              <PrivateRoute isLoggedIn={isLoggedIn}>
                 <Dashboard />
               </PrivateRoute>
             }
@@ -60,7 +62,7 @@ function App() {
           <Route
             path="/mylist"
             element={
-              <PrivateRoute>
+              <PrivateRoute isLoggedIn={isLoggedIn}>
                 <MyList />
               </PrivateRoute>
             }
@@ -68,7 +70,7 @@ function App() {
           <Route
             path="/bought"
             element={
-              <PrivateRoute>
+              <PrivateRoute isLoggedIn={isLoggedIn}>
                 <Bought />
               </PrivateRoute>
             }
@@ -76,7 +78,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <PrivateRoute>
+              <PrivateRoute isLoggedIn={isLoggedIn}>
                 <Profile />
               </PrivateRoute>
             }
@@ -84,15 +86,15 @@ function App() {
           <Route
             path="/chatpage"
             element={
-              <PrivateRoute>
+              <PrivateRoute isLoggedIn={isLoggedIn}>
                 <ChatPage />
               </PrivateRoute>
             }
           />
           {/* <Route path="/profile" element={<Profile />} /> */}
         </Routes>
-      </div>
-    </AuthState>
+      </AuthState>
+    </div>
   );
 }
 

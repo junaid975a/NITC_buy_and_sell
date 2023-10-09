@@ -21,11 +21,11 @@ const SignupForm = ({ setIsLoggedIn }) => {
   const [picLoading, setPicLoading] = useState(false);
   const navigate = useNavigate();
 
-    const [showPassword1, setShowPassword1] = useState(false);
-    const [showPassword2, setShowPassword2] = useState(false);
-    const [accountType, setAccountType] = useState("student");
-    const [selectedImage, setSelectedImage] = useState(null); // State to store selected image
-    const {setIsAuthenticated,setUser,setUserData} = useContext(AuthContext)
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const [accountType, setAccountType] = useState("student");
+  const [selectedImage, setSelectedImage] = useState(null); // State to store selected image
+  const { setIsAuthenticated, setUser, setUserData } = useContext(AuthContext);
 
   const changeHandler = (event) => {
     setFormData((prev) => ({
@@ -60,7 +60,7 @@ const SignupForm = ({ setIsLoggedIn }) => {
       return;
     }
 
-        setIsLoggedIn(true);
+    setIsLoggedIn(true);
 
     try {
       const name = formData.firstName + " " + formData.lastName;
@@ -91,16 +91,16 @@ const SignupForm = ({ setIsLoggedIn }) => {
         config
       );
 
-            console.log(data);
-            toast.success("Registration successful");
-            localStorage.setItem("token", data.token);
-            setPicLoading(false);
-            setIsAuthenticated(true);
-            setUser(data.email);
-            setUserData(data);
-            const accountData = {
-                ...formData,
-            };
+      console.log(data);
+      toast.success("Registration successful");
+      localStorage.setItem("token", data.token);
+      setPicLoading(false);
+      setIsAuthenticated(true);
+      setUser(data.email);
+      setUserData(data);
+      const accountData = {
+        ...formData,
+      };
 
       const finalData = {
         ...accountData,

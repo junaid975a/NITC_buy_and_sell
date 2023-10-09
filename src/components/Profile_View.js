@@ -22,6 +22,7 @@ function Profile_View() {
   const roundedRating = rating.toFixed(2);
   // useState variable to toggle between View and Edit state
   const [isEditing, setIsEditing] = useState(false);
+
   // useState variable to keep Edited data that will replace existing data
   // function to continuously edit isEditing variable with each user input
   const handleInputChange = (event) => {
@@ -52,7 +53,6 @@ function Profile_View() {
       toast.error(error.message);
     }
   };
-  
 
   // Temporary function to showcase edit working
   // const tempHandleChange = () => {
@@ -90,7 +90,6 @@ function Profile_View() {
               className="border-2 rounded-md p-2 w-full text-[#666666]"
             />
           </label>
-
 
           <div className="text-center">
             <button

@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "joelRALTE123!",
     "database": "nitc_buy_sell",
     "host": "127.0.0.1",
     "dialect": "mysql"

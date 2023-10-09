@@ -11,8 +11,13 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   // const {setUser,setIsAuthenticated,getUserData} = useContext(AuthContext)
-  const { setIsAuthenticated, setUser, getUserData, isAuthenticated } =
-    useContext(AuthContext);
+  const {
+    setIsAuthenticated,
+    setUser,
+    setUserData,
+    getUserData,
+    isAuthenticated,
+  } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
