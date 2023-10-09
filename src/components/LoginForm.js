@@ -63,13 +63,15 @@ const LoginForm = () => {
         // Assuming your server returns a token on successful login
         toast.success("Login successful");
         setIsAuthenticated(true);
-        setUser(data.email);
+
+        // Store user data in setUserData
+        setUserData({
+          email: data.email,
+          // Include other user data as needed
+        });
 
         // Save the token in local storage or context for future authenticated requests
         localStorage.setItem("token", data.token);
-
-        // Fetch user data if needed
-        getUserData(data.email); // Call this function to fetch user data
 
         navigate("/dashboard");
       } else {
