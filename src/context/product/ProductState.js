@@ -85,13 +85,6 @@ const ProductState = (props) => {
             const price = itemData.price;
             const categoryName = itemData.category;
 
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                    "auth-token":localStorage.getItem("token")
-                },
-            };
-
             // Upload the selected image (if any) to the server
             if (selectedImage) {
                 await postDetails(selectedImage);
@@ -123,7 +116,7 @@ const ProductState = (props) => {
             };
             
             // console.log(finalData);
-            toast.success('Product created successfully');
+            // toast.success('Product created successfully');
             // return {status:"success",mesage:"Product created successfully"};
         } catch (error) {
             // console.log(error);

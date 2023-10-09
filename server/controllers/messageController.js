@@ -4,80 +4,88 @@ const { sequelize } = require("../models");
 const sendMessage = async (req, res) => {
     const { message_text, chatId } = req.body;
     const senderId = req.user;
-    let message = message_text.trim();
-    if (message.length === 0) {
-        res.status(400).json({ message: "please atleast enter a character" })
-        return
-    }
+    const message = message_text.trim();
+
     try {
-        // check if the chat exists or not
-        const chat = await sequelize.query("select * from chats where id = :chatId", {
-            replacements: { chatId },
-            type: QueryTypes.SELECT
-        })
+        // Check if the chat exists and user is a member
+        const chat = await sequelize.query(
+            "SELECT buyerId, sellerId FROM chats WHERE id = :chatId FOR UPDATE",
+            {
+                replacements: { chatId },
+                type: QueryTypes.SELECT,
+            }
+        );
 
         if (chat.length === 0) {
-            res.status(404).json({ message: "This chat does not exist" })
-            return
-        } 
-
-        // check if the user is either seller or buyer 
-
-        const isUser = await sequelize.query("select buyerId,sellerId from chats where id=:chatId",{
-            replacements:{
-                chatId:chatId,
-            },
-            type:QueryTypes.SELECT
-        })
-
-        // // console.log(isUser);
-
-        if(isUser[0].buyerId !== req.user && isUser[0].sellerId !== req.user){
-            res.status(404).json({ message: "you are not the member of this chat" })
-            return
+            return res.status(404).json({ message: "This chat does not exist" });
         }
 
-        const insertQuery = "insert into messages (message_text,senderId,chatId,createdAt,updatedAt) values (:message_text,:senderId,:chatId,NOW(),NOW())"
+        const { buyerId, sellerId } = chat[0];
 
-        const data = {
-            message_text: message,
-            senderId: senderId,
-            chatId: chatId,
+        if (senderId !== buyerId && senderId !== sellerId) {
+            return res
+                .status(403)
+                .json({ message: "You are not a member of this chat" });
         }
 
-        const fMessage = await sequelize.query(insertQuery, {
-            replacements: data,
-            type: QueryTypes.INSERT
-        });
-        
-        // set the latestMessageId of that chat 
-        const messageId = fMessage[0];
-        // console.log(fMessage)
-        const updateQuery = "UPDATE chats SET latestMessage=:mId,updatedAt=NOW() WHERE id=:chatId"
-        const lMsgId = await sequelize.query(updateQuery,{
-            replacements: {
-                mId: messageId,
-                chatId: chatId
-            },
-            type: QueryTypes.UPDATE,
-            namedBindings: true
-        });
-        const thisMsg = await sequelize.query("select * from messages where id=:messageId",{
-            replacements: {messageId},
-            type: QueryTypes.SELECT
-        })
-        if(fMessage){
-            res.status(200).json(thisMsg[0])
-            return;
-        }else{
-            res.status(404).json({ message:"failed to send message" })
-            return;
+        // Begin a transaction
+        const t = await sequelize.transaction();
+
+        try {
+            // Insert the message into the database and retrieve the last inserted ID
+            const [messageId] = await sequelize.query(
+                "INSERT INTO messages (message_text, senderId, chatId, createdAt, updatedAt) VALUES (:message_text, :senderId, :chatId, NOW(), NOW())",
+                {
+                    replacements: {
+                        message_text: message,
+                        senderId,
+                        chatId,
+                    },
+                    type: QueryTypes.INSERT,
+                    transaction: t,
+                }
+            );
+
+            // Update the latest message ID in the chat
+            await sequelize.query(
+                "UPDATE chats SET latestMessage = :messageId, updatedAt = NOW() WHERE id = :chatId",
+                {
+                    replacements: {
+                        messageId,
+                        chatId,
+                    },
+                    type: QueryTypes.UPDATE,
+                    transaction: t,
+                }
+            );
+
+            // Commit the transaction
+            await t.commit();
+
+            // Fetch the sent message details
+            const sentMessage = await sequelize.query(
+                "SELECT * FROM messages WHERE id = :messageId",
+                {
+                    replacements: { messageId },
+                    type: QueryTypes.SELECT,
+                }
+            );
+
+            if (sentMessage.length > 0) {
+                return res.status(200).json(sentMessage[0]);
+            } else {
+                return res.status(500).json({ message: "Failed to send message" });
+            }
+        } catch (error) {
+            // Rollback the transaction in case of an error
+            await t.rollback();
+            throw error;
         }
     } catch (error) {
-        res.status(500).json(error.message)
+        return res.status(500).json({ message: error.message });
     }
+};
 
-}
 
 const allMessages = async (req, res) => {
     try {

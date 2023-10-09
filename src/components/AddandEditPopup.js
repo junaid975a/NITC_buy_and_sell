@@ -114,21 +114,20 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             setPicLoading(false);
             return;
         }
-        const uploadProduct = async () => {
-            try {
-                // Create a new product using the createNewProduct function
-                await await createNewProduct(itemData);
-
-                // Show a success message
-                toast.success("Product created successfully!");
-
-                // Close the popup
-                handleClose();
-            } catch (error) {
-                console.error(error);
-                toast.error("Failed to create the product");
-            }
-        };
+        const uploadProduct = () => {
+            return createNewProduct(itemData)
+                .then(() => {
+                    // Show a success message
+                    toast.success("Product created successfully!");
+                    
+                    // Close the popup
+                    handleClose();
+                })
+                .catch((error) => {
+                    console.error(error);
+                    toast.error("Failed to create the product");
+                });
+        };        
 
         uploadProduct();
     }

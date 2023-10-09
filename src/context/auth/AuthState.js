@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import AuthContext from './AuthContext'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const AuthState = (props) => {
     const host = "http://127.0.0.1:5000"
@@ -29,11 +30,12 @@ const AuthState = (props) => {
             //     throw new Error(`Request failed with status: ${response.status}`);
             // }
 
-            const dataUser = response.data // Parse JSON data from the response
+            const dataUser = await response.data // Parse JSON data from the response
 
             setUserData(dataUser); // Set the parsed data to state
         } catch (error) {
             console.error('Error fetching user data:', error);
+            toast.error("Error fetching user data")
             // Handle the error (e.g., show an error message to the user)
         }
     };

@@ -2,34 +2,93 @@ const { QueryTypes } = require("sequelize");
 const { sequelize } = require("../models");
 
 
+// const createProduct = async (req, res) => {
+//     const { name, description, pic, condition, categoryName, price } = req.body;
+//     // console.log(req.body);
+//     if (!name || !description || !pic || !condition || !categoryName || !price) {
+//         res.status(400).send({ message: 'Invalid inputs' });
+//         return;
+//     }
+//     try {
+
+//         let categoryId = await sequelize.query("select id from categories where name = :categoryName", {
+//             replacements: { categoryName },
+//             type: QueryTypes.SELECT
+//         })
+//         // // console.log(categoryId);
+//         if (categoryId.length === 0) {
+//             await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:categoryName,NOW(),NOW())", {
+//                 replacements: { categoryName },
+//                 type: QueryTypes.INSERT
+//             })
+
+//             categoryId = await sequelize.query("select id from categories where name = :categoryName", {
+//                 replacements: { categoryName },
+//                 type: QueryTypes.SELECT
+//             })
+//         }
+//         categoryId = categoryId[0].id
+//         // // console.log(categoryId);
+//         const insertQuery = "INSERT INTO products (name, description,image_url,pdt_condition, createdAt,updatedAt,item_price,categoryId,sellerId) VALUES (:name, :description, :image_url, :pdt_condition, NOW(),NOW(), :price, :categoryId, :sellerId)"
+
+//         const productData = {
+//             name: name,
+//             description: description,
+//             image_url: pic,
+//             pdt_condition: condition,
+//             categoryId: categoryId,
+//             sellerId: req.user,
+//             price: price
+//         }
+
+//         const product = await sequelize.query(insertQuery, {
+//             replacements: productData,
+//             type: QueryTypes.INSERT
+//         })
+
+//         if (product) {
+//             res.status(201).json({
+//                 name: name,
+//                 description: description,
+//                 image_url: pic,
+//                 pdt_condition: condition,
+//                 categoryName: categoryName,
+//                 price: price,
+//                 status: "not sold"
+//             });
+//         } else {
+//             res.status(500).send({ message: 'Failed to create product' });
+//         }
+
+//     } catch (error) {
+//         // console.log(error);
+//         res.status(500).send({ error: error.message });
+//     }
+// }
+
 const createProduct = async (req, res) => {
     const { name, description, pic, condition, categoryName, price } = req.body;
-    // console.log(req.body);
+    
     if (!name || !description || !pic || !condition || !categoryName || !price) {
         res.status(400).send({ message: 'Invalid inputs' });
         return;
     }
+    
+    const t = await sequelize.transaction();
+    
     try {
-
-        let categoryId = await sequelize.query("select id from categories where name = :categoryName", {
-            replacements: { categoryName },
-            type: QueryTypes.SELECT
-        })
-        // // console.log(categoryId);
-        if (categoryId.length === 0) {
-            await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:categoryName,NOW(),NOW())", {
+        let [categoryId] = await sequelize.query(
+            "INSERT INTO categories (name, createdAt, updatedAt) VALUES (:categoryName, NOW(), NOW()) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)",
+            {
                 replacements: { categoryName },
-                type: QueryTypes.INSERT
-            })
+                type: QueryTypes.INSERT,
+                transaction: t,
+            }
+        );
 
-            categoryId = await sequelize.query("select id from categories where name = :categoryName", {
-                replacements: { categoryName },
-                type: QueryTypes.SELECT
-            })
+        if (typeof categoryId === 'object') {
+            categoryId = categoryId[0];
         }
-        categoryId = categoryId[0].id
-        // // console.log(categoryId);
-        const insertQuery = "INSERT INTO products (name, description,image_url,pdt_condition, createdAt,updatedAt,item_price,categoryId,sellerId) VALUES (:name, :description, :image_url, :pdt_condition, NOW(),NOW(), :price, :categoryId, :sellerId)"
 
         const productData = {
             name: name,
@@ -38,13 +97,19 @@ const createProduct = async (req, res) => {
             pdt_condition: condition,
             categoryId: categoryId,
             sellerId: req.user,
-            price: price
-        }
+            price: price,
+        };
 
-        const product = await sequelize.query(insertQuery, {
-            replacements: productData,
-            type: QueryTypes.INSERT
-        })
+        const product = await sequelize.query(
+            "INSERT INTO products (name, description, image_url, pdt_condition, createdAt, updatedAt, item_price, categoryId, sellerId) VALUES (:name, :description, :image_url, :pdt_condition, NOW(), NOW(), :price, :categoryId, :sellerId)",
+            {
+                replacements: productData,
+                type: QueryTypes.INSERT,
+                transaction: t,
+            }
+        );
+
+        await t.commit();
 
         if (product) {
             res.status(201).json({
@@ -59,12 +124,12 @@ const createProduct = async (req, res) => {
         } else {
             res.status(500).send({ message: 'Failed to create product' });
         }
-
     } catch (error) {
-        // console.log(error);
+        await t.rollback();
         res.status(500).send({ error: error.message });
     }
-}
+};
+
 
 const updateProduct = async (req, res) => {
     const { name, description, pic, condition, categoryName, price, newStatus } = req.body;

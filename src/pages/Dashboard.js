@@ -5,6 +5,7 @@ import { useContext } from "react";
 import AuthContext from "../context/auth/AuthContext";
 import ProductContext from "../context/product/ProductContext";
 import ChatContext from "../context/chat/ChatContext";
+import toast from "react-hot-toast";
 
 
 
@@ -20,14 +21,20 @@ const Dashboard = () => {
   };
   useEffect(() => {
     const getUserDataFunction = async() => {
-      await getUserData(user)
-      await getAllProducts()
-      await getCategories()
+      try {
+        if (!userData) {
+          console.log("getting data");
+          await getUserData(user)
+        }
+        await getAllProducts()
+        await getCategories()
+      } catch (error) {
+          toast.error(error.response.data.message)
+      }
+      
     }
     if (isAuthenticated) {
-      if (!userData) {
-        console.log("getting data");
-      }
+      
       getUserDataFunction();
       console.log(user)
     } else {
