@@ -15,7 +15,9 @@ function Profile_View() {
   const [phoneNoFromDatabase, setPhoneNoFromDatabase] = useState(""); // State to store the fetched phone number
   const [picFromDatabase, setPicFromDatabase] = useState(""); // State to store the fetched profile pic
   // calculating rating variable
-  const rating = userData.tot_rating / userData.tot_no_rating;
+  const [no_rating, setNo_Rating] = useState("");
+  const [tot_rating, setTot_Rating] = useState("");
+  const rating = tot_rating / no_rating;
   const roundedRating = rating.toFixed(2);
   // const roundedRating = 3.22;
 
@@ -42,10 +44,13 @@ function Profile_View() {
           { headers } // Include the headers in the request
         );
         // Assuming your API response includes 'name' and 'phoneNo'
-        const { name, phoneNo, profilePicture } = response.data;
+        const { name, phoneNo, profilePicture, tot_no_rating, tot_rating } =
+          response.data;
         setNameFromDatabase(name);
         setPhoneNoFromDatabase(phoneNo);
         setPicFromDatabase(profilePicture);
+        setNo_Rating(tot_no_rating);
+        setTot_Rating(tot_rating);
         setEditedUser({
           ...editedUser,
           name, // Update the name
@@ -89,6 +94,9 @@ function Profile_View() {
   // function to go into Edit mode
   const handleEditClick = () => {
     setIsEditing(true);
+  };
+  const handleCancelClick = () => {
+    setIsEditing(false);
   };
 
   const handleSaveClick = async (e) => {
@@ -215,9 +223,7 @@ function Profile_View() {
           </label>
 
           <label className="w-full mb-4">
-            <p className="text-[0.875rem] text-[#333333] mb-1 leading-[1.375rem]">
-              Profile Picture
-            </p>
+            <strong className="text-[#444444]">Profile Picture:</strong>
             <input
               type="file"
               accept="image/*"
@@ -235,10 +241,19 @@ function Profile_View() {
               type="submit"
               onClick={handleSaveClick}
               className="py-[10px] px-[16px] rounded-[8px] border border-blue-700
-              w-[116px] bg-blue-500 hover:bg-blue-600 font-medium text-white
-              transition-all duration-300 ease-out"
+    w-[116px] bg-blue-500 hover:bg-blue-600 font-medium text-white
+    transition-all duration-300 ease-out mr-4"
             >
               Save
+            </button>
+            <button
+              type="button"
+              onClick={handleCancelClick}
+              className="py-[10px] px-[16px] rounded-[8px] border border-red-700
+    w-[116px] bg-red-500 hover:bg-red-600 font-medium text-white
+    transition-all duration-300 ease-out"
+            >
+              Cancel
             </button>
           </div>
         </form>
