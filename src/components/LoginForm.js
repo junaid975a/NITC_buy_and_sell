@@ -69,6 +69,7 @@ const LoginForm = () => {
           email: data.email,
           // Include other user data as needed
         });
+        setUser(data.email)
 
         // Save the token in local storage or context for future authenticated requests
         localStorage.setItem("token", data.token);

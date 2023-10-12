@@ -17,7 +17,7 @@ const ChatBox = () => {
         selectedChat,
         setAllMessages,
     } = useContext(ChatContext);
-    
+
     const scrollToBottom = () => {
         try {
             setTimeout(() => {
@@ -38,7 +38,7 @@ const ChatBox = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const [loadingMessages, setLoadingMessages] = useState(true); // Added loading state
-    const [messageSending,setMessageSending] = useState(false);
+    const [messageSending, setMessageSending] = useState(false);
     const messagesEndRef = useRef(null); // Ref for scrolling to the end
     const socket = io('http://127.0.0.1:5000'); // Connect to the server
 
@@ -60,6 +60,8 @@ const ChatBox = () => {
                 const { data } = await axios.get(`http://127.0.0.1:5000/chats/messages/${selectedChat}`, config);
                 setAllMessages(data);
                 setMessages(data);
+                // console.log(messages);
+                console.log(user);
                 setLoadingMessages(false); // Set loading to false when messages are loaded
                 scrollToBottom(); // Scroll to the end after loading
             } catch (error) {
@@ -73,7 +75,7 @@ const ChatBox = () => {
             setMessageSending(false);
             scrollToBottom(); // Scroll to the end when receiving a message
         });
-        
+
         getMessageFunction()
         setLoadingMessages(false);
         return () => {
@@ -87,7 +89,7 @@ const ChatBox = () => {
     };
 
     const sendMessage = async (event) => {
-        
+
         event.preventDefault();
         try {
             setMessageSending(true);
@@ -107,10 +109,11 @@ const ChatBox = () => {
                 },
                 config
             );
+            console.log(data);
             // Emit the message to the server
             socket.emit('chat message', data);
             // setMessages((prevMessages) => [...prevMessages, data]);
-            setMessages([...messages, data]);
+            // setMessages([...messages, data]);
             scrollToBottom(); // Scroll to the end after sending a message
             setMessageSending(false);
         } catch (error) {
@@ -128,19 +131,17 @@ const ChatBox = () => {
                             <div className="flex items-center justify-center h-full">
                                 <h1>Loading messages...</h1>
                             </div>
-                        ) : (
-                            messages.map((message) => (
-                                <div
-                                    key={message.id}
-                                    className={`m-2 p-3 rounded-md max-w-[70%] ${message.senderId === user
+                        ) : messages.map((message) => (
+                            <div
+                                key={message.id}
+                                className={`m-2 p-3 rounded-md max-w-[70%] ${message.senderId === user
                                         ? "bg-[#007bff] text-white self-end"
                                         : "bg-[#f0f0f0] text-[#333] self-start"
-                                        }`}
-                                >
-                                    {message.message_text}
-                                </div>
-                            ))
-                        )}
+                                    }`}
+                            >
+                                {message.message_text}
+                            </div>
+                        ))}
                         <div ref={messagesEndRef}></div> {/* Ref for scrolling */}
                     </div>
                     <form onSubmit={sendMessage}>
@@ -156,9 +157,9 @@ const ChatBox = () => {
                                 className="bg-blue-500 border border-blue-700 hover:bg-blue-600 text-white rounded-md px-[16px] py-[8px] ml-2
                 transition-all duration-300 ease-in-out"
                                 type="submit"
-                                
+
                             >
-                                { !messageSending ? "Send" : "Sending..."}
+                                {!messageSending ? "Send" : "Sending..."}
                             </button>
                         </div>
                     </form>

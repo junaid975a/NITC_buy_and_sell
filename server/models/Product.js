@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         image_url: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            defaultValue: "http://www.sitech.co.id/assets/img/products/default.jpg"
         },
         pdt_condition: {
             type: DataTypes.TEXT,

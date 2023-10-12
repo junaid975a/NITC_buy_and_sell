@@ -17,14 +17,18 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
         setPicLoading,
         setSelectedImage,
         createNewProduct,
-        updateOldProduct
+        updateOldProduct,
+        selectedImage,
     } = useContext(ProductContext)
 
     const [otherCategory, setOtherCategory] = useState(""); // State for the "Other" category input field
     const [showOtherInput, setShowOtherInput] = useState(false); // State to control when to show the "Other" input field
     const [optionsVisible, setOptionsVisible] = useState(false);
     const [isPopupVisible, setIsPopupVisible] = useState(false);
-
+    let categoryName = null;
+    if(category){
+        categoryName = allCategories.find((category) => category.id === category);
+    }
     const toggleOptions = () => {
         setOptionsVisible(!optionsVisible);
     };
@@ -43,7 +47,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                 ...prev,
                 category: selectedCategory,
             }));
-            
+
         }
     };
     const handleOtherCategoryChange = (event) => {
@@ -61,13 +65,11 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
 
     useEffect(() => {
         getCategories();
-        console.log(allCategories);
-        // Use a setTimeout to delay the appearance of the popup
+        setSelectedImage(null);
         const timeout = setTimeout(() => {
             setIsPopupVisible(true);
         }, 150); // Adjust the delay time (in milliseconds) as needed
 
-        // Clean up the timeout when the component unmounts
         return () => clearTimeout(timeout);
     }, []);
 
@@ -83,7 +85,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
 
     const [itemData, setItemData] = useState({
         itemname: name,
-        category: null,
+        category: id ? categoryName : null,
         description: description,
         condition: condition,
         price: price,
@@ -118,26 +120,51 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             return createNewProduct(itemData)
                 .then(() => {
                     // Show a success message
-                    toast.success("Product created successfully!");
-                    
+                    // toast.success("Product created successfully!");
+
                     // Close the popup
                     handleClose();
                 })
                 .catch((error) => {
                     console.error(error);
-                    toast.error("Failed to create the product");
+                    // toast.error("Failed to create the product");
                 });
-        };        
+        };
 
         uploadProduct();
     }
 
     const updateHandler = async (event) => {
+        event.preventDefault();
+        setPicLoading(true);
+        console.log(selectedImage);
+        console.log(itemData)
+        if (!itemData.itemname || !itemData.category || !itemData.description || !itemData.condition || !itemData.price) {
+            console.log(itemData)
+            toast.error("Please enter all required fields correctly");
+            setPicLoading(false);
+            return;
+        }
+        const data = itemData
+        data.id = id
+        const uploadProduct = () => {
+            return updateOldProduct(data)
+                .then(() => {
+                    // Show a success message
+                    // toast.success("Product updated successfully!");
+                    // Close the popup
+                    handleClose();
+                })
+                .catch((error) => {
+                    // console.error(error);
+                    // toast.error("Failed to update the product");
+                    handleClose();
+                });
+        };
 
+        uploadProduct();
     }
-    const sellHandler = async (event) => {
 
-    }
 
 
 
@@ -148,7 +175,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
             <div className={`bg-white rounded-lg shadow-md w-[90%] sm:w-[600px] md:w-[720px] h-min max-h-[600px]  overflow-y-auto p-4 text-center z-10 transform transition-transform ease-in duration-500 ${isPopupVisible ? "scale-100" : "scale-90"}`}>
                 {/* container to show all the details */}
                 <form
-                    onSubmit={submitHandler}
+                    // onSubmit={submitHandler}
                     encType="multipart/form-data"
                     className="flex flex-col">
 
@@ -264,7 +291,7 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                         <input
                             type="file"
                             accept="image/*"
-                            required
+                            {...(id ? {} : { required: true })}
                             name="productImage"
                             onChange={(e) => setSelectedImage(e.target.files[0])}
                             placeholder="choose image file"
@@ -336,21 +363,10 @@ const AddandEditPopup = ({ id, name, category, description, condition, price, on
                                 className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
                             transition-all duration-300 ease-out"
                                 type="submit"
-
-
                             >Update</button>
                         )
                         }
-                        {id && (
-                            <button onClick={sellHandler}
-                                className="border border-blue-700  bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-4 rounded-md focus:outline-none
-                            transition-all duration-300 ease-out"
-                                type="submit"
 
-
-                            >Sell</button>
-                        )
-                        }
 
 
 

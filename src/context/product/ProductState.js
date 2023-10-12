@@ -10,7 +10,7 @@ const ProductState = (props) => {
     const [sellerDetails, setSellerDetails] = useState(null);
     const [productReview, setProductReview] = useState(null);
     const [picLoading, setPicLoading] = useState(false);
-    const [pic, setPic] = useState("http://www.sitech.co.id/assets/img/products/default.jpg"); // Store the selected image file
+    const [pic, setPic] = useState(""); // Store the selected image file
     const [selectedImage, setSelectedImage] = useState(null); 
     const [alert, setAlert] = useState(null);
     const host = "http://127.0.0.1:5000"
@@ -87,7 +87,9 @@ const ProductState = (props) => {
 
             // Upload the selected image (if any) to the server
             if (selectedImage) {
+                console.log("pic selected");
                 await postDetails(selectedImage);
+                console.log(pic);
             }   
             // console.log(pic);
 
@@ -114,18 +116,16 @@ const ProductState = (props) => {
             const finalData = {
                 ...productData,
             };
-            
-            // console.log(finalData);
-            // toast.success('Product created successfully');
-            // return {status:"success",mesage:"Product created successfully"};
+            getPostedItems();
+            toast.success('Product created successfully');
         } catch (error) {
-            // console.log(error);
+            console.log(error);
             setPicLoading(false);
             toast.error(error.response.data.message)
+        }finally{
+            setPic(null);
         }
     }
-
-    
 
     const getBoughtItems = async () => {
         try {
@@ -235,6 +235,64 @@ const ProductState = (props) => {
         }
     }
 
+    const updateOldProduct = async (itemData) => {
+        console.log(itemData);
+        try {
+            const id = itemData.id
+            const name = itemData.itemname;
+            const description = itemData.description;
+            const condition = itemData.condition;
+            const price = itemData.price;
+            const categoryName = itemData.category;
+            const buyerId = itemData.buyerId;
+            const finalPrice = itemData.finalPrice;
+            // if(itemData.pic)setPic(itemData.pic)
+
+            // Upload the selected image (if any) to the server
+            if (selectedImage) {
+                console.log("truwan: Uploading image");
+                await postDetails(selectedImage);
+                console.log(pic);
+            }   
+
+            const { data } = await axios.put(
+                `http://127.0.0.1:5000/product/update-product/${id}`,
+                {
+                    name,
+                    description,
+                    pic,    
+                    condition,
+                    categoryName,
+                    price,
+                    buyerId,
+                    finalPrice
+                },
+                config
+            );
+
+            // // console.log(data);
+            setPicLoading(false);
+            
+            const productData = {
+                ...itemData,
+            };
+            
+            const finalData = {
+                ...productData,
+            };
+            // console.log(finalData);
+            getPostedItems();
+            toast.success('Product updated successfully');
+            // return {status:"success",mesage:"Product created successfully"};
+        } catch (error) {
+            console.log(error);
+            setPicLoading(false);
+            toast.error(error.response.data.message)
+        }finally{
+            setPic(null);
+        }
+    }
+
     return (
         <ProductContext.Provider value={{
             allProducts,
@@ -257,7 +315,10 @@ const ProductState = (props) => {
             getReview,
             picLoading,
             setPicLoading,
-            setSelectedImage
+            selectedImage,
+            setSelectedImage,
+            updateOldProduct,
+            setPic
         }}>
             {props.children}
         </ProductContext.Provider>

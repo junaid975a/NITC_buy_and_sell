@@ -68,32 +68,39 @@ const { sequelize } = require("../models");
 
 const createProduct = async (req, res) => {
     const { name, description, pic, condition, categoryName, price } = req.body;
-    
-    if (!name || !description || !pic || !condition || !categoryName || !price) {
+
+    if (!name || !description || !condition || !categoryName || !price) {
         res.status(400).send({ message: 'Invalid inputs' });
         return;
     }
-    
-    const t = await sequelize.transaction();
-    
-    try {
-        let [categoryId] = await sequelize.query(
-            "INSERT INTO categories (name, createdAt, updatedAt) VALUES (:categoryName, NOW(), NOW()) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)",
-            {
-                replacements: { categoryName },
-                type: QueryTypes.INSERT,
-                transaction: t,
-            }
-        );
 
-        if (typeof categoryId === 'object') {
-            categoryId = categoryId[0];
+    const t = await sequelize.transaction();
+
+    try {
+        const lCategoryName = categoryName.toLowerCase();
+
+        let categoryId = await sequelize.query("select id from categories where name = :lCategoryName", {
+            replacements: { lCategoryName },
+            type: QueryTypes.SELECT
+        })
+        // // console.log(categoryId);
+        if (categoryId.length === 0) {
+            await sequelize.query("insert into categories (name,createdAt,updatedAt) values (:lCategoryName,NOW(),NOW())", {
+                replacements: { lCategoryName },
+                type: QueryTypes.INSERT
+            })
+
+            categoryId = await sequelize.query("select id from categories where name = :lCategoryName", {
+                replacements: { lCategoryName },
+                type: QueryTypes.SELECT
+            })
         }
+        categoryId = categoryId[0].id
 
         const productData = {
             name: name,
             description: description,
-            image_url: pic,
+            image_url: pic ? pic : "http://www.sitech.co.id/assets/img/products/default.jpg",
             pdt_condition: condition,
             categoryId: categoryId,
             sellerId: req.user,
@@ -132,7 +139,9 @@ const createProduct = async (req, res) => {
 
 
 const updateProduct = async (req, res) => {
-    const { name, description, pic, condition, categoryName, price, newStatus } = req.body;
+    // console.log(req.body);
+    const { name, description, pic, condition, categoryName, price } = req.body;
+    const { finalPrice, buyerId } = req.body
     // let status = req.body
     const id = req.params.id;
     const sellerId = req.user;
@@ -142,43 +151,41 @@ const updateProduct = async (req, res) => {
     }
     // const validStatusValues = ["sold", "not sold"];
     // const status = validStatusValues.includes(newStatus) ? newStatus : "not sold";
-    const status = newStatus ? newStatus : "not sold";
+    let status = "not sold";
     // // console.log(req.user);
     try {
-
-
         // check if the product present or not , if not then send 404 else check the seller of the product
         // const user = req.user;
         // 1. check if the user is actually the seller of the product
-        const existingProduct = await sequelize.query("select * from products where id=:id",{
-            replacements:{
-                sellerId:req.user,
-                id:id
+        const existingProduct = await sequelize.query("select * from products where id=:id", {
+            replacements: {
+                sellerId: req.user,
+                id: id
             },
             type: QueryTypes.SELECT
         });
 
         // // console.log("seller :",userId);
-        if(existingProduct.length===0){
-            res.status(400).json({message:"This product does not exist"})
+        if (existingProduct.length === 0) {
+            res.status(400).json({ message: "This product does not exist" })
             return;
         }
 
         // // console.log(existingProduct);
 
-        if(existingProduct[0].sellerId!==sellerId){
-            res.status(400).json({message:"You are not the seller of this product"})
+        if (existingProduct[0].sellerId !== sellerId) {
+            res.status(400).json({ message: "You are not the seller of this product" })
             return;
         }
 
         // 2. Check if the product has already been in solditems i.e it is already sold out
-        const isSold = await sequelize.query("select * from solditems where productId = :id",{
-            replacements:{id},
-            type:QueryTypes.SELECT
+        const isSold = await sequelize.query("select * from solditems where productId = :id", {
+            replacements: { id },
+            type: QueryTypes.SELECT
         })
 
-        if(isSold.length > 0){
-            res.status(400).json({message:"This product has already been sold out , so you cannot update this"})
+        if (isSold.length > 0) {
+            res.status(400).json({ message: "This product has already been sold out , so you cannot update this" })
             return;
         }
         // 3. if both cases doesn't satisfy then proceed'
@@ -202,11 +209,11 @@ const updateProduct = async (req, res) => {
         }
         categoryId = categoryId[0].id
         // // console.log(categoryId, id);
-        
+        if (buyerId && finalPrice) status = "sold"
         const productData = {
             name: name,
             description: description,
-            image_url: pic,
+            image_url: pic ? pic : existingProduct[0].image_url,
             pdt_condition: condition,
             categoryId: categoryId,
             price: price,
@@ -215,7 +222,7 @@ const updateProduct = async (req, res) => {
         };
 
         const updateQuery = "UPDATE products SET name=:name, description=:description, image_url=:image_url, pdt_condition=:pdt_condition, item_price=:price, categoryId=:categoryId, updatedAt=NOW(), status=:status WHERE id = :id";
-        
+
         const product = await sequelize.query(updateQuery, {
             replacements: productData,
             type: QueryTypes.UPDATE
@@ -223,15 +230,17 @@ const updateProduct = async (req, res) => {
 
 
         if (product) {
-            if(status==="sold"){
-                const {finalPrice,buyerId} = req.body
-                if(finalPrice && buyerId) {
-
-                    const buyer = await sequelize.query("select * from users where email=:buyerId",{
-                        replacements:{buyerId},
-                        type:QueryTypes.SELECT
+            if (status === "sold") {
+                if(buyerId===sellerId) {
+                    res.status(400).json({ message: "You cannot sell this product to yourself" })
+                    return;
+                }
+                if (finalPrice && buyerId) {
+                    const buyer = await sequelize.query("select * from users where email=:buyerId", {
+                        replacements: { buyerId },
+                        type: QueryTypes.SELECT
                     })
-                    if(buyer.length===0) {
+                    if (buyer.length === 0) {
                         res.status(404).json({
                             "message": "User not found"
                         })
@@ -241,28 +250,28 @@ const updateProduct = async (req, res) => {
                     const insertQuery = "INSERT INTO solditems (finalPrice,buyerId,productId,createdAt,updatedAt) values (:finalPrice,:buyerId,:id,NOW(),NOW())";
                     const soldData = {
                         finalPrice: finalPrice,
-                        id:id,
+                        id: id,
                         buyerId: buyer[0].email
                     }
-                    const soldProduct = await sequelize.query(insertQuery,{
-                        replacements:soldData,
+                    const soldProduct = await sequelize.query(insertQuery, {
+                        replacements: soldData,
                         type: QueryTypes.INSERT
                     })
-                    if(soldProduct){
-                        const buyerData = await sequelize.query("select * from users where email= :buyerId",{
-                            replacements:{buyerId},
+                    if (soldProduct) {
+                        const buyerData = await sequelize.query("select * from users where email= :buyerId", {
+                            replacements: { buyerId },
                             type: QueryTypes.SELECT
                         })
                         res.status(201).json({
                             name: name,
                             description: description,
-                            image_url: pic,
+                            image_url: soldProduct[0].image_url,
                             pdt_condition: condition,
                             categoryName: categoryName,
                             price: price,
                             status: status,
-                            finalPrice:finalPrice,
-                            buyer:buyerData[0]
+                            finalPrice: finalPrice,
+                            buyer: buyerData[0]
                         })
                         return;
                     }
@@ -273,7 +282,7 @@ const updateProduct = async (req, res) => {
             res.status(201).json({
                 name: name,
                 description: description,
-                image_url: pic,
+                image_url: pic ? pic : existingProduct[0].image_url,
                 pdt_condition: condition,
                 categoryName: categoryName,
                 price: price,
@@ -289,43 +298,43 @@ const updateProduct = async (req, res) => {
     }
 }
 
-const deleteProduct = async(req, res) => {
+const deleteProduct = async (req, res) => {
     const id = req.params.id;
-    
+
     try {
 
-        const isSold = await sequelize.query("select * from solditems where productId = :id",{
-            replacements:{id},
-            type:QueryTypes.SELECT
+        const isSold = await sequelize.query("select * from solditems where productId = :id", {
+            replacements: { id },
+            type: QueryTypes.SELECT
         })
 
-        if(isSold.length > 0) {
-            res.status(400).json({ message:"sorry this product is already sold, so that you cannot delete it"})
+        if (isSold.length > 0) {
+            res.status(400).json({ message: "sorry this product is already sold, so that you cannot delete it" })
         }
 
-        const userId = await sequelize.query("select sellerId from products where sellerId=:sellerId",{
-            replacements:{sellerId:req.user},
+        const userId = await sequelize.query("select sellerId from products where sellerId=:sellerId", {
+            replacements: { sellerId: req.user },
             type: QueryTypes.SELECT
         });
 
         // // console.log(userId);
-        if(userId.length===0){
-            res.status(500).json({message:"Unauthorized access"})
+        if (userId.length === 0) {
+            res.status(500).json({ message: "Unauthorized access" })
             return;
         }
-        const product = await sequelize.query("select * from products where id=:id",{
-            replacements:{id},
-            type:QueryTypes.SELECT
+        const product = await sequelize.query("select * from products where id=:id", {
+            replacements: { id },
+            type: QueryTypes.SELECT
         })
-        if(product.length === 0) {
+        if (product.length === 0) {
             res.status(404).json({ message: 'product not found' });
         }
-        await sequelize.query("delete from products where id = :id",{
-            replacements:{id},
-            type:QueryTypes.DELETE
+        await sequelize.query("delete from products where id = :id", {
+            replacements: { id },
+            type: QueryTypes.DELETE
         })
-        res.status(200).json({message:"deleted successfully"})
-    }catch(error){
+        res.status(200).json({ message: "deleted successfully" })
+    } catch (error) {
         // console.log(error);
         res.status(500).send({ error: error.message });
     }
@@ -335,14 +344,14 @@ const deleteProduct = async(req, res) => {
 
 // }
 
-const getAllProducts = async(req, res) => {
+const getAllProducts = async (req, res) => {
     const sellerId = req.user;
     // // console.log(sellerId)
     try {
-        const allProducts = await sequelize.query("select p.*, c.name as categoryName from products as p join categories as c on p.categoryId = c.id where p.status='not sold' and p.sellerId != :sellerId",{
-            type:QueryTypes.SELECT,
+        const allProducts = await sequelize.query("select p.*, c.name as categoryName from products as p join categories as c on p.categoryId = c.id where p.status='not sold' and p.sellerId != :sellerId", {
+            type: QueryTypes.SELECT,
             replacements: {
-                sellerId : sellerId
+                sellerId: sellerId
             }
         })
         // // console.log(allProducts);
@@ -352,14 +361,14 @@ const getAllProducts = async(req, res) => {
         // console.log(error);
         res.status(500).send({ error: error.message });
     }
-    
+
 }
 
 
-const getCategories = async(req, res) => {
+const getCategories = async (req, res) => {
     try {
-        const allCategories = await sequelize.query("select * from categories",{
-            type:QueryTypes.SELECT
+        const allCategories = await sequelize.query("select * from categories", {
+            type: QueryTypes.SELECT
         })
         // // console.log(allCategories);
         res.status(200).json(allCategories)
@@ -374,13 +383,13 @@ const getSearchProducts = async (req, res) => {
     const { query } = req.params;
     // // console.log(query);
     const searchQuery = query.trim().toLowerCase();
-    
+
     try {
         const searchedProducts = await sequelize.query("SELECT * FROM products WHERE LOWER(name) LIKE :searchQuery", {
             replacements: { searchQuery: `%${searchQuery}%` },
             type: QueryTypes.SELECT
         });
-        
+
         // // console.log(searchedProducts);
         res.status(200).json(searchedProducts);
     } catch (error) {
@@ -390,18 +399,18 @@ const getSearchProducts = async (req, res) => {
 };
 
 
-const getBoughtProducts = async(req, res) => {
+const getBoughtProducts = async (req, res) => {
     const buyerId = req.user
     try {
         const selectQuery = "SELECT p.*,s.* FROM solditems as s INNER JOIN products as p on s.buyerId=:buyerId and s.productId=p.id";
-        const boughtProducts = await sequelize.query(selectQuery,{
-            replacements:{buyerId},
-            type:QueryTypes.SELECT
+        const boughtProducts = await sequelize.query(selectQuery, {
+            replacements: { buyerId },
+            type: QueryTypes.SELECT
         });
         if (boughtProducts.length > 0) {
             res.status(200).json(boughtProducts)
-        }else{
-            res.status(404).json({message:"You have not purchased any products"})
+        } else {
+            res.status(404).json({ message: "You have not purchased any products" })
             return
         }
     } catch (error) {
@@ -413,15 +422,15 @@ const getBoughtProducts = async(req, res) => {
 const getPostedProducts = async (req, res) => {
     const sellerId = req.user;
     try {
-        const selectQuery = "SELECT p.*, s.*,r.rating, r.review FROM products as p left join solditems as s on p.id=s.productId left join ratings as r on p.id=r.productId where p.sellerId=:sellerId order by p.status desc";
-        const postedProducts = await sequelize.query(selectQuery,{
-            replacements:{sellerId},
-            type:QueryTypes.SELECT
+        const selectQuery = "SELECT p.*, s.*,r.rating, r.review FROM products as p left join solditems as s on p.id=s.productId left join ratings as r on p.id=r.productId where p.sellerId=:sellerId order by p.status,p.createdAt desc";
+        const postedProducts = await sequelize.query(selectQuery, {
+            replacements: { sellerId },
+            type: QueryTypes.SELECT
         });
         if (postedProducts.length > 0) {
             res.status(200).json(postedProducts)
-        }else{
-            res.status(404).json({message:"You have not posted any products"})
+        } else {
+            res.status(404).json({ message: "You have not posted any products" })
             return
         }
     } catch (error) {
